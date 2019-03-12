@@ -1,0 +1,96 @@
+@import "Colors.less";
+
+.button-reset {
+  display: inline-block;
+  padding: 4px 10px;
+  font-weight: bold;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+  transition: background-color 0.1s ease-in, border-color 0.1s ease-in;
+}
+
+.buttonSimple {
+  .button-reset;
+  background: @white;
+  border-color: @quip-color-grey-lighter;
+  color: @quip-color-grey;
+
+  &:focus,
+  &:hover {
+    border-color: darken(@quip-color-grey, 30%);
+    background: @quip-color-grey-lightest;
+  }
+  
+  &[disabled] {
+    background: @white;
+    color: @quip-color-grey-light;
+    border-color: @quip-color-grey-lightest;
+    cursor: not-allowed;
+  }
+}
+
+.buttonPrimary {
+  .button-reset;
+  background: @quip-color-blue;
+  border-color: @quip-color-blue;
+  color: @white;
+
+  &:focus,
+  &:hover {
+    border-color: darken(@quip-color-blue, 30%);
+    background: darken(@quip-color-blue, 5%);
+  }
+  
+  &[disabled] {
+    background: @quip-color-blue-light;
+    border-color: @quip-color-blue-light;
+    cursor: not-allowed;
+  }
+}
+
+.focus {
+  // HACK overwrite some heavy-handed quip styles
+  border-color: @quip-color-blue !important;
+  outline: 1px @quip-color-blue;
+  box-shadow: 0px 2px 5px @quip-color-grey-lighter;
+}
+
+.input-reset {
+  outline: none;
+  font-size: 1em;
+
+  &:focus {
+    .focus;
+  }
+}
+
+.stackedFormInput {
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    font-style: italic;
+    color: @quip-color-grey-dark;
+    margin-bottom: 5px;
+  }
+
+  input[type=text] {
+    .input-reset
+  }
+}
+
+.form-container {
+  padding: 10px;
+  background: @off-white;
+  border: 1px @quip-color-grey-lighter solid;
+  border-radius: 6px;
+}
+
+.tokenForm {
+  .form-container;
+  input {
+    font-family: monospace;
+    font-size: 1em;
+  }
+}
