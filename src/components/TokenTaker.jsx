@@ -1,4 +1,5 @@
 import Style from '../style/Form.less';
+import Message from '../style/Message.less'
 
 export default class TokenTaker extends React.Component {
   static propTypes = {
@@ -10,8 +11,11 @@ export default class TokenTaker extends React.Component {
     super();
 
     this.state = {
-      tokenCandidate: (props.token === undefined) ? '' : token
+      updated: false,
+      tokenCandidate: (props.token === undefined) ? '' : props.token
     };
+
+    quip.apps.updateToolbar({disabledCommandIds: ['updateToken']});
   }
 
   updateCandidate = (event) => {
@@ -21,12 +25,17 @@ export default class TokenTaker extends React.Component {
   saveToken = () => {
     const preferences = quip.apps.getUserPreferences();
     
-    preferences.save({token: this.state.tokenCandidate})
-    this.props.tokenSaved(this.state.tokenCandidate);
+    preferences.save({token: this.state.tokenCandidate});
+
+    this.setState({updated: true}, () => {
+      window.setTimeout(() => {
+        this.props.tokenSaved(this.state.tokenCandidate);
+      }, 3000);
+    });
   }
 
   render() {
-    let welcome;
+    let welcome, successMessage;
 
     if (this.props.token === undefined) {
       welcome = <p>Welcome! Please enter a user key to use the app.</p>
@@ -34,7 +43,11 @@ export default class TokenTaker extends React.Component {
       welcome = <p>Please enter a user key.</p>
     }
 
-    return <form className={Style.tokenForm}>
+    if (this.state.updated) {
+      successMessage = <span className={Message.success}>token was successfully saved.</span>;
+    }
+
+    return <div className={Style.tokenForm}>
       {welcome}
       <p><code>TODO</code> instructions for how to find that key go here.</p>
 
@@ -44,10 +57,12 @@ export default class TokenTaker extends React.Component {
       </label>
 
       <p>        
-        <button type="submit" disabled={!this.state.tokenCandidate.length} className={Style.buttonPrimary}>
+        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.buttonPrimary} onClick={this.saveToken}>
           save token
         </button>
+        &nbsp;
+        {successMessage}
       </p>
-    </form>;
+    </div>;
   }
 }

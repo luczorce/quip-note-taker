@@ -1,4 +1,5 @@
 import TokenTaker from './components/TokenTaker.jsx';
+import NoteTaker from './components/NoteTaker.jsx';
 import Styles from "./style/App.less";
 
 export default class App extends React.Component {
@@ -11,7 +12,8 @@ export default class App extends React.Component {
       token: token,
       showTokenForm: (token === undefined || !token.length)
     };
-    console.log(this.state);
+
+    this.setMenu();
   }
 
   tokenIsSet = (token) => {
@@ -21,13 +23,28 @@ export default class App extends React.Component {
     });
   }
 
+  setMenu = () => {
+    let toolbar = {
+      toolbarCommandIds: [ 'updateToken' ],
+      menuCommands: [
+        {
+          id: 'updateToken',
+          label: 'update user key',
+          handler: () => this.setState({showTokenForm: true}) 
+        }
+      ]
+    };
+
+    quip.apps.updateToolbar(toolbar);
+  }
+
   render() {
     let content;
     
     if (this.state.showTokenForm) {
       content = <TokenTaker token={this.state.token} tokenSaved={this.tokenIsSet} />
     } else {
-      content = <p>Hello, world!</p>;
+      content = <NoteTaker />;
     }
     
     return content;
