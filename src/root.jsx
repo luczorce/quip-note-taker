@@ -8,8 +8,6 @@ quip.apps.registerClass(NoteRecord, 'note-record');
 
 quip.apps.initialize({
   initializationCallback: function(rootNode) {
-    const token = quip.apps.getUserPreferences().getForKey("token");
-
-    ReactDOM.render(<App userKey={token} />, rootNode);
+    ReactDOM.render(<App />, rootNode);
   },
 });
