@@ -9,8 +9,39 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getDefaultProperties() {
     return {
       notes: [],
-      topcis: []
+      topics: []
     };
+  }
+
+  addNote(noteData) {
+    this.get('notes').add(noteData);
+  }
+
+  getAllNotes() {
+    const notes = quip.apps.getRootRecord()
+          .get('notes')
+          .getRecords()
+          .map(r => {
+            return {
+              note: r.get('content'), 
+              topics: r.get('topics'), 
+              owner: r.get('owner')
+            };
+          });
+
+    return notes;
+  }
+
+  updateTopics = (topics) => {
+    let current = this.get('topics');
+    
+    topics.forEach(t => {
+      if (current.indexOf(t) === -1) {
+        current.push(t);
+      }
+    });
+
+    this.set('topics', current);
   }
 }
 

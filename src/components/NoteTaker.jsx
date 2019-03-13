@@ -16,14 +16,50 @@ export default class NoteTaker extends React.Component {
 
     this.state = {
       thought: '',
-      tags: ''
+      tags: '',
+      showSavedMessage: false
     };
+
+    this.thoughtElement = null;
+    this.setThoughtElementRef = element => {
+      this.thoughtElement = element;
+    }
 
     quip.apps.updateToolbar({disabledCommandIds: []});
   }
 
+  clearAndShiftFocus = () => {
+    this.setState({
+      thought: '',
+      tags: ''
+    });
+
+    this.thoughtElement.focus();
+  }
+  
+  indicateSaved = () => {
+    this.setState({showSavedMessage: true}, () => {
+      window.setTimeout(() => {
+        this.setState({showSavedMessage: false})
+      }, 3000);
+    });
+  }
+
   saveThought = () =>{
-    console.log('TODO will save the thought');
+    const record = quip.apps.getRootRecord();
+
+    let topics = this.state.tags.split(',');
+    topics = topics.map(t => t.trim());
+    
+    record.updateTopics(topics);
+    record.addNote({
+      content: this.state.thought,
+      topics: topics,
+      owner: quip.apps.getViewingUser().getId()
+    });
+
+    this.indicateSaved();
+    this.clearAndShiftFocus();
   }
 
   updateTags = (event) => {
@@ -37,8 +73,12 @@ export default class NoteTaker extends React.Component {
   render() {
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
-        <span className={Style.label}>current thought</span>
-        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3"></textarea>
+        <span className={`${Style.label} ${Style.labelWithPopup}`}>
+          current thought
+          {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
+        </span>
+        
+        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3" ref={this.setThoughtElementRef}></textarea>
       </label>
 
       <div className={Style.formRow}>
