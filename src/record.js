@@ -13,6 +13,25 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     };
   }
 
+  addNote(noteData) {
+    this.get('notes').add(noteData);
+  }
+
+  getAllNotes() {
+    const notes = quip.apps.getRootRecord()
+          .get('notes')
+          .getRecords()
+          .map(r => {
+            return {
+              note: r.get('content'), 
+              topics: r.get('topics'), 
+              owner: r.get('owner')
+            };
+          });
+
+    return notes;
+  }
+
   updateTopics = (topics) => {
     let current = this.get('topics');
     
