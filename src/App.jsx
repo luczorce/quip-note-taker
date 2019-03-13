@@ -44,7 +44,7 @@ export default class App extends React.Component {
     if (this.state.showTokenForm) {
       content = <TokenTaker token={this.state.token} tokenSaved={this.tokenIsSet} />
     } else {
-      content = <NoteTaker />;
+      content = <NoteTaker token={this.state.token} />;
     }
     
     return content;

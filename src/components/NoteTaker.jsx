@@ -6,10 +6,9 @@ const Question = function() {
 }
 
 export default class NoteTaker extends React.Component {
-  // static propTypes = {
-  //   token: React.PropTypes.string,
-  //   tokenSaved: React.PropTypes.func
-  // };
+  static propTypes = {
+    token: React.PropTypes.string
+  };
 
   constructor(props) {
     super();
