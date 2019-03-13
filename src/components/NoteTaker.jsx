@@ -38,17 +38,18 @@ export default class NoteTaker extends React.Component {
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
         <span className={Style.label}>current thought</span>
-        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought}></textarea>
+        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3"></textarea>
       </label>
 
       <div className={Style.formRow}>
         <label className={Style.stackedFormInput}>
           <span className={Style.label}>tags</span>
-          <input type="text" onInput={this.updateTags} value={this.state.tags} />
+          <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" />
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length} className={`${Style.buttonSimple} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length} className={`${Style.buttonPrimary} ${Style.submitNote}`}>
           add
+          <span className={Style.primedToAdd}>ready!</span>
         </button>
       </div>
 
