@@ -59,6 +59,7 @@
 .input-reset {
   outline: none;
   font-size: 1em;
+  padding: 5px 10px;
 
   &:focus {
     .focus;
@@ -70,13 +71,22 @@
   flex-direction: column;
 
   .label {
-    font-style: italic;
     color: @quip-color-grey-dark;
     margin-bottom: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
   }
 
   input[type=text] {
-    .input-reset
+    .input-reset;
+  }
+
+  textarea {
+    .input-reset;
+
+    width: 100%;
+    resize: vertical;
   }
 }
 
@@ -93,4 +103,51 @@
     font-family: monospace;
     font-size: 1em;
   }
+}
+
+.noteForm {
+  .form-container;
+
+  .stackedFormInput {
+    flex: 1 0 auto;
+  }
+
+  .submitNote {
+    align-self: flex-end;
+    margin-left: 10px;
+    padding: 5px 10px;
+    position: relative;
+
+    &:focus .primedToAdd {
+      display: block;
+    }
+  }
+
+  .primedToAdd {
+    display: none;
+    position: absolute;
+    font-size: 0.9em;
+    background: @quip-color-blue-dark;
+    color: @white;
+    border-radius: 2px;
+    padding: 2px 5px;
+    top: -30px;
+    right: 0;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      right: 18px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid @quip-color-blue-dark;
+    }
+  }
+}
+
+.formRow {
+  display: flex;
+  align-content: space-between;
+  margin: 1em auto;
 }

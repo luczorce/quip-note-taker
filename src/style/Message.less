@@ -5,3 +5,20 @@
   font-weight: bold;
   border-bottom: 2px @quip-color-green solid;
 }
+
+.helper {
+  color: @quip-color-grey;
+  margin: 0;
+
+  .icon {
+    transform: translateY(3px);
+  }
+
+  &:hover {
+    color: @quip-color-blue;
+    
+    .icon {
+      stroke: @quip-color-blue;
+    }
+  }
+}
