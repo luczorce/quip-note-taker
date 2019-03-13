@@ -15,15 +15,23 @@ export default class NoteTaker extends React.Component {
     super();
 
     this.state = {
-      thought: '',
-      tags: ''
+      // TODO delete these
+      thought: 'test',
+      tags: 'topic 1,topci 3, topci 4'
+      // thought: '',
+      // tags: ''
     };
 
     quip.apps.updateToolbar({disabledCommandIds: []});
   }
 
   saveThought = () =>{
-    console.log('TODO will save the thought');
+    const record = quip.apps.getRootRecord();
+
+    let topics = this.state.tags.split(',');
+    topics = topics.map(t => t.trim());
+    
+    record.updateTopics(topics);
   }
 
   updateTags = (event) => {

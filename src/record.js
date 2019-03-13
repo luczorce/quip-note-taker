@@ -9,8 +9,20 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getDefaultProperties() {
     return {
       notes: [],
-      topcis: []
+      topics: []
     };
+  }
+
+  updateTopics = (topics) => {
+    let current = this.get('topics');
+    
+    topics.forEach(t => {
+      if (current.indexOf(t) === -1) {
+        current.push(t);
+      }
+    });
+
+    this.set('topics', current);
   }
 }
 
