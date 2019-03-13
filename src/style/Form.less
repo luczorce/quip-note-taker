@@ -76,7 +76,14 @@
   }
 
   input[type=text] {
-    .input-reset
+    .input-reset;
+  }
+
+  textarea {
+    .input-reset;
+
+    width: 100%;
+    resize: vertical;
   }
 }
 
@@ -93,4 +100,24 @@
     font-family: monospace;
     font-size: 1em;
   }
+}
+
+.noteForm {
+  .form-container;
+
+  .stackedFormInput {
+    flex: 1 0 auto;
+  }
+
+  .submitNote {
+    align-self: flex-end;
+    margin-left: 10px;
+    padding: 5px 10px;
+  }
+}
+
+.formRow {
+  display: flex;
+  align-content: space-between;
+  margin: 1em auto;
 }
