@@ -1,5 +1,6 @@
+import Question from './Question.jsx';
 import Style from '../style/Form.less';
-import Message from '../style/Message.less'
+import Message from '../style/Message.less';
 
 export default class TokenTaker extends React.Component {
   static propTypes = {
@@ -49,17 +50,24 @@ export default class TokenTaker extends React.Component {
 
     return <div className={Style.tokenForm}>
       {welcome}
-      <p><code>TODO</code> instructions for how to find that key go here.</p>
+      <p className={Message.instruction}><Question /> To find your user key, visit the <a href="https://quip.com/dev/token" target="_blank">quip dev token page</a></p>
 
       <label className={Style.stackedFormInput}>
-        <span className={Style.label}>user token</span>
+        <span className={Style.label}>user key</span>
         <input type="text" value={this.state.tokenCandidate} onInput={this.updateCandidate} />
       </label>
 
-      <p>        
+      <p>
         <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.buttonPrimary} onClick={this.saveToken}>
           save token
         </button>
+
+        &nbsp;
+
+        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.buttonSimple} onClick={() => this.props.tokenSaved(this.state.tokenCandidate)}>
+          never mind
+        </button>
+
         &nbsp;
         {successMessage}
       </p>
