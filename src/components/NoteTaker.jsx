@@ -49,16 +49,21 @@ export default class NoteTaker extends React.Component {
 
     let topics = this.state.tags.split(',');
     topics = topics.map(t => t.trim());
-    
     record.updateTopics(topics);
-    record.addNote({
+    
+    let note = {
       content: this.state.thought,
       topics: topics,
       owner: quip.apps.getViewingUser().getId()
+    };
+    record.addNote(note);
+    this.docCaller.updateDocument(note).then(response => {
+      console.log(response);
     });
 
     this.indicateSaved();
     this.clearAndShiftFocus();
+
   }
 
   testDocumentGetter = () => {
@@ -97,9 +102,6 @@ export default class NoteTaker extends React.Component {
           <span className={Style.primedToAdd}>ready!</span>
         </button>
 
-        <button type="button" onClick={this.testDocumentGetter} className={Style.buttonSimple}>
-          test document getter
-        </button>
       </div>
 
       <p className={Message.helper}><Question/> add notes as you think them, and they'll be automatically sorted for you based on your tags.</p>

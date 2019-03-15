@@ -11,7 +11,8 @@
   "css_files": ["dist/app.css"],
   "csp_sources": {
     "connect_srcs": [
-      "https://platform.quip.com/1"
+      "https://localhost:8000",
+      "https://qetl-notetaker-proxy.herokuapp.com"
     ]
   },
   "allow_tiny_size": true

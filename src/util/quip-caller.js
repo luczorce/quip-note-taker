@@ -1,6 +1,8 @@
 export default function QuipCaller(token, threadId) {
   const USER_TOKEN = token;
   const THREAD = threadId;
+  const API = 'https://qetl-notetaker-proxy.herokuapp.com';
+  // const API = 'https://localhost:8000';
   
   return {
     getDocument,
@@ -10,7 +12,7 @@ export default function QuipCaller(token, threadId) {
   //////
   
   function getDocument() {
-    const path = `https://localhost:8000/doc/${THREAD}?token=${encodeURIComponent(USER_TOKEN)}`;
+    const path = `${API}/doc/${THREAD}?token=${encodeURIComponent(USER_TOKEN)}`;
     const options = {
       method: 'GET'
     };
@@ -18,10 +20,21 @@ export default function QuipCaller(token, threadId) {
     return combinedFetch(path, options);
   }
 
-  function updateDocument() {
-    console.log('TODO');
+  function updateDocument(note) {
+    const path = `${API}/doc/${THREAD}?token=${encodeURIComponent(USER_TOKEN)}`;
+    const options = {
+      method: 'POST',
+      body: getFormatedQuipSection(note),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+    
+    return combinedFetch(path, options);
   }
 }
+
+//////
 
 function combinedFetch(path, options) {
   let response;
@@ -35,4 +48,20 @@ function combinedFetch(path, options) {
       resolve(response);
     });
   });
+}
+
+function getFormatedQuipSection(note) {
+  let content = '';
+
+  note.topics.forEach((n, index) => {
+    if (index === 0) {
+      content += `<h2>${n}</h2>`;
+    } else {
+      content += `<h3>${n}</h3>`;
+    }
+  });
+
+  content += `<p>${note.content}</p>`;
+
+  return `content=${content}`;
 }
