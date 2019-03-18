@@ -2,14 +2,16 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       notes: quip.apps.RecordList.Type(NoteRecord),
-      topics: 'array'
+      topics: 'array',
+      sections: 'array'
     };
   }
 
   static getDefaultProperties() {
     return {
       notes: [],
-      topics: []
+      topics: [],
+      sections: []
     };
   }
 
@@ -56,7 +58,8 @@ export class NoteRecord extends quip.apps.Record {
     return {
       content: 'string',
       owner: 'string',
-      topics: 'array'
+      topics: 'array',
+      guid: 'string'
     }
   }
 }

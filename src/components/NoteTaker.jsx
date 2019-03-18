@@ -1,11 +1,10 @@
 import Question from './Question.jsx';
-import QuipCaller from '../util/quip-caller.js';
 import Style from '../style/Form.less';
 import Message from '../style/Message.less';
 
 export default class NoteTaker extends React.Component {
   static propTypes = {
-    token: React.PropTypes.string
+    noteCreated: React.PropTypes.func
   };
 
   constructor(props) {
@@ -21,8 +20,6 @@ export default class NoteTaker extends React.Component {
     this.setThoughtElementRef = element => {
       this.thoughtElement = element;
     }
-
-    this.docCaller = QuipCaller(props.token, quip.apps.getThreadId());
 
     quip.apps.updateToolbar({disabledCommandIds: []});
   }
@@ -57,19 +54,10 @@ export default class NoteTaker extends React.Component {
       owner: quip.apps.getViewingUser().getId()
     };
     record.addNote(note);
-    this.docCaller.updateDocument(note).then(response => {
-      console.log(response);
-    });
 
     this.indicateSaved();
     this.clearAndShiftFocus();
 
-  }
-
-  testDocumentGetter = () => {
-    this.docCaller.getDocument().then(response => {
-      console.log(response);
-    });
   }
 
   updateTags = (event) => {

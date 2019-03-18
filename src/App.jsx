@@ -1,52 +1,61 @@
-import TokenTaker from './components/TokenTaker.jsx';
 import NoteTaker from './components/NoteTaker.jsx';
-import Styles from "./style/App.less";
+import NoteList from './components/NoteList.jsx';
+import SectionMaker from './components/SectionMaker.jsx';
+import Sections from './components/Sections.jsx';
+import Style from "./style/App.less";
 
 export default class App extends React.Component {
+  // static propTypes = {
+  //   record: quip.rootRecord
+  // }
+
   constructor(props) {
     super();
 
-    const token = quip.apps.getUserPreferences().getForKey('token');
-    
-    this.state = {
-      token: token,
-      showTokenForm: (token === undefined || !token.length)
-    };
 
-    this.setMenu();
+    this.state = {
+      sections: props.record.get('sections'),
+      topics: props.record.get('topics'),
+      notes: props.record.get('notes'),
+
+      // TODO read this from user/doc preferences?
+      currentSections: [],
+      showSectionMaker: false
+    }
   }
 
-  tokenIsSet = (token) => {
+  appendNote = (note) => {
+    this.setState({notes: this.state.notes.concat(note)});
+  }
+
+  finishSectionMaker = (section) => {
     this.setState({
-      token: token,
-      showTokenForm: false
+      sections: this.state.sections.concat(section),
+      showSectionMaker: false
+    }, () => {
+      quip.apps.getRootRecord().set('sections', this.state.sections);
     });
   }
 
-  setMenu = () => {
-    let toolbar = {
-      toolbarCommandIds: [ 'updateToken' ],
-      menuCommands: [
-        {
-          id: 'updateToken',
-          label: 'update user key',
-          handler: () => this.setState({showTokenForm: true}) 
-        }
-      ]
-    };
+  showSectionMaker = () => {
+    this.setState({showSectionMaker: true});
+  }
 
-    quip.apps.updateToolbar(toolbar);
+  updateCurrentSections = (section) => {
+    if (this.state.currentSections.includes(section)) {
+      this.setState({currentSections: this.state.currentSections.filter(s => s !== section)});
+    } else {
+      this.setState({currentSections: this.state.currentSections.concat(section)});
+    }
   }
 
   render() {
-    let content;
-    
-    if (this.state.showTokenForm) {
-      content = <TokenTaker token={this.state.token} tokenSaved={this.tokenIsSet} />
-    } else {
-      content = <NoteTaker token={this.state.token} />;
-    }
-    
-    return content;
+    return <div className={Style.app}>
+      <Sections sections={this.state.sections} showSectionMaker={this.showSectionMaker} currentSections={this.state.currentSections} updateCurrentSections={this.updateCurrentSections} />
+      {/*<NoteList notes={this.state.notes} currentSections={this.state.currentSections} />*/}
+      {/*<NoteTaker noteCreated={this.appendNote} />*/}
+
+      { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
+    </div>;
   }
 }
