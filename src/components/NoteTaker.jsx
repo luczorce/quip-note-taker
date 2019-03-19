@@ -41,6 +41,14 @@ export default class NoteTaker extends React.Component {
 
     this.thoughtElement.focus();
   }
+
+  formatAndCleanTopics = () => {
+    let topics = this.state.tags.split(',');
+    topics = topics.map(t => t.trim());
+    topics = topics.filter(t => t.length);
+    
+    return topics;
+  }
   
   indicateSaved = () => {
     this.setState({showSavedMessage: true}, () => {
@@ -53,8 +61,7 @@ export default class NoteTaker extends React.Component {
   saveThought = () =>{
     const record = quip.apps.getRootRecord();
 
-    let topics = this.state.tags.split(',');
-    topics = topics.map(t => t.trim());
+    let topics = this.formatAndCleanTopics();
     record.updateTopics(topics);
     
     let note = {
@@ -67,7 +74,6 @@ export default class NoteTaker extends React.Component {
 
     this.indicateSaved();
     this.clearAndShiftFocus();
-
   }
 
   updateTags = (event) => {
