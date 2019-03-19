@@ -7,10 +7,6 @@ export default class NoteList extends React.Component {
     currentSections: React.PropTypes.array
   };
 
-  // constructor(props) {
-  //   super();
-  // }
-
   getCurrentNotes = () => {
     return this.props.notes.filter(n => {
       let isPresent = false;
@@ -36,7 +32,7 @@ export default class NoteList extends React.Component {
     });
 
     return <div key={note.guid} className={Style.note}>
-      <textarea value={note.content} disabled="true"></textarea>
+      <p style={{'white-space': 'pre'}}>{note.content}</p>
       <div className={Style.topicList}>{topics}</div>
       <div className={Style.owner}>owner: {note.owner}</div>
     </div>;
@@ -47,7 +43,7 @@ export default class NoteList extends React.Component {
     let notes;
 
     if (currentNotes.length) {
-      notes = currentNotes.reverse().map(this.makeEachNote);
+      notes = currentNotes.map(this.makeEachNote);
     } else {
       notes = <p>add notes to get started</p>;
     }
