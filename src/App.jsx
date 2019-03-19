@@ -55,8 +55,16 @@ export default class App extends React.Component {
 
   //////
 
+  addAllToCurrentSections = () => {
+    this.setState({currentSections: this.state.sections});
+  }
+
   finishSectionMaker = () => {
     this.setState({ showSectionMaker: false });
+  }
+
+  removeAllToCurrentSections = () => {
+    this.setState({currentSections: []});
   }
 
   showSectionMaker = () => {
@@ -73,7 +81,12 @@ export default class App extends React.Component {
 
   render() {
     return <div className={Style.app}>
-      <Sections sections={this.state.sections} showSectionMaker={this.showSectionMaker} currentSections={this.state.currentSections} updateCurrentSections={this.updateCurrentSections} />
+      <Sections sections={this.state.sections} 
+          showSectionMaker={this.showSectionMaker} 
+          currentSections={this.state.currentSections} 
+          update={this.updateCurrentSections} 
+          addAll={this.addAllToCurrentSections}
+          removeAll={this.removeAllToCurrentSections} />
       <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
       <NoteTaker currentSections={this.state.currentSections} />
 

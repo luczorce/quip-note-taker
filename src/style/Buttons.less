@@ -48,3 +48,50 @@
     cursor: not-allowed;
   }
 }
+
+.discreet {
+  .button-reset;
+  text-align: left;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  font-size: 0.9em;
+
+  &:focus,
+  &:hover {
+    background: @quip-color-grey-lightest;
+  }
+  
+  &[disabled] {
+    background: none;
+    cursor: not-allowed;
+    color: @quip-color-grey-dark;
+  }
+}
+
+.discreetForDark {
+  .discreet;
+  color: @white;
+
+  &:focus,
+  &:hover {
+    background: @quip-color-grey-darker;
+    text-decoration: underline;
+  }
+
+  &[disabled] {
+    background: none;
+    cursor: not-allowed;
+    color: @quip-color-grey-light;
+  }
+}
+
+.iconButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .icon {
+    margin-right: 5px;
+  }
+}
