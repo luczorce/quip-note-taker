@@ -1,4 +1,5 @@
 import Style from '../style/Sections.less';
+import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
 
 export default class Sections extends React.Component {
@@ -14,7 +15,11 @@ export default class Sections extends React.Component {
 
     if (this.props.sections.length) {
       ordered = this.props.sections.sort().map(section => {
-        const itemClass = (this.props.currentSections.includes(section)) ? Style.selected : '';
+        let itemClass = Style.section;
+        
+        if (this.props.currentSections.includes(section)) {
+          itemClass += ' ' + Style.selected;
+        }
         
         return <li 
             onClick={() => this.props.updateCurrentSections(section)} 
@@ -23,16 +28,16 @@ export default class Sections extends React.Component {
             </li>;
       });
 
-      ordered = <ul>{ordered}</ul>;
+      ordered = <ul className={Style.sectionList}>{ordered}</ul>;
     } else {
       ordered = <p>add a section to get started</p>;
     }
 
-    return <div>
+    return <div className={Style.sectionContainer}>
       {ordered}
       
       <div>
-        <button type="button" onClick={this.props.showSectionMaker}>add new section</button>
+        <button type="button" onClick={this.props.showSectionMaker} className={Button.buttonSimple}>add new section</button>
       </div>
     </div>;
   }

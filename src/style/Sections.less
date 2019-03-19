@@ -1,5 +1,34 @@
 @import "Colors.less";
 
-.selected {
-  background: tomato;
+.sectionContainer {
+  background: @quip-color-grey-darkest;
+  color: @quip-color-grey-lightest;
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.sectionList {
+  list-style: none;
+  padding: 0;
+
+}
+
+.section {
+  cursor: pointer;
+  padding: 3px 5px;
+  margin: 0 -5px 0px;
+  user-select: none;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.selected {
+    font-style: bold;
+    text-decoration: underline;
+    background: fade(@white, 20%);
+  }
 }

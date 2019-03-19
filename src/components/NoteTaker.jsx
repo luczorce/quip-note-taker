@@ -1,5 +1,6 @@
 import Question from './Question.jsx';
 import Style from '../style/Form.less';
+import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
 
 const uuid = require('uuid/v1');
@@ -100,7 +101,7 @@ export default class NoteTaker extends React.Component {
           <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" />
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length} className={`${Style.buttonPrimary} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length} className={`${Button.buttonPrimary} ${Style.submitNote}`}>
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>
