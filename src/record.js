@@ -2,14 +2,16 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       notes: quip.apps.RecordList.Type(NoteRecord),
-      topics: 'array'
+      topics: 'array',
+      sections: 'array'
     };
   }
 
   static getDefaultProperties() {
     return {
       notes: [],
-      topics: []
+      topics: [],
+      sections: []
     };
   }
 
@@ -21,27 +23,28 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     const notes = quip.apps.getRootRecord()
           .get('notes')
           .getRecords()
-          .map(r => {
-            return {
-              note: r.get('content'), 
-              topics: r.get('topics'), 
-              owner: r.get('owner')
-            };
-          });
+          .map(r => r.getData());
 
     return notes;
   }
 
-  updateTopics = (topics) => {
-    let current = this.get('topics');
+  updateTopics(topics) {
+    const current = this.get('topics');
+    let newTopics = [];
     
     topics.forEach(t => {
       if (current.indexOf(t) === -1) {
-        current.push(t);
+        newTopics.push(t);
       }
     });
 
-    this.set('topics', current);
+    if (newTopics.length) {
+      this.set('topics', current.concat(newTopics));
+    }
+  }
+
+  appendSection(section) {
+    this.set('sections', this.get('sections').concat(section));
   }
 }
 
@@ -56,7 +59,8 @@ export class NoteRecord extends quip.apps.Record {
     return {
       content: 'string',
       owner: 'string',
-      topics: 'array'
+      topics: 'array',
+      guid: 'string'
     }
   }
 }

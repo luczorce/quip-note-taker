@@ -1,11 +1,12 @@
 import Question from './Question.jsx';
-import QuipCaller from '../util/quip-caller.js';
 import Style from '../style/Form.less';
 import Message from '../style/Message.less';
 
+const uuid = require('uuid/v1');
+
 export default class NoteTaker extends React.Component {
   static propTypes = {
-    token: React.PropTypes.string
+    currentSections: React.PropTypes.array
   };
 
   constructor(props) {
@@ -21,19 +22,31 @@ export default class NoteTaker extends React.Component {
     this.setThoughtElementRef = element => {
       this.thoughtElement = element;
     }
-
-    this.docCaller = QuipCaller(props.token, quip.apps.getThreadId());
-
-    quip.apps.updateToolbar({disabledCommandIds: []});
   }
 
   clearAndShiftFocus = () => {
+    let tags;
+
+    if (this.props.currentSections.length === 1) {
+      tags = `${this.props.currentSections[0]}, `;
+    } else {
+      tags = '';
+    }
+
     this.setState({
       thought: '',
-      tags: ''
+      tags: tags
     });
 
     this.thoughtElement.focus();
+  }
+
+  formatAndCleanTopics = () => {
+    let topics = this.state.tags.split(',');
+    topics = topics.map(t => t.trim());
+    topics = topics.filter(t => t.length);
+    
+    return topics;
   }
   
   indicateSaved = () => {
@@ -47,29 +60,19 @@ export default class NoteTaker extends React.Component {
   saveThought = () =>{
     const record = quip.apps.getRootRecord();
 
-    let topics = this.state.tags.split(',');
-    topics = topics.map(t => t.trim());
+    let topics = this.formatAndCleanTopics();
     record.updateTopics(topics);
     
     let note = {
       content: this.state.thought,
       topics: topics,
-      owner: quip.apps.getViewingUser().getId()
+      owner: quip.apps.getViewingUser().getId(),
+      guid: uuid()
     };
     record.addNote(note);
-    this.docCaller.updateDocument(note).then(response => {
-      console.log(response);
-    });
 
     this.indicateSaved();
     this.clearAndShiftFocus();
-
-  }
-
-  testDocumentGetter = () => {
-    this.docCaller.getDocument().then(response => {
-      console.log(response);
-    });
   }
 
   updateTags = (event) => {

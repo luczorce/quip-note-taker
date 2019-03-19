@@ -1,52 +1,81 @@
-import TokenTaker from './components/TokenTaker.jsx';
 import NoteTaker from './components/NoteTaker.jsx';
-import Styles from "./style/App.less";
+import NoteList from './components/NoteList.jsx';
+import SectionMaker from './components/SectionMaker.jsx';
+import Sections from './components/Sections.jsx';
+import Style from "./style/App.less";
 
 export default class App extends React.Component {
+  // static propTypes = {
+  //   record: quip.rootRecord
+  // }
+
+  recordListener = null;
+
   constructor(props) {
     super();
 
-    const token = quip.apps.getUserPreferences().getForKey('token');
-    
-    this.state = {
-      token: token,
-      showTokenForm: (token === undefined || !token.length)
-    };
 
-    this.setMenu();
+    this.state = {
+      sections: props.record.get('sections'),
+      topics: props.record.get('topics'),
+      notes: props.record.getAllNotes(),
+
+      // TODO read this from a record?...
+      currentSections: [],
+      showSectionMaker: false
+    };
   }
 
-  tokenIsSet = (token) => {
+  componentDidMount() {
+    let rootRecord = quip.apps.getRootRecord();
+    this.recordListener = rootRecord.listen(() => this.getUpdatedState());
+  }
+
+  componentWillUnmount() {
+    if (this.recordListener !== null) {
+      let rootRecord = quip.apps.getRootRecord();
+      rootRecord.unlisten(this.recordListener);
+    }
+  }
+
+  getUpdatedState = () => {
+    const record = quip.apps.getRootRecord();
+    const notes = record.getAllNotes();
+    const topics = record.get('topics');
+    const sections = record.get('sections');
+
     this.setState({
-      token: token,
-      showTokenForm: false
+      notes: notes,
+      topics: topics,
+      sections: sections
     });
   }
 
-  setMenu = () => {
-    let toolbar = {
-      toolbarCommandIds: [ 'updateToken' ],
-      menuCommands: [
-        {
-          id: 'updateToken',
-          label: 'update user key',
-          handler: () => this.setState({showTokenForm: true}) 
-        }
-      ]
-    };
+  //////
 
-    quip.apps.updateToolbar(toolbar);
+  finishSectionMaker = () => {
+    this.setState({ showSectionMaker: false });
+  }
+
+  showSectionMaker = () => {
+    this.setState({showSectionMaker: true});
+  }
+
+  updateCurrentSections = (section) => {
+    if (this.state.currentSections.includes(section)) {
+      this.setState({currentSections: this.state.currentSections.filter(s => s !== section)});
+    } else {
+      this.setState({currentSections: this.state.currentSections.concat(section)});
+    }
   }
 
   render() {
-    let content;
-    
-    if (this.state.showTokenForm) {
-      content = <TokenTaker token={this.state.token} tokenSaved={this.tokenIsSet} />
-    } else {
-      content = <NoteTaker token={this.state.token} />;
-    }
-    
-    return content;
+    return <div className={Style.app}>
+      <Sections sections={this.state.sections} showSectionMaker={this.showSectionMaker} currentSections={this.state.currentSections} updateCurrentSections={this.updateCurrentSections} />
+      <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
+      <NoteTaker currentSections={this.state.currentSections} />
+
+      { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
+    </div>;
   }
 }

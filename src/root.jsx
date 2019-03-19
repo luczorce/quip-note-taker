@@ -8,6 +8,7 @@ quip.apps.registerClass(NoteRecord, 'note-record');
 
 quip.apps.initialize({
   initializationCallback: function(rootNode) {
-    ReactDOM.render(<App />, rootNode);
+    let rootRecord = quip.apps.getRootRecord();
+    ReactDOM.render(<App record={rootRecord} />, rootNode);
   },
 });
