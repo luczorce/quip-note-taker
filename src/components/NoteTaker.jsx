@@ -2,9 +2,12 @@ import Question from './Question.jsx';
 import Style from '../style/Form.less';
 import Message from '../style/Message.less';
 
+const uuid = require('uuid/v1');
+
 export default class NoteTaker extends React.Component {
   static propTypes = {
-    noteCreated: React.PropTypes.func
+    noteCreated: React.PropTypes.func,
+    currentSections: React.PropTypes.array
   };
 
   constructor(props) {
@@ -20,14 +23,20 @@ export default class NoteTaker extends React.Component {
     this.setThoughtElementRef = element => {
       this.thoughtElement = element;
     }
-
-    quip.apps.updateToolbar({disabledCommandIds: []});
   }
 
   clearAndShiftFocus = () => {
+    let tags;
+
+    if (this.props.currentSections.length === 1) {
+      tags = `${this.props.currentSections[0]}, `;
+    } else {
+      tags = '';
+    }
+
     this.setState({
       thought: '',
-      tags: ''
+      tags: tags
     });
 
     this.thoughtElement.focus();
@@ -51,7 +60,8 @@ export default class NoteTaker extends React.Component {
     let note = {
       content: this.state.thought,
       topics: topics,
-      owner: quip.apps.getViewingUser().getId()
+      owner: quip.apps.getViewingUser().getId(),
+      guid: uuid()
     };
     record.addNote(note);
 

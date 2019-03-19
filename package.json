@@ -11,5 +11,8 @@
     "devDependencies": {
         "create-quip-app": "0.0.45",
         "quip-apps-webpack-config": ">=0.0.39"
+    },
+    "dependencies": {
+        "uuid": "^3.3.2"
     }
 }
