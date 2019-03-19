@@ -1,4 +1,5 @@
 @import "Colors.less";
+@import "Common.less";
 
 .sectionContainer {
   background: @quip-color-grey-darkest;
@@ -11,6 +12,14 @@
   border-radius: 6px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
+}
+
+.title {
+  color: @quip-color-grey-lightest;
+  
+  .icon {
+    .iconInline;
+  }
 }
 
 .sectionList {
