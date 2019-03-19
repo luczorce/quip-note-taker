@@ -16,12 +16,12 @@ export default class App extends React.Component {
     this.state = {
       sections: props.record.get('sections'),
       topics: props.record.get('topics'),
-      notes: props.record.get('notes'),
+      notes: props.record.get('notes').getRecords().map(n => n.getData()),
 
-      // TODO read this from user/doc preferences?
+      // TODO read this from a record...
       currentSections: [],
       showSectionMaker: false
-    }
+    };
   }
 
   appendNote = (note) => {
@@ -29,10 +29,15 @@ export default class App extends React.Component {
   }
 
   finishSectionMaker = (section) => {
-    this.setState({
-      sections: this.state.sections.concat(section),
+    let updatedState = {
       showSectionMaker: false
-    }, () => {
+    };
+
+    if (section !== null) {
+      updatedState.sections = this.state.sections.concat(section);
+    }
+
+    this.setState(updatedState, () => {
       quip.apps.getRootRecord().set('sections', this.state.sections);
     });
   }
@@ -52,8 +57,8 @@ export default class App extends React.Component {
   render() {
     return <div className={Style.app}>
       <Sections sections={this.state.sections} showSectionMaker={this.showSectionMaker} currentSections={this.state.currentSections} updateCurrentSections={this.updateCurrentSections} />
-      {/*<NoteList notes={this.state.notes} currentSections={this.state.currentSections} />*/}
-      {/*<NoteTaker noteCreated={this.appendNote} />*/}
+      <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
+      <NoteTaker noteCreated={this.appendNote} currentSections={this.state.currentSections} />
 
       { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
     </div>;

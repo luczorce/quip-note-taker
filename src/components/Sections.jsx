@@ -10,12 +10,10 @@ export default class Sections extends React.Component {
   };
 
   render() {
-    console.log(this.props.currentSections);
     let ordered;
 
     if (this.props.sections.length) {
       ordered = this.props.sections.sort().map(section => {
-        console.log(section);
         const itemClass = (this.props.currentSections.includes(section)) ? Style.selected : '';
         
         return <li 

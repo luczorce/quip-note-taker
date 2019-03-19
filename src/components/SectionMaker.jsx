@@ -33,7 +33,7 @@ export default class SectionMaker extends React.Component {
   }
 
   closeMaker = () => {
-    this.props.sectionCreated();
+    this.props.sectionCreated(null);
   }
 
   saveSection = (event) => {    
