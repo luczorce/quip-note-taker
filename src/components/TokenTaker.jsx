@@ -58,13 +58,13 @@ export default class TokenTaker extends React.Component {
       </label>
 
       <p>
-        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.buttonPrimary} onClick={this.saveToken}>
+        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.primary} onClick={this.saveToken}>
           save token
         </button>
 
         &nbsp;
 
-        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.buttonSimple} onClick={() => this.props.tokenSaved(this.state.tokenCandidate)}>
+        <button type="button" disabled={!this.state.tokenCandidate.length} className={Style.simple} onClick={() => this.props.tokenSaved(this.state.tokenCandidate)}>
           never mind
         </button>
 

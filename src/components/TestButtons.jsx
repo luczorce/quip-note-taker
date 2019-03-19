@@ -20,7 +20,7 @@ export default class TestButtons extends React.Component {
 
   render() {
     return <p>
-      <button type="button" onClick={this.testDocumentGetter} className={Style.buttonSimple}>
+      <button type="button" onClick={this.testDocumentGetter} className={Style.simple}>
         test document getter
       </button>
     </p>;

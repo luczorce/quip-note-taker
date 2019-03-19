@@ -103,7 +103,7 @@ export default class NoteTaker extends React.Component {
           <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" disabled={noNoteTaking}/>
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length || noNoteTaking} className={`${Button.buttonPrimary} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>

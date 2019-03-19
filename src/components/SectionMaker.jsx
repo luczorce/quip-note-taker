@@ -67,11 +67,11 @@ export default class SectionMaker extends React.Component {
         <button type="button" 
             onClick={this.saveSection} 
             disabled={!this.state.isValid}
-            className={Button.buttonPrimary}>
+            className={Button.primary}>
           add
         </button>
         
-        <button className={`${Button.buttonSimple} ${Button.windowCloser}`} type="button" onClick={this.closeMaker}>
+        <button className={`${Button.simple} ${Button.windowCloser}`} type="button" onClick={this.closeMaker}>
           cancel
         </button>
 
