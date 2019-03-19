@@ -1,7 +1,6 @@
 import Question from './Question.jsx';
 import Style from '../style/Form.less';
 import Button from '../style/Buttons.less';
-import Message from '../style/Message.less';
 
 const uuid = require('uuid/v1');
 
@@ -16,7 +15,8 @@ export default class NoteTaker extends React.Component {
     this.state = {
       thought: '',
       tags: '',
-      showSavedMessage: false
+      showSavedMessage: false,
+      showHelpMessage: false,
     };
 
     this.thoughtElement = null;
@@ -76,6 +76,12 @@ export default class NoteTaker extends React.Component {
     this.clearAndShiftFocus();
   }
 
+  toggleHelpMessage = () => {
+    const current = this.state.showHelpMessage;
+
+    this.setState({showHelpMessage: !current});
+  }
+
   updateTags = (event) => {
     this.setState({tags: event.target.value});
   }
@@ -108,7 +114,11 @@ export default class NoteTaker extends React.Component {
 
       </div>
 
-      <p className={Message.helper}><Question/> add notes as you think them, and they'll be automatically sorted for you based on your tags.</p>
+      <div className={Style.popoverQuestion}>
+        <span onClick={this.toggleHelpMessage}><Question style={Style.icon}/></span>
+      </div>
+
+      { this.state.showHelpMessage && <p className={Style.popoverNote}>add notes as you think them, and they'll be automatically sorted for you based on your tags.</p> }
     </div>;
   }
 }

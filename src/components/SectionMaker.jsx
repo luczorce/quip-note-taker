@@ -1,5 +1,6 @@
 import Question from './Question.jsx';
 import Style from '../style/Form.less';
+import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
 
 export default class SectionMaker extends React.Component {
@@ -66,17 +67,17 @@ export default class SectionMaker extends React.Component {
         <button type="button" 
             onClick={this.saveSection} 
             disabled={!this.state.isValid}
-            className={Style.buttonPrimary}>
+            className={Button.buttonPrimary}>
           add
         </button>
         
-        <button className={Style.windowCloser} type="button" onClick={this.closeMaker}>
+        <button className={`${Button.buttonSimple} ${Button.windowCloser}`} type="button" onClick={this.closeMaker}>
           cancel
         </button>
 
       </div>
 
-      <p className={Message.helper}><Question/> add sections like groups from slack</p>
+      <p className={Message.helper}><Question style={Message.icon}/> add sections like groups from slack</p>
     </div>;
   }
 }
