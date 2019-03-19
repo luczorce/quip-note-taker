@@ -14,14 +14,16 @@ export default class App extends React.Component {
   constructor(props) {
     super();
 
+    const sections = props.record.get('sections');
+    const currentSections = (sections.length) ? [sections[0]] : [];
 
     this.state = {
-      sections: props.record.get('sections'),
+      sections: sections,
       topics: props.record.get('topics'),
       notes: props.record.getAllNotes(),
 
       // TODO read this from a record?...
-      currentSections: [],
+      currentSections: currentSections,
       showSectionMaker: false
     };
   }

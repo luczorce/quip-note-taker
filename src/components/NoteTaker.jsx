@@ -17,6 +17,7 @@ export default class NoteTaker extends React.Component {
       tags: '',
       showSavedMessage: false,
       showHelpMessage: false,
+      collapse: Boolean(props.currentSections.length !== 1)
     };
 
     this.thoughtElement = null;
@@ -26,17 +27,9 @@ export default class NoteTaker extends React.Component {
   }
 
   clearAndShiftFocus = () => {
-    let tags;
-
-    if (this.props.currentSections.length === 1) {
-      tags = `${this.props.currentSections[0]}, `;
-    } else {
-      tags = '';
-    }
-
     this.setState({
       thought: '',
-      tags: tags
+      tags: ''
     });
 
     this.thoughtElement.focus();
@@ -46,6 +39,7 @@ export default class NoteTaker extends React.Component {
     let topics = this.state.tags.split(',');
     topics = topics.map(t => t.trim());
     topics = topics.filter(t => t.length);
+    topics.unshift(this.props.currentSections[0]);
     
     return topics;
   }
@@ -91,23 +85,25 @@ export default class NoteTaker extends React.Component {
   }
 
   render() {
+    const noNoteTaking = (this.props.currentSections.length !== 1);
+
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
         <span className={`${Style.label} ${Style.labelWithPopup}`}>
-          current thought
+          {noNoteTaking ? 'select only one section to add a note' : 'current thought' }
           {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
         </span>
         
-        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3" ref={this.setThoughtElementRef}></textarea>
+        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3" ref={this.setThoughtElementRef} disabled={noNoteTaking}></textarea>
       </label>
 
       <div className={Style.formRow}>
         <label className={Style.stackedFormInput}>
           <span className={Style.label}>tags</span>
-          <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" />
+          <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" disabled={noNoteTaking}/>
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length} className={`${Button.buttonPrimary} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length || noNoteTaking} className={`${Button.buttonPrimary} ${Style.submitNote}`}>
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>
