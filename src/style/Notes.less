@@ -1,16 +1,38 @@
 @import "Colors.less";
 
-.noteList {}
+.noteList {
+  margin-left: 10px;
+  overflow-y: auto;
+  max-height: 300px;
+}
 
 .note {
+  padding: 5px 10px;
+  background: #f9f9f9;
+  margin-bottom: 2px;
 
+  &:last-child {
+    margin-bottom: 20px;
+  }
+
+  .content {
+    margin: 0 auto 10px;
+    white-space: pre-line;
+  }
+
+  .owner {
+    margin-bottom: 0;
+    font-size: 0.9em;
+    font-style: italic;
+  }
 }
 
 .topicList {
   .topic {
     border: 1px solid #cecece;
-    padding: 2px;
-    font-size: 0.9em;
+    border-radius: 3px;
+    padding: 1px 2px;
+    font-size: 0.8em;
     margin-right: 5px;
   }
   
@@ -20,6 +42,7 @@
 
   .noteSection {
     .topic;
-    background: #a2a2a2;
+    background: fade(@quip-color-green, 20%);
+    border-color: @quip-color-green;
   }
 }

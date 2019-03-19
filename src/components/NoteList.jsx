@@ -32,9 +32,9 @@ export default class NoteList extends React.Component {
     });
 
     return <div key={note.guid} className={Style.note}>
-      <p style={{'white-space': 'pre-line'}}>{note.content}</p>
+      <p className={Style.content}>{note.content}</p>
       <div className={Style.topicList}>{topics}</div>
-      <div className={Style.owner}>owner: {note.owner}</div>
+      <p className={Style.owner}>{quip.apps.getUserById(note.owner).getName()}</p>
     </div>;
   }
 
