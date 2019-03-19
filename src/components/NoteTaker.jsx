@@ -6,7 +6,6 @@ const uuid = require('uuid/v1');
 
 export default class NoteTaker extends React.Component {
   static propTypes = {
-    noteCreated: React.PropTypes.func,
     currentSections: React.PropTypes.array
   };
 

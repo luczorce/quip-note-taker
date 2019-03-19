@@ -9,6 +9,8 @@ export default class App extends React.Component {
   //   record: quip.rootRecord
   // }
 
+  recordListener = null;
+
   constructor(props) {
     super();
 
@@ -16,30 +18,43 @@ export default class App extends React.Component {
     this.state = {
       sections: props.record.get('sections'),
       topics: props.record.get('topics'),
-      notes: props.record.get('notes').getRecords().map(n => n.getData()),
+      notes: props.record.getAllNotes(),
 
-      // TODO read this from a record...
+      // TODO read this from a record?...
       currentSections: [],
       showSectionMaker: false
     };
   }
 
-  appendNote = (note) => {
-    this.setState({notes: this.state.notes.concat(note)});
+  componentDidMount() {
+    let rootRecord = quip.apps.getRootRecord();
+    this.recordListener = rootRecord.listen(() => this.getUpdatedState());
   }
 
-  finishSectionMaker = (section) => {
-    let updatedState = {
-      showSectionMaker: false
-    };
-
-    if (section !== null) {
-      updatedState.sections = this.state.sections.concat(section);
+  componentWillUnmount() {
+    if (this.recordListener !== null) {
+      let rootRecord = quip.apps.getRootRecord();
+      rootRecord.unlisten(this.recordListener);
     }
+  }
 
-    this.setState(updatedState, () => {
-      quip.apps.getRootRecord().set('sections', this.state.sections);
+  getUpdatedState = () => {
+    const record = quip.apps.getRootRecord();
+    const notes = record.getAllNotes();
+    const topics = record.get('topics');
+    const sections = record.get('sections');
+
+    this.setState({
+      notes: notes,
+      topics: topics,
+      sections: sections
     });
+  }
+
+  //////
+
+  finishSectionMaker = () => {
+    this.setState({ showSectionMaker: false });
   }
 
   showSectionMaker = () => {
@@ -58,7 +73,7 @@ export default class App extends React.Component {
     return <div className={Style.app}>
       <Sections sections={this.state.sections} showSectionMaker={this.showSectionMaker} currentSections={this.state.currentSections} updateCurrentSections={this.updateCurrentSections} />
       <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
-      <NoteTaker noteCreated={this.appendNote} currentSections={this.state.currentSections} />
+      <NoteTaker currentSections={this.state.currentSections} />
 
       { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
     </div>;
