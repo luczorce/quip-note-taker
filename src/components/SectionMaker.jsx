@@ -38,9 +38,7 @@ export default class SectionMaker extends React.Component {
   }
 
   saveSection = (event) => {    
-    const section = event.target.value;
-
-    quip.apps.getRootRecord.appendSection(section);
+    quip.apps.getRootRecord().appendSection(this.state.section);
     this.props.sectionCreated();
   }
 

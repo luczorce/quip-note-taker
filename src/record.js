@@ -19,6 +19,11 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     this.get('notes').add(noteData);
   }
 
+  appendSection(section) {
+    let sections = this.get('sections');
+    this.set('sections', sections.concat(section));
+  }
+
   getAllNotes() {
     const notes = quip.apps.getRootRecord()
           .get('notes')
@@ -41,10 +46,6 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     if (newTopics.length) {
       this.set('topics', current.concat(newTopics));
     }
-  }
-
-  appendSection(section) {
-    this.set('sections', this.get('sections').concat(section));
   }
 }
 
