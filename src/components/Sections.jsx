@@ -41,7 +41,7 @@ export default class Sections extends React.Component {
 
     return <div className={Style.sectionContainer}>
       <div>
-        <h1 className={Style.title}>
+        <h1 className={Style.title} title="Shift+click sections to select multiple at once">
           <svg className={Style.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ebebeb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
           &nbsp; Sections
         </h1>
