@@ -94,7 +94,11 @@ export default class NoteList extends React.Component {
         select sections to see their notes
       </p>;
     } else {
-      notes = <p className={Message.emptyNotice}>add notes below!</p>;
+      notes = <p className={Message.emptyNotice}>
+        <BigNoteIcon />
+        <br/>
+        add notes below!
+      </p>;
     }
 
     return <div className={Style.noteList}>{notes}</div>;
@@ -103,4 +107,8 @@ export default class NoteList extends React.Component {
 
 function BigSectionIcon() {
   return <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>;
+}
+
+function BigNoteIcon() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
 }

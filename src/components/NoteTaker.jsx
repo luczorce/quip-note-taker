@@ -86,11 +86,19 @@ export default class NoteTaker extends React.Component {
 
   render() {
     const noNoteTaking = (this.props.currentSections.length !== 1);
+    let thoughtLabel;
+
+    if (noNoteTaking) {
+      thoughtLabel = 'select only one section to add a note';
+    } else {
+      thoughtLabel = <span><SmallNoteIcon/> current thought</span>;
+    }
 
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
         <span className={`${Style.label} ${Style.labelWithPopup}`}>
-          {noNoteTaking ? 'select only one section to add a note' : 'current thought' }
+          {thoughtLabel}
+          
           {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
         </span>
         
@@ -116,4 +124,8 @@ export default class NoteTaker extends React.Component {
       { this.state.showHelpMessage && <p className={Style.popoverNote}>add notes as you think them, and they'll be automatically sorted for you based on your tags.</p> }
     </div>;
   }
+}
+
+function SmallNoteIcon() {
+  return <svg className={Style.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5c6470" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>;
 }
