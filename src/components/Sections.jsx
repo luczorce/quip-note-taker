@@ -42,8 +42,7 @@ export default class Sections extends React.Component {
     return <div className={Style.sectionContainer}>
       <div>
         <h1 className={Style.title} title="Shift+click sections to select multiple at once">
-          <svg className={Style.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ebebeb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
-          &nbsp; Sections
+          <SmallSectionIcon /> Sections
         </h1>
         
         <p style={{fontSize: '0.9em'}}>select: 
@@ -56,10 +55,18 @@ export default class Sections extends React.Component {
       
       <div>
         <button type="button" onClick={this.props.showSectionMaker} className={`${Button.discreetForDark} ${Button.iconButton}`}>
-          <svg className={Button.icon} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ebebeb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <AddPlusIcon />
           <span>add new section</span>
         </button>
       </div>
     </div>;
   }
+}
+
+function SmallSectionIcon() {
+  return <svg className={Style.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ebebeb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>;
+}
+
+function AddPlusIcon() {
+  return <svg className={Button.icon} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ebebeb" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>;
 }

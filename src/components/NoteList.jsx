@@ -89,7 +89,7 @@ export default class NoteList extends React.Component {
       notes = currentNotes.map(this.makeEachNote);
     } else if (!this.props.currentSections.length) {
       notes = <p className={Message.emptyNotice}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>
+        <BigSectionIcon />
         <br/>
         select sections to see their notes
       </p>;
@@ -99,4 +99,8 @@ export default class NoteList extends React.Component {
 
     return <div className={Style.noteList}>{notes}</div>;
   }
+}
+
+function BigSectionIcon() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>;
 }
