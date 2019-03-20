@@ -13,7 +13,7 @@ export default class NoteTaker extends React.Component {
     super();
 
     this.state = {
-      thought: '',
+      // thought: quip.apps.getRootRecord().get('noteInProgress'),
       tags: '',
       showSavedMessage: false,
       showHelpMessage: false,
@@ -94,6 +94,12 @@ export default class NoteTaker extends React.Component {
       thoughtLabel = <span><SmallNoteIcon/> current thought</span>;
     }
 
+    const thought = quip.apps.getRootRecord().get('noteInProgress');
+    const emptyThought = thought.empty();
+    // const emptyThought = false;
+    console.log(thought);
+    console.log(emptyThought);
+
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
         <span className={`${Style.label} ${Style.labelWithPopup}`}>
@@ -102,7 +108,8 @@ export default class NoteTaker extends React.Component {
           {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
         </span>
         
-        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3" ref={this.setThoughtElementRef} disabled={noNoteTaking}></textarea>
+        {/*maxListIndentationLevel="3" */}
+        <quip.apps.ui.RichTextBox record={thought} allowedStyles={[1, 3, 4, 5, 6, 8, 9, 10, 11, 12]} />
       </label>
 
       <div className={Style.formRow}>
@@ -111,7 +118,7 @@ export default class NoteTaker extends React.Component {
           <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" disabled={noNoteTaking}/>
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={emptyThought || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>

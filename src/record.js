@@ -2,6 +2,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       notes: quip.apps.RecordList.Type(NoteRecord),
+      noteInProgress: quip.apps.RichTextRecord,
       topics: 'array',
       sections: 'array'
     };
@@ -9,6 +10,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
 
   static getDefaultProperties() {
     return {
+      noteInProgress: {RichText_placeholderText: "test"},
       notes: [],
       topics: [],
       sections: []
@@ -59,19 +61,10 @@ export class NoteRecord extends quip.apps.Record {
     //    guid: 'kjhgkj-kdjhffhg-hehehfjehf'
     // }
     return {
-      content: quip.apps.RichTextRecord,
+      content: 'string',
       owner: 'string',
       topics: 'array',
       guid: 'string'
-    };
-  }
-
-  static getDefaultProperties() {
-    return {
-      content: { RichText_placeholderText: 'add your thoughts...' },
-      owner: null,
-      topics: [],
-      guid: null
     };
   }
 }
