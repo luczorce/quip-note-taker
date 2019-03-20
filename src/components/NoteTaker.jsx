@@ -107,7 +107,6 @@ export default class NoteTaker extends React.Component {
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>
-
       </div>
 
       <div className={Style.popoverQuestion}>

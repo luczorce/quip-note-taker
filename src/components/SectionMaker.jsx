@@ -74,7 +74,6 @@ export default class SectionMaker extends React.Component {
         <button className={`${Button.simple} ${Button.windowCloser}`} type="button" onClick={this.closeMaker}>
           cancel
         </button>
-
       </div>
 
       <p className={Message.helper}><Question style={Message.icon}/> add sections like groups from slack</p>

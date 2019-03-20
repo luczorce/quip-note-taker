@@ -153,7 +153,7 @@
     color: @white;
     border-radius: 2px;
     padding: 2px 5px;
-    top: -60px;
+    top: -42px;
     right: 0;
     text-align: right;
 
@@ -177,6 +177,7 @@
 
 .sectionForm {
   .form-container;
+  padding: 10px 5px 5px;
 
   position: absolute;
   bottom: 10px;
@@ -184,4 +185,14 @@
   width: 300px;  
   border-radius: 6px;
   box-shadow: 3px -3px 15px fade(black, 10%);
+
+  .formRow {
+    margin-top: 0;
+    justify-content: space-between;
+
+    button {
+      align-self: flex-end;
+      padding-bottom: 6px;
+    }
+  }
 }
