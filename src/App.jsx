@@ -59,8 +59,20 @@ export default class App extends React.Component {
     this.setState({currentSections: this.state.sections});
   }
 
-  finishSectionMaker = () => {
-    this.setState({ showSectionMaker: false });
+  finishSectionMaker = (section) => {
+    let updatedState = {
+      showSectionMaker: false
+    };
+
+    if (section !== null) {
+      if (this.state.currentSections.length > 1) {
+        updatedState.currentSections = this.state.currentSections.concat(section);  
+      } else {
+        updatedState.currentSections = [section]
+      }
+    }
+
+    this.setState(updatedState);
   }
 
   removeAllToCurrentSections = () => {
