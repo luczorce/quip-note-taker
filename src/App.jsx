@@ -71,11 +71,15 @@ export default class App extends React.Component {
     this.setState({showSectionMaker: true});
   }
 
-  updateCurrentSections = (section) => {
-    if (this.state.currentSections.includes(section)) {
-      this.setState({currentSections: this.state.currentSections.filter(s => s !== section)});
+  updateCurrentSections = (section, isAdd) => {
+    if (isAdd) {
+      if (this.state.currentSections.includes(section)) {
+        this.setState({currentSections: this.state.currentSections.filter(s => s !== section)});
+      } else {
+        this.setState({currentSections: this.state.currentSections.concat(section)});
+      }
     } else {
-      this.setState({currentSections: this.state.currentSections.concat(section)});
+      this.setState({currentSections: [section]});
     }
   }
 

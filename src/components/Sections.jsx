@@ -12,6 +12,10 @@ export default class Sections extends React.Component {
     removeAll: React.PropTypes.func
   };
 
+  detectAddType = (event, section) => {
+    this.props.update(section, event.shiftKey);
+  }
+
   render() {
     let ordered;
 
@@ -23,8 +27,8 @@ export default class Sections extends React.Component {
           itemClass += ' ' + Style.selected;
         }
         
-        return <li 
-            onClick={() => this.props.update(section)} 
+        return <li
+            onClick={(event) => this.detectAddType(event, section)}
             className={itemClass}>
               {section}
             </li>;
