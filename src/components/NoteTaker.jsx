@@ -6,6 +6,8 @@ const uuid = require('uuid/v1');
 
 export default class NoteTaker extends React.Component {
   static propTypes = {
+    // thought: quip.apps.RichTextRecord,
+    thought: React.PropTypes.object,
     currentSections: React.PropTypes.array
   };
 
@@ -15,6 +17,7 @@ export default class NoteTaker extends React.Component {
     this.state = {
       // thought: quip.apps.getRootRecord().get('noteInProgress'),
       tags: '',
+      thoughtFocus: false,
       showSavedMessage: false,
       showHelpMessage: false,
       collapse: Boolean(props.currentSections.length !== 1)
@@ -52,6 +55,14 @@ export default class NoteTaker extends React.Component {
     });
   }
 
+  loseThoughtFocusStyle = () => {
+    this.setState({thoughtFocus: false});
+  }
+
+  setThoughtFocusStyle = () => {
+    this.setState({thoughtFocus: true});
+  }
+
   saveThought = () =>{
     const record = quip.apps.getRootRecord();
 
@@ -87,6 +98,7 @@ export default class NoteTaker extends React.Component {
   render() {
     const noNoteTaking = (this.props.currentSections.length !== 1);
     let thoughtLabel;
+    let thoughtStyle = Style.textarea;
 
     if (noNoteTaking) {
       thoughtLabel = 'select only one section to add a note';
@@ -94,11 +106,12 @@ export default class NoteTaker extends React.Component {
       thoughtLabel = <span><SmallNoteIcon/> current thought</span>;
     }
 
-    const thought = quip.apps.getRootRecord().get('noteInProgress');
-    const emptyThought = thought.empty();
-    // const emptyThought = false;
-    console.log(thought);
-    console.log(emptyThought);
+    if (this.state.thoughtFocus) {
+      thoughtStyle += ` ${Style.focus}`;
+    }
+
+    // const emptyThought = this.props.thought.empty();
+    const emptyThought = false;
 
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
@@ -107,9 +120,17 @@ export default class NoteTaker extends React.Component {
           
           {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
         </span>
-        
-        {/*maxListIndentationLevel="3" */}
-        <quip.apps.ui.RichTextBox record={thought} allowedStyles={[1, 3, 4, 5, 6, 8, 9, 10, 11, 12]} />
+
+        <quip.apps.ui.RichTextBox 
+            record={this.props.thought}
+            className={thoughtStyle}
+            allowedStyles={[1, 3, 4, 5, 6, 8, 9, 10, 11, 12]}
+            maxListIndentationLevel="3"
+            scrollable="true"
+            minHeight={70}
+            maxHeight={70}
+            onFocus={this.setThoughtFocusStyle}
+            onBlur={this.loseThoughtFocusStyle} />
       </label>
 
       <div className={Style.formRow}>

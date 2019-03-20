@@ -2,7 +2,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       notes: quip.apps.RecordList.Type(NoteRecord),
-      noteInProgress: quip.apps.RichTextRecord,
+      notesInProgress: quip.apps.RecordList.Type(NoteInProgressRecord),
       topics: 'array',
       sections: 'array'
     };
@@ -10,7 +10,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
 
   static getDefaultProperties() {
     return {
-      noteInProgress: {RichText_placeholderText: "test"},
+      notesInProgress: [],
       notes: [],
       topics: [],
       sections: []
@@ -21,6 +21,14 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     this.get('notes').add(noteData);
   }
 
+  addNoteInProgress(userId) {
+    console.log('adding note in record');
+    this.get('notesInProgress').add({  
+      owner: userId,
+      thought: { RichText_placeholderText: "add your thoughts" }
+    });
+  }
+
   appendSection(section) {
     let sections = this.get('sections');
     this.set('sections', sections.concat(section));
@@ -29,6 +37,23 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   getAllNotes() {
     const notes = quip.apps.getRootRecord()
           .get('notes')
+          .getRecords()
+          .map(r => r.getData());
+
+    return notes;
+  }
+
+  getNoteInProgress(userId) {
+    return quip.apps.getRootRecord()
+          .get('notesInProgress')
+          .getRecords()
+          .map(r => r.getData())
+          .find(n => n.owner === userId);
+  }
+
+  getAllNotesInProgress() {
+    const notes = quip.apps.getRootRecord()
+          .get('notesInProgress')
           .getRecords()
           .map(r => r.getData());
 
@@ -65,6 +90,15 @@ export class NoteRecord extends quip.apps.Record {
       owner: 'string',
       topics: 'array',
       guid: 'string'
+    };
+  }
+}
+
+export class NoteInProgressRecord extends quip.apps.Record {
+  static getProperties() {
+    return {
+      thought: quip.apps.RichTextRecord,
+      owner: 'string'
     };
   }
 }
