@@ -7,11 +7,25 @@
   grid-area: sidebar;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 5px;
+  justify-content: flex-start;
   border-radius: 6px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
+  height: 500px;
+
+  .header {
+    padding: 5px 5px 0;
+  }
+
+  .body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 100px;
+  }
+
+  .footer {
+    padding: 0 5px 5px;
+  }
 }
 
 .title {
@@ -25,12 +39,13 @@
 .sectionList {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .section {
   cursor: pointer;
   padding: 3px 5px;
-  margin: 0 -5px 0px;
+  margin: 0;
   user-select: none;
 
   &:last-child {
@@ -42,7 +57,7 @@
   }
 
   &.selected {
-    font-style: bold;
+    font-weight: bold;
     text-decoration: underline;
     background: fade(@quip-color-blue, 30%);
   }
