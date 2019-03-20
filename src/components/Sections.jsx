@@ -40,7 +40,7 @@ export default class Sections extends React.Component {
     }
 
     return <div className={Style.sectionContainer}>
-      <div>
+      <div className={Style.header}>
         <h1 className={Style.title} title="Shift+click sections to select multiple at once">
           <SmallSectionIcon /> Sections
         </h1>
@@ -49,11 +49,13 @@ export default class Sections extends React.Component {
           <button type="button" onClick={this.props.addAll} className={Button.discreetForDark}>all</button>
           <button type="button" onClick={this.props.removeAll} className={Button.discreetForDark}>none</button>
         </p>
-
+      </div>
+      
+      <div className={Style.body}>
         {ordered}
       </div>
       
-      <div>
+      <div className={Style.footer}>
         <button type="button" onClick={this.props.showSectionMaker} className={`${Button.discreetForDark} ${Button.iconButton}`}>
           <AddPlusIcon />
           <span>add new section</span>
