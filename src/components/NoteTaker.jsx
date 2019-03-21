@@ -37,8 +37,7 @@ export default class NoteTaker extends React.Component {
       emptyThought: props.thought.empty(),
       thoughtFocus: false,
       showSavedMessage: false,
-      showHelpMessage: false,
-      collapse: Boolean(props.currentSections.length !== 1)
+      showHelpMessage: false
     };
   }
 
@@ -52,12 +51,13 @@ export default class NoteTaker extends React.Component {
   }
 
   clearAndShiftFocus = () => {
+    this.props.thought.replaceContent('');
+    this.props.thought.focus();
+
     this.setState({
-      thought: '',
+      emptyThought: true,
       tags: ''
     });
-
-    this.thoughtElement.focus();
   }
 
   formatAndCleanTopics = () => {
@@ -92,7 +92,7 @@ export default class NoteTaker extends React.Component {
     record.updateTopics(topics);
     
     let note = {
-      content: this.state.thought,
+      content: this.props.thought.getTextContent(),
       topics: topics,
       owner: quip.apps.getViewingUser().getId(),
       guid: uuid()
@@ -114,7 +114,12 @@ export default class NoteTaker extends React.Component {
   }
 
   updateNoteValidity = (record) => {
-    const recordEmpty = record.empty();
+    // NOTE :insert scream emoji:
+    // record.empty() returns false when it's empty
+    // const recordEmpty = record.empty();
+    
+    const content = record.getTextContent();
+    const recordEmpty = !content.length;
 
     if (recordEmpty && !this.state.emptyThought) {
       console.log('record should be reading as empty');
