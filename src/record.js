@@ -22,10 +22,14 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   }
 
   addNoteInProgress(userId) {
-    console.log('adding note in record');
-    this.get('notesInProgress').add({  
+
+    return this.get('notesInProgress').add({  
       owner: userId,
-      thought: { RichText_placeholderText: "add your thoughts" }
+      // NOTE
+      // we can not add placeholder text to the record, like so:
+      // thought: { RichText_placeholderText: "add your thoughts" }
+      // it registers as text, so an empty text box will register as not empty
+      thought: { RichText_placeholderText: '' }
     });
   }
 
