@@ -22,7 +22,6 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   }
 
   addNoteInProgress(userId) {
-
     return this.get('notesInProgress').add({  
       owner: userId,
       // NOTE

@@ -13,6 +13,8 @@
         "quip-apps-webpack-config": ">=0.0.39"
     },
     "dependencies": {
+        "markdown-it": "^8.4.2",
+        "react-html-parser": "^2.0.2",
         "uuid": "^3.3.2"
     }
 }
