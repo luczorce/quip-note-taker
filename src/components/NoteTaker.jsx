@@ -15,7 +15,9 @@ const richTextAllowedStyles = [
   4, // TEXT_CODE
   5, // LIST_BULLET
   6, // LIST_NUMBERED
-  7, // LIST_CHECKLIST
+  // checklist markdown just returns like a bullet list
+  // there's no way to differentiate it
+  // 7, // LIST_CHECKLIST
   11, // IMAGE
   16, // TEXT_BLOCKQUOTE
   // 17, // TEXT_PULL_QUOTE
@@ -122,10 +124,8 @@ export default class NoteTaker extends React.Component {
     const recordEmpty = !content.length;
 
     if (recordEmpty && !this.state.emptyThought) {
-      console.log('record should be reading as empty');
       this.setState({emptyThought: true});
     } else if (!recordEmpty && this.state.emptyThought) {
-      console.log('record should be reading as not empty');
       this.setState({emptyThought: false});
     }
   }
