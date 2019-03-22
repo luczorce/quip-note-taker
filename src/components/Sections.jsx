@@ -36,7 +36,7 @@ export default class Sections extends React.Component {
 
       ordered = <ul className={Style.sectionList}>{ordered}</ul>;
     } else {
-      ordered = <p><em>(empty)</em></p>;
+      ordered = <p className={Style.empty}><em>(empty)</em></p>;
     }
 
     return <div className={Style.sectionContainer}>

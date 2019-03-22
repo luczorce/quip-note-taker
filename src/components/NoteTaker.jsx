@@ -3,9 +3,31 @@ import Style from '../style/Form.less';
 import Button from '../style/Buttons.less';
 
 const uuid = require('uuid/v1');
+// NOTE these values are different than what the docs say
+// also images are not available to be added?
+// not even drag and drop works on it
+// console.log(quip.apps.RichTextRecord.Style);
+const richTextAllowedStyles = [
+  0, // TEXT_PLAIN
+  // 1, // TEXT_H1
+  2, // TEXT_H2
+  3, // TEXT_H3
+  4, // TEXT_CODE
+  5, // LIST_BULLET
+  6, // LIST_NUMBERED
+  // checklist markdown just returns like a bullet list
+  // there's no way to differentiate it
+  // 7, // LIST_CHECKLIST
+  11, // IMAGE
+  16, // TEXT_BLOCKQUOTE
+  // 17, // TEXT_PULL_QUOTE
+  // 18, // HORIZONTAL_RULE
+];
 
 export default class NoteTaker extends React.Component {
   static propTypes = {
+    // thought really is a quip.apps.RichTextRecord,
+    thought: React.PropTypes.object,
     currentSections: React.PropTypes.array
   };
 
@@ -13,26 +35,31 @@ export default class NoteTaker extends React.Component {
     super();
 
     this.state = {
-      thought: '',
       tags: '',
+      emptyThought: props.thought.empty(),
+      thoughtFocus: false,
       showSavedMessage: false,
-      showHelpMessage: false,
-      collapse: Boolean(props.currentSections.length !== 1)
+      showHelpMessage: false
     };
+  }
 
-    this.thoughtElement = null;
-    this.setThoughtElementRef = element => {
-      this.thoughtElement = element;
-    }
+  componentDidMount() {
+    this.props.thought.listenToContent(this.updateNoteValidity);
+    this.updateNoteValidity(this.props.thought);
+  }
+
+  componentWillUnmount() {
+    this.props.thought.unlistenToContent();
   }
 
   clearAndShiftFocus = () => {
+    this.props.thought.replaceContent('');
+    this.props.thought.focus();
+
     this.setState({
-      thought: '',
+      emptyThought: true,
       tags: ''
     });
-
-    this.thoughtElement.focus();
   }
 
   formatAndCleanTopics = () => {
@@ -52,6 +79,14 @@ export default class NoteTaker extends React.Component {
     });
   }
 
+  loseThoughtFocusStyle = () => {
+    this.setState({thoughtFocus: false});
+  }
+
+  setThoughtFocusStyle = () => {
+    this.setState({thoughtFocus: true});
+  }
+
   saveThought = () =>{
     const record = quip.apps.getRootRecord();
 
@@ -59,7 +94,7 @@ export default class NoteTaker extends React.Component {
     record.updateTopics(topics);
     
     let note = {
-      content: this.state.thought,
+      content: this.props.thought.getTextContent(),
       topics: topics,
       owner: quip.apps.getViewingUser().getId(),
       guid: uuid()
@@ -80,18 +115,34 @@ export default class NoteTaker extends React.Component {
     this.setState({tags: event.target.value});
   }
 
-  updateThought = (event) => {
-    this.setState({thought: event.target.value});
+  updateNoteValidity = (record) => {
+    // NOTE :insert scream emoji:
+    // record.empty() returns false when it's empty
+    // const recordEmpty = record.empty();
+    
+    const content = record.getTextContent();
+    const recordEmpty = !content.length;
+
+    if (recordEmpty && !this.state.emptyThought) {
+      this.setState({emptyThought: true});
+    } else if (!recordEmpty && this.state.emptyThought) {
+      this.setState({emptyThought: false});
+    }
   }
 
   render() {
     const noNoteTaking = (this.props.currentSections.length !== 1);
     let thoughtLabel;
+    let thoughtStyle = Style.textarea;
 
     if (noNoteTaking) {
       thoughtLabel = 'select only one section to add a note';
     } else {
       thoughtLabel = <span><SmallNoteIcon/> current thought</span>;
+    }
+
+    if (this.state.thoughtFocus) {
+      thoughtStyle += ` ${Style.focus}`;
     }
 
     return <div className={Style.noteForm}>
@@ -101,8 +152,17 @@ export default class NoteTaker extends React.Component {
           
           {this.state.showSavedMessage && <span className={Style.addSuccess}>saved!</span>}
         </span>
-        
-        <textarea className={Style.thoughtInput} onInput={this.updateThought} value={this.state.thought} rows="3" ref={this.setThoughtElementRef} disabled={noNoteTaking}></textarea>
+
+        <quip.apps.ui.RichTextBox 
+            record={this.props.thought}
+            className={thoughtStyle}
+            allowedStyles={richTextAllowedStyles}
+            maxListIndentationLevel="3"
+            scrollable="true"
+            minHeight={70}
+            maxHeight={70}
+            onFocus={this.setThoughtFocusStyle}
+            onBlur={this.loseThoughtFocusStyle} />
       </label>
 
       <div className={Style.formRow}>
@@ -111,7 +171,7 @@ export default class NoteTaker extends React.Component {
           <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" disabled={noNoteTaking}/>
         </label>
 
-        <button type="button" onClick={this.saveThought} disabled={!this.state.thought.length || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
+        <button type="button" onClick={this.saveThought} disabled={this.state.emptyThought || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
           add
           <span className={Style.primedToAdd}>ready!</span>
         </button>

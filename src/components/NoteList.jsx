@@ -1,3 +1,5 @@
+import ReactHtmlParser from 'react-html-parser';
+import mdRender from '../util/markdown-renderer.js';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
 
@@ -71,11 +73,14 @@ export default class NoteList extends React.Component {
 
     // NOTE rendering the app on load with a selected section
     // made quip.apps.getUserById() return null
-    // and this won't show anything until the first add
+    // and name (below) won't show anything until the first add (of note or section)
     let name = this.getName(note.owner);
+    
+    let content = mdRender(note.content);
+    content = ReactHtmlParser(content);
 
     return <div key={note.guid} className={Style.note}>
-      <p className={Style.content}>{note.content}</p>
+      <div className={Style.content}>{content}</div>
       <div className={Style.topicList}>{topics}</div>
       <p className={Style.owner}>{name}</p>
     </div>;

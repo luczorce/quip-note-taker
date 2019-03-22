@@ -6,7 +6,8 @@ import Style from "./style/App.less";
 
 export default class App extends React.Component {
   // static propTypes = {
-  //   record: quip.rootRecord
+  //   record: quip.rootRecord,
+  //   userThought: { userId: 'kdjfhkdjf', thought: quip.RichTextRecord}
   // }
 
   recordListener = null;
@@ -30,7 +31,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     let rootRecord = quip.apps.getRootRecord();
-    this.recordListener = rootRecord.listen(() => this.getUpdatedState());
+    this.recordListener = rootRecord.listen(this.getUpdatedState);
   }
 
   componentWillUnmount() {
@@ -40,8 +41,9 @@ export default class App extends React.Component {
     }
   }
 
-  getUpdatedState = () => {
-    const record = quip.apps.getRootRecord();
+  getUpdatedState = (record) => {
+
+
     const notes = record.getAllNotes();
     const topics = record.get('topics');
     const sections = record.get('sections');
@@ -104,7 +106,7 @@ export default class App extends React.Component {
           addAll={this.addAllToCurrentSections}
           removeAll={this.removeAllToCurrentSections} />
       <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
-      <NoteTaker currentSections={this.state.currentSections} />
+      <NoteTaker thought={this.props.userThought} currentSections={this.state.currentSections} />
 
       { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
     </div>;
