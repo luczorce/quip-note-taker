@@ -42,11 +42,11 @@ export default class App extends React.Component {
   }
 
   getUpdatedState = (record) => {
-
-
     const notes = record.getAllNotes();
     const topics = record.get('topics');
     const sections = record.get('sections');
+
+    console.log(notes.length, this.state.notes.length);
 
     this.setState({
       notes: notes,

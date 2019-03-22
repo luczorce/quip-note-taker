@@ -1,5 +1,6 @@
 import ReactHtmlParser from 'react-html-parser';
 import mdRender from '../util/markdown-renderer.js';
+import { debounce } from 'throttle-debounce';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
 
@@ -16,15 +17,64 @@ export default class NoteList extends React.Component {
 
     props.notes.forEach(n => {
       if (!this.names.hasOwnProperty(n.owner)) {
-        // console.log(n.owner, typeof n.owner);
         let owner = quip.apps.getUserById(n.owner);
-        // console.log(owner);
         
         if (owner !== null) {
           this.names[n.owner] = owner.getName();
         }
       }
     });
+
+    this.state = {
+      hasScrolledUp: false
+    };
+
+    this.containerElement = null;
+    this.setContainerElementRef = element => {
+      this.containerElement = element;
+    }
+  }
+
+  componentDidMount() {
+    this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
+    this.scrollToBottom();
+    this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const moreNotes = Boolean(nextProps.notes.length !== this.props.notes.length);
+
+    let sectionChange = false;
+    let sectionLengths = {
+      current: this.props.currentSections.length,
+      next: nextProps.currentSections.length
+    };
+
+    if (sectionLengths.current !== sectionLengths.next) {
+      sectionChange = true;
+    } else if (sectionLengths.current === 1 && sectionLengths.next === 1 && this.props.currentSections[0] !== nextProps.currentSections[0]) {
+      sectionChange = true;
+    }
+    
+    if (moreNotes || sectionChange) {
+      this.scrollToBottom(sectionChange);
+    }
+
+    // always update when react thinks it's best
+    return true;
+  }
+
+  detectScrollBehavior = () => {
+    const height = this.containerElement.offsetHeight;
+    const scrollHeight = this.containerElement.scrollHeight;
+
+    const position = this.containerElement.scrollTop + this.containerElement.offsetHeight;
+
+    if (position === scrollHeight && this.state.hasScrolledUp) {
+      this.setState({hasScrolledUp: false});
+    } else if (position !== scrollHeight && !this.state.hasScrolledUp) {
+      this.setState({hasScrolledUp: true});
+    }
   }
 
   getCurrentNotes = () => {
@@ -86,6 +136,15 @@ export default class NoteList extends React.Component {
     </div>;
   }
 
+  scrollToBottom = (override) => {
+    if (!this.state.hasScrolledUp || override) {
+      // wait for the state to update o.o?
+      window.setTimeout(() => {
+        this.containerElement.scrollTop = this.containerElement.scrollHeight;
+      }, 100);
+    }
+  }
+
   render() {
     const currentNotes = this.getCurrentNotes();
     let notes;
@@ -106,7 +165,7 @@ export default class NoteList extends React.Component {
       </p>;
     }
 
-    return <div className={Style.noteList}>{notes}</div>;
+    return <div className={Style.noteList} ref={this.setContainerElementRef}>{notes}</div>;
   }
 }
 

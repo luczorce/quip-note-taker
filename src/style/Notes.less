@@ -8,16 +8,42 @@
 
 .note {
   padding: 5px 10px;
-  background: #f9f9f9;
-  margin-bottom: 2px;
+  // margin-bottom: 2px;
+  transition: background 0.2s ease-in;
+  border-bottom: 1px solid @off-white;
 
   &:last-child {
     margin-bottom: 20px;
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: @off-white;
   }
 
   .content {
     margin: 0 auto 10px;
     white-space: pre-line;
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    h2 {
+      font-size: 1.25em;
+    }
+
+    h3 {
+      text-transform: uppercase;
+    }
+
+    pre {
+      padding: 10px;
+      background: @quip-color-grey-darkest;
+      color: @quip-color-grey-lightest;
+      border-radius: 4px;
+      white-space: pre-line;
+    }
   }
 
   .owner {
