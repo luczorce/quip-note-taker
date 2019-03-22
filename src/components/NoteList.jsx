@@ -35,7 +35,21 @@ export default class NoteList extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.notes.length !== this.props.notes.length) {
+    const moreNotes = Boolean(nextProps.notes.length !== this.props.notes.length);
+
+    let sectionChange = false;
+    let sectionLengths = {
+      current: this.props.currentSections.length,
+      next: nextProps.currentSections.length
+    };
+
+    if (sectionLengths.current !== sectionLengths.next) {
+      sectionChange = true;
+    } else if (sectionLengths.current === 1 && sectionLengths.next === 1 && this.props.currentSections[0] !== nextProps.currentSections[0]) {
+      sectionChange = true;
+    }
+    
+    if (moreNotes || sectionChange) {
       console.log('yes scroll to the bottom!!');
       this.scrollToBottom();
     }
