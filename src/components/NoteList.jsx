@@ -10,20 +10,11 @@ export default class NoteList extends React.Component {
     currentSections: React.PropTypes.array
   };
 
+  // { 'quipUserId': 'Namey McNamerson' }
   names = {};
 
   constructor(props) {
     super();
-
-    props.notes.forEach(n => {
-      if (!this.names.hasOwnProperty(n.owner)) {
-        let owner = quip.apps.getUserById(n.owner);
-        
-        if (owner !== null) {
-          this.names[n.owner] = owner.getName();
-        }
-      }
-    });
 
     this.state = {
       hasScrolledUp: false
@@ -36,6 +27,16 @@ export default class NoteList extends React.Component {
   }
 
   componentDidMount() {
+    this.props.notes.forEach(n => {
+      if (!this.names.hasOwnProperty(n.owner)) {
+        let owner = quip.apps.getUserById(n.owner);
+        
+        if (owner !== null) {
+          this.names[n.owner] = owner.getName();
+        }
+      }
+    });
+
     this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.scrollToBottom();
     this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
@@ -101,7 +102,6 @@ export default class NoteList extends React.Component {
         this.names[owner] = name;
       } else {
         name = '';
-        // console.log('WHY cant we find the name from a valid quip user id?');
       }
 
       return name;
