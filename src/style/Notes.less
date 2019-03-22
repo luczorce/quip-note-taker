@@ -8,7 +8,6 @@
 
 .note {
   padding: 5px 10px;
-  // margin-bottom: 2px;
   transition: background 0.2s ease-in;
   border-bottom: 1px solid @off-white;
 
@@ -43,6 +42,20 @@
       color: @quip-color-grey-lightest;
       border-radius: 4px;
       white-space: pre-line;
+    }
+
+    p > code {
+      background: @white;
+      border: 1px @quip-color-grey-lightest solid;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    blockquote {
+      border-left: 3px @quip-color-grey solid;
+      padding-left: 6px;
+      margin-left: 0;
+      color: @quip-color-grey-darkest;
     }
   }
 
