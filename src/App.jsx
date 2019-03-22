@@ -11,6 +11,7 @@ export default class App extends React.Component {
   // }
 
   recordListener = null;
+  noteListener = null;
 
   constructor(props) {
     super();
@@ -32,27 +33,47 @@ export default class App extends React.Component {
   componentDidMount() {
     let rootRecord = quip.apps.getRootRecord();
     this.recordListener = rootRecord.listen(this.getUpdatedState);
+    this.noteListener = rootRecord.get('notes').listen(this.getUpdatedNoteState);
   }
 
   componentWillUnmount() {
+    let rootRecord = quip.apps.getRootRecord();
+    
     if (this.recordListener !== null) {
-      let rootRecord = quip.apps.getRootRecord();
       rootRecord.unlisten(this.recordListener);
     }
+
+    if (this.noteListener !== null) {
+      rootRecord.get('notes').unlisten(this.noteListener);
+    }    
   }
 
   getUpdatedState = (record) => {
-    const notes = record.getAllNotes();
     const topics = record.get('topics');
     const sections = record.get('sections');
+    let update = {}, shouldUpdate = false;
 
-    console.log(notes.length, this.state.notes.length);
+    if (topics.length !== this.state.topics.length) {
+      update.topics = topics;
+      shouldUpdate = true;
+    }
 
-    this.setState({
-      notes: notes,
-      topics: topics,
-      sections: sections
-    });
+    if (sections.length !== this.state.length) {
+      update.sections = sections;
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      this.setState(update);
+    }
+  }
+
+  getUpdatedNoteState = (record) => {
+    const notes = record.getRecords().map(r => r.getData());
+
+    if (notes.length !== this.state.notes.length) {
+      this.setState({notes: notes});
+    }
   }
 
   //////
