@@ -24,6 +24,10 @@ const md = Markdown({
   // highlight: function (/*str, lang*/) { return ''; }
 });
 
+const underlineRegex = new RegExp(/(_)(.*?)(_)/gim);
+
 export default function mdRender(markdownString) {
-  return md.render(markdownString);
+  const withUnderline = markdownString.replace(underlineRegex, '<span style="text-decoration: underline;">$2</span>');
+
+  return md.render(withUnderline);
 }
