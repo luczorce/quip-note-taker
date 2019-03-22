@@ -31,7 +31,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     let rootRecord = quip.apps.getRootRecord();
-    this.recordListener = rootRecord.listen(() => this.getUpdatedState());
+    this.recordListener = rootRecord.listen(this.getUpdatedState);
   }
 
   componentWillUnmount() {
@@ -41,8 +41,9 @@ export default class App extends React.Component {
     }
   }
 
-  getUpdatedState = () => {
-    const record = quip.apps.getRootRecord();
+  getUpdatedState = (record) => {
+
+
     const notes = record.getAllNotes();
     const topics = record.get('topics');
     const sections = record.get('sections');
