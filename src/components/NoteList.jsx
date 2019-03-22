@@ -16,15 +16,32 @@ export default class NoteList extends React.Component {
 
     props.notes.forEach(n => {
       if (!this.names.hasOwnProperty(n.owner)) {
-        // console.log(n.owner, typeof n.owner);
         let owner = quip.apps.getUserById(n.owner);
-        // console.log(owner);
         
         if (owner !== null) {
           this.names[n.owner] = owner.getName();
         }
       }
     });
+
+    this.containerElement = null;
+    this.setContainerElementRef = element => {
+      this.containerElement = element;
+    }
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.notes.length !== this.props.notes.length) {
+      console.log('yes scroll to the bottom!!');
+      this.scrollToBottom();
+    }
+
+    // always update when react thinks it's best
+    return true;
   }
 
   getCurrentNotes = () => {
@@ -86,6 +103,13 @@ export default class NoteList extends React.Component {
     </div>;
   }
 
+  scrollToBottom = () => {
+    // wait for the state to update o.o
+    window.setTimeout(() => {
+      this.containerElement.scrollTop = this.containerElement.scrollHeight;
+    }, 100);
+  }
+
   render() {
     const currentNotes = this.getCurrentNotes();
     let notes;
@@ -106,7 +130,7 @@ export default class NoteList extends React.Component {
       </p>;
     }
 
-    return <div className={Style.noteList}>{notes}</div>;
+    return <div className={Style.noteList} ref={this.setContainerElementRef}>{notes}</div>;
   }
 }
 
