@@ -1,5 +1,6 @@
 import ReactHtmlParser from 'react-html-parser';
 import mdRender from '../util/markdown-renderer.js';
+import { debounce } from 'throttle-debounce';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
 
@@ -24,6 +25,10 @@ export default class NoteList extends React.Component {
       }
     });
 
+    this.state = {
+      hasScrolledUp: false
+    };
+
     this.containerElement = null;
     this.setContainerElementRef = element => {
       this.containerElement = element;
@@ -31,7 +36,9 @@ export default class NoteList extends React.Component {
   }
 
   componentDidMount() {
+    this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.scrollToBottom();
+    this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -50,12 +57,24 @@ export default class NoteList extends React.Component {
     }
     
     if (moreNotes || sectionChange) {
-      console.log('yes scroll to the bottom!!');
-      this.scrollToBottom();
+      this.scrollToBottom(sectionChange);
     }
 
     // always update when react thinks it's best
     return true;
+  }
+
+  detectScrollBehavior = () => {
+    const height = this.containerElement.offsetHeight;
+    const scrollHeight = this.containerElement.scrollHeight;
+
+    const position = this.containerElement.scrollTop + this.containerElement.offsetHeight;
+
+    if (position === scrollHeight && this.state.hasScrolledUp) {
+      this.setState({hasScrolledUp: false});
+    } else if (position !== scrollHeight && !this.state.hasScrolledUp) {
+      this.setState({hasScrolledUp: true});
+    }
   }
 
   getCurrentNotes = () => {
@@ -117,11 +136,13 @@ export default class NoteList extends React.Component {
     </div>;
   }
 
-  scrollToBottom = () => {
-    // wait for the state to update o.o
-    window.setTimeout(() => {
-      this.containerElement.scrollTop = this.containerElement.scrollHeight;
-    }, 100);
+  scrollToBottom = (override) => {
+    if (!this.state.hasScrolledUp || override) {
+      // wait for the state to update o.o?
+      window.setTimeout(() => {
+        this.containerElement.scrollTop = this.containerElement.scrollHeight;
+      }, 100);
+    }
   }
 
   render() {
