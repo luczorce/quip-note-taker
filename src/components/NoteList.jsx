@@ -141,7 +141,7 @@ export default class NoteList extends React.Component {
       // wait for the state to update o.o?
       window.setTimeout(() => {
         this.containerElement.scrollTop = this.containerElement.scrollHeight;
-      }, 100);
+      }, 10);
     }
   }
 
