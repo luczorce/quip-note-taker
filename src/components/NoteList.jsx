@@ -37,8 +37,8 @@ export default class NoteList extends React.Component {
       }
     });
 
-    this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.scrollToBottom();
+    this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
   }
 
@@ -141,7 +141,7 @@ export default class NoteList extends React.Component {
       // wait for the state to update o.o?
       window.setTimeout(() => {
         this.containerElement.scrollTop = this.containerElement.scrollHeight;
-      }, 10);
+      }, 50);
     }
   }
 
