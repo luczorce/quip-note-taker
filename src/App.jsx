@@ -126,7 +126,7 @@ export default class App extends React.Component {
           addAll={this.addAllToCurrentSections}
           removeAll={this.removeAllToCurrentSections} />
       <NoteList notes={this.state.notes} currentSections={this.state.currentSections} />
-      <NoteTaker thought={this.props.userThought} currentSections={this.state.currentSections} />
+      <NoteTaker thought={this.props.userThought} currentSections={this.state.currentSections} topics={this.state.topics} />
 
       { this.state.showSectionMaker && <SectionMaker sections={this.state.sections} sectionCreated={this.finishSectionMaker} /> }
     </div>;
