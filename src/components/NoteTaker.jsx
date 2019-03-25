@@ -28,7 +28,8 @@ export default class NoteTaker extends React.Component {
   static propTypes = {
     // thought really is a quip.apps.RichTextRecord,
     thought: React.PropTypes.object,
-    currentSections: React.PropTypes.array
+    currentSections: React.PropTypes.array,
+    topics: React.PropTypes.array
   };
 
   constructor(props) {
@@ -37,6 +38,7 @@ export default class NoteTaker extends React.Component {
     this.state = {
       tags: '',
       emptyThought: props.thought.empty(),
+      matchingTags: [],
       thoughtFocus: false,
       showSavedMessage: false,
       showHelpMessage: false
@@ -112,7 +114,42 @@ export default class NoteTaker extends React.Component {
   }
 
   updateTags = (event) => {
-    this.setState({tags: event.target.value});
+    const value = event.target.value;
+    let updatedState = { tags: value };
+
+    if (value.length > 2) {
+      let tags = value.split(',');
+      tags = tags.map(t => t.trim());
+      // tags = tags.filter(t => t.length);
+      
+      if (tags.length) {
+        let last = tags.pop();
+        let matchingTags = [];
+
+        if (last[0] !== '#') {
+          updatedState.matchingTags = ['start each tag with a #'];
+        } else if (last.length > 3) {
+          // search for the string without the hash
+          last = last.slice(1);
+
+          let matchingTags = this.props.topics.filter(t => {
+            return t.toLowerCase().includes(last.toLowerCase()) && t[0] === '#';
+          });
+          
+          if (matchingTags.length > 4) {
+            matchingTags = matchingTags.slice(0, 4);
+          }
+
+          updatedState.matchingTags = matchingTags;
+        } else if (this.state.matchingTags.length) {
+          updatedState.matchingTags = [];
+        }
+      }
+    } else if (this.state.matchingTags.length) {
+      updatedState.matchingTags = [];
+    }
+
+    this.setState(updatedState);
   }
 
   updateNoteValidity = (record) => {
@@ -134,6 +171,7 @@ export default class NoteTaker extends React.Component {
     const noNoteTaking = (this.props.currentSections.length !== 1);
     let thoughtLabel;
     let thoughtStyle = Style.textarea;
+    let matchingTags;
 
     if (noNoteTaking) {
       thoughtLabel = 'select only one section to add a note';
@@ -144,6 +182,10 @@ export default class NoteTaker extends React.Component {
     if (this.state.thoughtFocus) {
       thoughtStyle += ` ${Style.focus}`;
     }
+
+    if (this.state.matchingTags.length) {
+      matchingTags = <span className={Style.tagsYouMightWant}><em>maybe</em> {this.state.matchingTags.join(', ')}?</span>;
+    } 
 
     return <div className={Style.noteForm}>
       <label className={Style.stackedFormInput}>
@@ -167,7 +209,10 @@ export default class NoteTaker extends React.Component {
 
       <div className={Style.formRow}>
         <label className={Style.stackedFormInput}>
-          <span className={Style.label}>tags</span>
+          <span className={Style.label}>
+            tags
+            {matchingTags}
+          </span>
           <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" disabled={noNoteTaking}/>
         </label>
 
