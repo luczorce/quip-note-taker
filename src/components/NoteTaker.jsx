@@ -168,7 +168,7 @@ export default class NoteTaker extends React.Component {
       <div className={Style.formRow}>
         <label className={Style.stackedFormInput}>
           <span className={Style.label}>tags</span>
-          <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="example: blockchain, data privacy, ethics" disabled={noNoteTaking}/>
+          <input type="text" onInput={this.updateTags} value={this.state.tags} placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" disabled={noNoteTaking}/>
         </label>
 
         <button type="button" onClick={this.saveThought} disabled={this.state.emptyThought || noNoteTaking} className={`${Button.primary} ${Style.submitNote}`}>
