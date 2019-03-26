@@ -46,6 +46,15 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     return notes;
   }
 
+  getAllNotesInProgress() {
+    const notes = quip.apps.getRootRecord()
+          .get('notesInProgress')
+          .getRecords()
+          .map(r => r.getData());
+
+    return notes;
+  }
+
   getNoteInProgress(userId) {
     return quip.apps.getRootRecord()
           .get('notesInProgress')
@@ -54,13 +63,27 @@ export class NoteBookRecord extends quip.apps.RootRecord {
           .find(n => n.owner === userId);
   }
 
-  getAllNotesInProgress() {
-    const notes = quip.apps.getRootRecord()
-          .get('notesInProgress')
+  toggleNoteLike(noteGuid, user, isLike) {
+    const note = quip.apps.getRootRecord()
+          .get('notes')
           .getRecords()
-          .map(r => r.getData());
+          .find(r => r.get('guid') === noteGuid);
 
-    return notes;
+    if (!note) return;
+
+    let likes = note.get('likes');
+    
+    if (isLike) {
+      likes.push(user);
+    } else {
+      const index = likes.indexOf(user);
+
+      if (index !== -1) {
+        likes.splice(index, 1);
+      }
+    }
+
+    note.set('likes', likes);
   }
 
   updateTopics(topics) {
@@ -86,14 +109,26 @@ export class NoteRecord extends quip.apps.Record {
     //   content: 'This is something that the person typed into the notebox',
     //   owner: quip.apps.getViewingUser().getId(),
     //   topics: ['artifical intelligence', 'ethics'],
-    //   guid: 'kjhgkj-kdjhffhg-hehehfjehf'
+    //   guid: 'kjhgkj-kdjhffhg-hehehfjehf',
+    //   likes: ['quipUserId', 'quipUserId2']
     // }
     return {
       content: 'string',
       owner: 'string',
       topics: 'array',
-      guid: 'string'
+      guid: 'string',
+      likes: 'array'
     };
+  }
+
+  static getDefaultProperties() {
+    return {
+      content: '',
+      likes: [],
+      topics: [],
+      owner: '',
+      guid: ''
+    }
   }
 }
 

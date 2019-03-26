@@ -99,7 +99,8 @@ export default class NoteTaker extends React.Component {
       content: this.props.thought.getTextContent(),
       topics: topics,
       owner: quip.apps.getViewingUser().getId(),
-      guid: uuid()
+      guid: uuid(),
+      likes: []
     };
     record.addNote(note);
 

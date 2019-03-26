@@ -70,9 +70,7 @@ export default class App extends React.Component {
   getUpdatedNoteState = (record) => {
     const notes = record.getRecords().map(r => r.getData());
 
-    if (notes.length !== this.state.notes.length) {
-      this.setState({notes: notes});
-    }
+    this.setState({notes: notes});
   }
 
   //////

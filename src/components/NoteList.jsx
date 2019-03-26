@@ -1,6 +1,5 @@
-import ReactHtmlParser from 'react-html-parser';
-import mdRender from '../util/markdown-renderer.js';
 import { debounce } from 'throttle-debounce';
+import Note from './Note.jsx';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
 
@@ -27,16 +26,6 @@ export default class NoteList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.notes.forEach(n => {
-      if (!this.names.hasOwnProperty(n.owner)) {
-        let owner = quip.apps.getUserById(n.owner);
-        
-        if (owner !== null) {
-          this.names[n.owner] = owner.getName();
-        }
-      }
-    });
-
     this.scrollToBottom();
     this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
@@ -109,31 +98,11 @@ export default class NoteList extends React.Component {
   }
 
   makeEachNote = (note) => {
-    let topics = note.topics.filter(t => t !== this.props.currentSection);
-    
-    topics = topics.map(t => {
-      if (t[0] === '#') {
-        return <span className={Style.noteTopic}>{t}</span>;
-      } else {
-        if (this.props.currentSections.length > 1) {
-          return <span className={Style.noteSection}>{t}</span>;
-        }
-      }
-    });
+    const name = this.getName(note.owner);
+    // const likeNames = note.likes.map(this.getName);
+    const likeNames = [];
 
-    // NOTE rendering the app on load with a selected section
-    // made quip.apps.getUserById() return null
-    // and name (below) won't show anything until the first add (of note or section)
-    let name = this.getName(note.owner);
-    
-    let content = mdRender(note.content);
-    content = ReactHtmlParser(content);
-
-    return <div key={note.guid} className={Style.note}>
-      <div className={Style.content}>{content}</div>
-      <div className={Style.topicList}>{topics}</div>
-      <p className={Style.owner}>{name}</p>
-    </div>;
+    return <Note note={note} name={name} likeNames={likeNames} multipleSections={(this.props.currentSections > 1)} />;
   }
 
   scrollToBottom = (override) => {
