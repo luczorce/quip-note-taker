@@ -1,7 +1,4 @@
-import NoteTaker from './components/NoteTaker.jsx';
-import NoteList from './components/NoteList.jsx';
-import SectionMaker from './components/SectionMaker.jsx';
-import Sections from './components/Sections.jsx';
+import NoteTakerTwo from './components/NoteTakerTwo.jsx';
 import Style from "./style/App.less";
 
 export default class App extends React.Component {
@@ -32,6 +29,10 @@ export default class App extends React.Component {
     // this.recordListener = rootRecord.listen(this.getUpdatedState);
     // this.noteListener = rootRecord.get('notes').listen(this.getUpdatedNoteState);
   // }
+
+  hideAddNote = () => {
+    this.setState({ addNote: false });
+  }
 
   toggleAddNote = () => {
     this.setState({ addNote: !this.state.addNote });
@@ -120,11 +121,14 @@ export default class App extends React.Component {
   render() {
     return <div className={Style.app2}>
       <div className={Style.controls}>
-        <button type="button">add note</button>
+        <button type="button" onClick={this.toggleAddNote}>add note</button>
       </div>
-
-      <h1>app</h1>
-
+      
+      {this.state.addNote && (
+        <div className={Style.lilWindow}>
+          <NoteTakerTwo finished={this.hideAddNote} thought={this.props.scratchpad} topics={this.state.topics} />
+        </div>
+      )}
     </div>;
   }
 }

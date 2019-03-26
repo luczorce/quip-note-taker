@@ -108,6 +108,10 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   }
 
   // new for alternative universe
+  addNoteTwo(note) {
+    this.get('notesTwo').add(note);
+  }
+
   addScratchpad(userId) {
     return this.get('scratchpad').add({  
       owner: userId,
