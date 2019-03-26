@@ -86,13 +86,15 @@ export class NoteRecord extends quip.apps.Record {
     //   content: 'This is something that the person typed into the notebox',
     //   owner: quip.apps.getViewingUser().getId(),
     //   topics: ['artifical intelligence', 'ethics'],
-    //   guid: 'kjhgkj-kdjhffhg-hehehfjehf'
+    //   guid: 'kjhgkj-kdjhffhg-hehehfjehf',
+    //   likes: ['quipUserId', 'quipUserId2']
     // }
     return {
       content: 'string',
       owner: 'string',
       topics: 'array',
-      guid: 'string'
+      guid: 'string',
+      likes: 'array'
     };
   }
 }
