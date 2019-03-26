@@ -43,10 +43,10 @@ export default class NoteList extends React.Component {
 
 
     return <div key={note.guid} className={Style.note}>
-      <p className={Style.owner}>{this.props.name}</p>
       <div className={Style.content}>{content}</div>
       <div className={Style.topicList}>{topics}</div>
       <div className={Style.likes}>{likeControl} {likeCount} {likeList}</div>
+      <p className={Style.owner}>{this.props.name}</p>
     </div>;
   }
 }
