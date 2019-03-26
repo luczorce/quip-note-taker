@@ -26,16 +26,6 @@ export default class NoteList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.notes.forEach(n => {
-      if (!this.names.hasOwnProperty(n.owner)) {
-        let owner = quip.apps.getUserById(n.owner);
-        
-        if (owner !== null) {
-          this.names[n.owner] = owner.getName();
-        }
-      }
-    });
-
     this.scrollToBottom();
     this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
     this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
@@ -108,9 +98,11 @@ export default class NoteList extends React.Component {
   }
 
   makeEachNote = (note) => {
-    let name = this.getName(note.owner);
+    const name = this.getName(note.owner);
+    // const likeNames = note.likes.map(this.getName);
+    const likeNames = [];
 
-    return <Note note={note} name={name} multipleSections={(this.props.currentSections > 1)} />;
+    return <Note note={note} name={name} likeNames={likeNames} multipleSections={(this.props.currentSections > 1)} />;
   }
 
   scrollToBottom = (override) => {
