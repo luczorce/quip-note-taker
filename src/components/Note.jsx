@@ -12,11 +12,13 @@ export default class NoteList extends React.Component {
   };
 
   likeNote = () => {
-    console.log('wanna like this note');
+    const rootRecord = quip.apps.getRootRecord();
+    rootRecord.toggleNoteLike(this.props.note.guid, quip.apps.getViewingUser().getId(), true);
   }
 
   unlikeNote = () => {
-    console.log('wanna unlike this terrible thing');
+    const rootRecord = quip.apps.getRootRecord();
+    rootRecord.toggleNoteLike(this.props.note.guid, quip.apps.getViewingUser().getId(), false);
   }
 
   render() {
