@@ -4,7 +4,10 @@ export class NoteBookRecord extends quip.apps.RootRecord {
       notes: quip.apps.RecordList.Type(NoteRecord),
       notesInProgress: quip.apps.RecordList.Type(NoteInProgressRecord),
       topics: 'array',
-      sections: 'array'
+      sections: 'array',
+      // the alternate universe
+      notesTwo: quip.apps.RecordList.Type(NoteTwoRecord),
+      scratchpad: quip.apps.RecordList.Type(NoteInProgressRecord)
     };
   }
 
@@ -13,10 +16,13 @@ export class NoteBookRecord extends quip.apps.RootRecord {
       notesInProgress: [],
       notes: [],
       topics: [],
-      sections: []
+      sections: [],
+      notesTwo: [],
+      scratchpad: []
     };
   }
 
+  // from first version
   addNote(noteData) {
     this.get('notes').add(noteData);
   }
@@ -100,6 +106,25 @@ export class NoteBookRecord extends quip.apps.RootRecord {
       this.set('topics', current.concat(newTopics));
     }
   }
+
+  // new for alternative universe
+  addScratchpad(userId) {
+    return this.get('scratchpad').add({  
+      owner: userId,
+      thought: { RichText_placeholderText: '' }
+    });
+  }
+
+  getScratchpad(userId) {
+    return quip.apps.getRootRecord()
+          .get('notesInProgress')
+          .getRecords()
+          .find(n => n.get('owner') === userId);
+  }
+
+  moveScratchpadtoNotes() {
+    console.log('moving a scratch pad record to the note?');
+  }
 }
 
 export class NoteRecord extends quip.apps.Record {
@@ -138,5 +163,16 @@ export class NoteInProgressRecord extends quip.apps.Record {
       thought: quip.apps.RichTextRecord,
       owner: 'string'
     };
+  }
+}
+
+export class NoteTwoRecord extends quip.apps.Record {
+  static getProperties() {
+    return {
+      content: quip.apps.RichTextRecord,
+      owner: 'string',
+      topics: 'array',
+      likes: 'array'
+    }
   }
 }

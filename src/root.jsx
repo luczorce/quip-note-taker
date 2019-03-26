@@ -15,15 +15,15 @@ quip.apps.initialize({
     let rootRecord = quip.apps.getRootRecord();
 
     const userId = quip.apps.getViewingUser().getId();    
-    let noteInProgress = rootRecord.getNoteInProgress(userId);
+    let scratchpad = rootRecord.getScratchpad(userId);
     
-    if (noteInProgress === undefined) {
-      noteInProgress = rootRecord.addNoteInProgress(userId);
-      noteInProgress = noteInProgress.get('thought');
+    if (scratchpad === undefined) {
+      scratchpad = rootRecord.addScratchpad(userId);
+      // scratchpad = scratchpad.get('thought');
     } else {
-      noteInProgress = noteInProgress.thought;
+      scratchpad = scratchpad.thought;
     }
 
-    ReactDOM.render(<App record={rootRecord} userThought={noteInProgress} />, rootNode);
+    ReactDOM.render(<App record={rootRecord} scratchpad={scratchpad} />, rootNode);
   },
 });
