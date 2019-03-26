@@ -97,6 +97,16 @@ export class NoteRecord extends quip.apps.Record {
       likes: 'array'
     };
   }
+
+  static getDefaultProperties() {
+    return {
+      content: '',
+      likes: [],
+      topics: [],
+      owner: '',
+      guid: ''
+    }
+  }
 }
 
 export class NoteInProgressRecord extends quip.apps.Record {
