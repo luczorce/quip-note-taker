@@ -115,6 +115,26 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     });
   }
 
+  getAllNotesTwo() {
+    return quip.apps.getRootRecord()
+      .get('notesTwo')
+      .getRecords()
+      .map(n => {
+        // return {
+        //   content: n.get('content'),
+        //   owner: n.get('owner'),
+        //   topics: n.get('topics'),
+        //   likes: n.get('likes')
+        // }
+        
+        let data = n.getData();
+        delete data.content;
+        data.content = n.get('content');
+
+        return data;
+      });
+  }
+
   getScratchpad(userId) {
     return quip.apps.getRootRecord()
           .get('notesInProgress')

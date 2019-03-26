@@ -14,8 +14,9 @@ quip.apps.initialize({
   initializationCallback: function(rootNode) {
     let rootRecord = quip.apps.getRootRecord();
 
-    const userId = quip.apps.getViewingUser().getId();    
+    const userId = quip.apps.getViewingUser().getId();
     let scratchpad = rootRecord.getScratchpad(userId);
+    console.log();
     
     if (scratchpad === undefined) {
       scratchpad = rootRecord.addScratchpad(userId);
