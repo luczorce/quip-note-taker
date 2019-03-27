@@ -22,18 +22,28 @@ const richTextAllowedStyles = [
   18, // HORIZONTAL_RULE
 ];
 
+
+
 export default class NoteTakerTwo extends React.Component {
   static propTypes = {
-    // thought really is a quip.apps.RichTextRecord,
-    thought: React.PropTypes.object,
+    record: React.PropTypes.object,
     topics: React.PropTypes.array,
     finished: React.PropTypes.func
   };
 
+  scratchpad = null;
+  userId = null
+
   constructor(props) {
     super();
 
+    this.userId = quip.apps.getViewingUser().getId();
+    const scratchpad = this.findScratchPad(props.record);
+    this.scratchpad = scratchpad;
+    
     this.state = {
+      // thought really is a quip.apps.RichTextRecord,
+      thought: scratchpad.get('thought'),
       tags: '',
       emptyThought: true,
       matchingTags: [],
@@ -42,12 +52,22 @@ export default class NoteTakerTwo extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.thought.listenToContent(this.updateNoteValidity);
-    // this.updateNoteValidity(this.props.thought);
+    this.state.thought.listenToContent(this.updateNoteValidity);
+    this.updateNoteValidity(this.state.thought);
   }
 
   componentWillUnmount() {
-    // this.props.thought.unlistenToContent();
+    this.state.thought.unlistenToContent();
+  }
+
+  findScratchPad = (record) => {
+    let scratchpad = record.getScratchpad(this.userId);
+    
+    if (scratchpad === undefined) {
+      scratchpad = record.addScratchpad(this.userId);
+    }
+
+    return scratchpad;
   }
 
   formatAndCleanTopics = () => {
@@ -67,20 +87,23 @@ export default class NoteTakerTwo extends React.Component {
   }
 
   saveThought = () =>{
-    const record = quip.apps.getRootRecord();
+    const record = this.props.record;
 
     let topics = this.formatAndCleanTopics();
     record.updateTopics(topics);
     
     let note = {
-      content: this.props.thought,
+      content: this.scratchpad.get('thought'),
       topics: topics,
-      owner: quip.apps.getViewingUser().getId(),
+      owner: this.userId,
       likes: []
     };
-    record.addNoteTwo(note);
-    this.props.finished();
+    console.log(note);
 
+    record.addNoteTwo(note);
+    record.clearScratchpad(this.scratchpad);
+    record.addScratchpad(this.userId);
+    this.props.finished();
   }
 
   updateTags = (event) => {
@@ -148,21 +171,22 @@ export default class NoteTakerTwo extends React.Component {
     } 
 
     return <div className={Style.noteTwoForm}>
-      {/*<label className={Style.stackedFormInput}>
+      <label className={Style.stackedFormInput}>
         <span className={Style.label}>
           <SmallNoteIcon/> current thought
         </span>
 
         <quip.apps.ui.RichTextBox 
-            record={this.props.thought}
+            record={this.state.thought}
             className={thoughtStyle}
             allowedStyles={richTextAllowedStyles}
             maxListIndentationLevel="3"
             scrollable="true"
-            minHeight={70}
+            minHeight={200}
             onFocus={this.setThoughtFocusStyle}
-            onBlur={this.loseThoughtFocusStyle} />
-      </label>*/}
+            onBlur={this.loseThoughtFocusStyle}
+             />
+      </label>
 
       <label className={Style.stackedFormInput}>
         <span className={Style.label}>
