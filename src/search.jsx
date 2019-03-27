@@ -16,9 +16,10 @@ export default class App extends React.Component {
     this.state = {
       topics: props.record.get('topics'),
       notes: props.record.getAllNotes(),
-      searchTerm: '',
-      isSearching: false
+      searchTerm: ''
     };
+
+    console.log(this.state.notes);
   }
 
   componentDidMount() {
@@ -35,33 +36,10 @@ export default class App extends React.Component {
     this.props.record.addNote();
   }
 
-  clearSearch = () => {
-    this.setState({
-      searchTerm: '',
-      isSearching: false
-    });
-  }
-
-  enableSearch = () => {
-    this.setState({
-      isSearching: true
-    });
-  }
-
   getUpdatedNoteState = (record) => {
     const notes = record.getRecords();
 
     this.setState({notes: notes});
-  }
-
-  searchForNotes = () => {
-    // TODO search for more than just the topics
-    return this.state.notes.filter(n => {
-      const topics = n.get('topics').map(t => t.toLowerCase());
-
-      const match = topics.includes(this.state.searchTerm.toLowerCase());
-      return match;
-    });
   }
 
   updateTopics = (topics) => {
@@ -71,19 +49,7 @@ export default class App extends React.Component {
   render() {
     let notes;
 
-    if (this.state.isSearching) {
-      notes = this.searchForNotes();
-      
-      if (notes.length) {
-        notes = <div className={Style.noteList}>
-          {notes.map(n => {
-            return <Note note={n} globalTopics={this.state.topics} updateGlobalTopics={this.updateTopics} />;
-          })}
-        </div>;
-      } else {
-        notes = <p>no results from {this.state.searchTerm}</p>;
-      }
-    } else if (this.state.notes.length) {
+    if (this.state.notes.length) {
       notes = <div className={Style.noteList}>
         {this.state.notes.map(n => {
           return <Note note={n} globalTopics={this.state.topics} updateGlobalTopics={this.updateTopics} />;
@@ -98,8 +64,8 @@ export default class App extends React.Component {
         <input type="text" 
           onInput={event => this.setState({searchTerm: event.target.value})} 
           value={this.state.search} />
-        <button type="button" className={Button.primary} onClick={this.enableSearch}>search</button>
-        <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
+        <button type="button" className={Button.primary}>search</button>
+        <button type="button" className={Button.simple}>clear</button>
         <button type="button" className={Button.simple}>export</button>
       </div>
       

@@ -3,7 +3,6 @@ import Style from '../style/Notes.less';
 import Form from '../style/Form.less';
 import Message from '../style/Message.less';
 import {richTextAllowedStyles} from '../util/richtext-record-styles.js';
-console.log(richTextAllowedStyles);
 
 export default class Note extends React.Component {
   static propTypes = {
