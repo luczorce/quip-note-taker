@@ -22,6 +22,10 @@
   }
 }
 
+.textInput {
+  .input-reset;
+}
+
 .stackedFormInput {
   display: flex;
   flex-direction: column;
@@ -71,119 +75,119 @@
   }
 }
 
-.noteForm {
-  .form-container;
-  margin-left: 10px;
-  position: relative;
-  border-bottom-right-radius: 6px;
+// .noteForm {
+//   .form-container;
+//   margin-left: 10px;
+//   position: relative;
+//   border-bottom-right-radius: 6px;
 
-  .collapsed {
-    display: none;
-  }
+//   .collapsed {
+//     display: none;
+//   }
 
-  .stackedFormInput {
-    flex: 1 0 auto;
-  }
+//   .stackedFormInput {
+//     flex: 1 0 auto;
+//   }
 
-  .labelWithPopup {
-    position: relative;
-  } 
+//   .labelWithPopup {
+//     position: relative;
+//   } 
 
-  .submitNote {
-    align-self: flex-end;
-    margin-left: 10px;
-    padding: 5px 10px;
-    position: relative;
+//   .submitNote {
+//     align-self: flex-end;
+//     margin-left: 10px;
+//     padding: 5px 10px;
+//     position: relative;
 
-    &:focus .primedToAdd {
-      display: block;
-    }
-  }
+//     &:focus .primedToAdd {
+//       display: block;
+//     }
+//   }
 
-  .primedToAdd {
-    display: none;
-    position: absolute;
-    font-size: 0.9em;
-    background: @quip-color-blue-dark;
-    color: @white;
-    border-radius: 2px;
-    padding: 2px 5px;
-    top: -30px;
-    right: 0;
+//   .primedToAdd {
+//     display: none;
+//     position: absolute;
+//     font-size: 0.9em;
+//     background: @quip-color-blue-dark;
+//     color: @white;
+//     border-radius: 2px;
+//     padding: 2px 5px;
+//     top: -30px;
+//     right: 0;
 
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -6px;
-      right: 18px;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid @quip-color-blue-dark;
-    }
-  }
+//     &:after {
+//       content: "";
+//       position: absolute;
+//       bottom: -6px;
+//       right: 18px;
+//       border-left: 6px solid transparent;
+//       border-right: 6px solid transparent;
+//       border-top: 6px solid @quip-color-blue-dark;
+//     }
+//   }
 
-  .addSuccess {
-    position: absolute;
-    font-size: 0.9em;
-    background: @quip-color-green;
-    color: @white;
-    border-radius: 2px;
-    padding: 2px 5px;
-    top: -5px;
-    right: 20px;
+//   .addSuccess {
+//     position: absolute;
+//     font-size: 0.9em;
+//     background: @quip-color-green;
+//     color: @white;
+//     border-radius: 2px;
+//     padding: 2px 5px;
+//     top: -5px;
+//     right: 20px;
 
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -6px;
-      right: 18px;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid @quip-color-green;
-    }
-  }
+//     &:after {
+//       content: "";
+//       position: absolute;
+//       bottom: -6px;
+//       right: 18px;
+//       border-left: 6px solid transparent;
+//       border-right: 6px solid transparent;
+//       border-top: 6px solid @quip-color-green;
+//     }
+//   }
 
-  .popoverQuestion {
-    position: absolute;
-    top: 8px;
-    right: 12px;
+//   .popoverQuestion {
+//     position: absolute;
+//     top: 8px;
+//     right: 12px;
 
-    .icon {
-      cursor: pointer;
+//     .icon {
+//       cursor: pointer;
 
-      &:hover {
-        stroke: @quip-color-blue;
-      }
-    }
-  }
+//       &:hover {
+//         stroke: @quip-color-blue;
+//       }
+//     }
+//   }
 
-  .popoverNote {
-    position: absolute;
-    width: 90%;
-    font-size: 0.9em;
-    background: @quip-color-blue-dark;
-    color: @white;
-    border-radius: 2px;
-    padding: 2px 5px;
-    top: -42px;
-    right: 0;
-    text-align: right;
+//   .popoverNote {
+//     position: absolute;
+//     width: 90%;
+//     font-size: 0.9em;
+//     background: @quip-color-blue-dark;
+//     color: @white;
+//     border-radius: 2px;
+//     padding: 2px 5px;
+//     top: -42px;
+//     right: 0;
+//     text-align: right;
 
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -6px;
-      right: 14px;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid @quip-color-blue-dark;
-    }
-  }
+//     &:after {
+//       content: "";
+//       position: absolute;
+//       bottom: -6px;
+//       right: 14px;
+//       border-left: 6px solid transparent;
+//       border-right: 6px solid transparent;
+//       border-top: 6px solid @quip-color-blue-dark;
+//     }
+//   }
 
-  .icon {
-    .iconInline;
-  }
-}
+//   .icon {
+//     .iconInline;
+//   }
+// }
 
 .formRow {
   display: flex;
@@ -191,27 +195,27 @@
   margin: 1em auto 0;
 }
 
-.sectionForm {
-  .form-container;
-  padding: 10px 5px 5px;
+// .sectionForm {
+//   .form-container;
+//   padding: 10px 5px 5px;
 
-  position: absolute;
-  bottom: 10px;
-  left: 5px;
-  width: 300px;  
-  border-radius: 6px;
-  box-shadow: 3px -3px 15px fade(black, 10%);
+//   position: absolute;
+//   bottom: 10px;
+//   left: 5px;
+//   width: 300px;  
+//   border-radius: 6px;
+//   box-shadow: 3px -3px 15px fade(black, 10%);
 
-  .formRow {
-    margin-top: 0;
-    justify-content: space-between;
+//   .formRow {
+//     margin-top: 0;
+//     justify-content: space-between;
 
-    button {
-      align-self: flex-end;
-      padding-bottom: 6px;
-    }
-  }
-}
+//     button {
+//       align-self: flex-end;
+//       padding-bottom: 6px;
+//     }
+//   }
+// }
 
 .tagsYouMightWant {
   margin-left: 5px;
@@ -219,19 +223,19 @@
   font-weight: normal;
 }
 
-.noteTwoForm {
-  padding: 10px;
-  background: #f1f1f1;
-  border: 1px @quip-color-grey-lighter solid;
+// .noteTwoForm {
+//   padding: 10px;
+//   background: #f1f1f1;
+//   border: 1px @quip-color-grey-lighter solid;
 
-  .textarea {
-    margin-bottom: 15px;
-  }
+//   .textarea {
+//     margin-bottom: 15px;
+//   }
 
 
-  .submitNote {
-    align-self: flex-end;
-    margin-left: 10px;
-    // padding: 5px 10px;
-  }
-}
+//   .submitNote {
+//     align-self: flex-end;
+//     margin-left: 10px;
+//     // padding: 5px 10px;
+//   }
+// }

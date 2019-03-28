@@ -1,0 +1,21 @@
+@import "Colors.less";
+
+.search {
+  background: tomato;
+
+  &.open {
+    flex: 1 0 auto;
+    background: lime;
+  }
+
+  &.closed {}
+
+  .inside {
+    display: flex;
+    justify-content: space-between;
+
+    input {
+      flex: 0.98 0 auto;
+    }
+  }
+}

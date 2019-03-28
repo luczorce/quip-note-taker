@@ -1,3 +1,4 @@
+import Search from './components/Search.jsx';
 import Note from './components/Note.jsx';
 import Style from './style/App.less';
 import Button from './style/Buttons.less';
@@ -35,23 +36,24 @@ export default class App extends React.Component {
     this.props.record.addNote();
   }
 
-  clearSearch = () => {
-    this.setState({
-      searchTerm: '',
-      isSearching: false
-    });
-  }
-
-  enableSearch = () => {
-    this.setState({
-      isSearching: true
-    });
-  }
-
   getUpdatedNoteState = (record) => {
     const notes = record.getRecords();
 
     this.setState({notes: notes});
+  }
+
+  search = (value) => {
+    let updatedState = {
+      searchTerm: value
+    };
+
+    if (value.length) {
+      updatedState.isSearching = true;
+    } else {
+      updatedState.isSearching = false;
+    }
+
+    this.setState(updatedState);
   }
 
   searchForNotes = () => {
@@ -93,15 +95,10 @@ export default class App extends React.Component {
       notes = <p>no notes yet.. add one!</p>;
     }
 
-    return <div className={Style.app2}>
-      <div className={Style.searchControl}>
-        <input type="text" 
-          onInput={event => this.setState({searchTerm: event.target.value})} 
-          value={this.state.search} />
-        <button type="button" className={Button.primary} onClick={this.enableSearch}>search</button>
-        <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
-        <button type="button" className={Button.simple}>export</button>
-      </div>
+    return <div className={Style.app}>
+      <header className={Style.header}>
+        <Search search={this.search} />
+      </header>
       
       {notes}
       
