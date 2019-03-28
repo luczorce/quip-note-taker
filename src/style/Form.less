@@ -44,6 +44,17 @@
     width: 100%;
     resize: vertical;
   }
+
+  .textarea {
+    border: 1px @quip-color-grey-lightest solid;
+    border-radius: 6px;
+    background: @white;
+    padding: 5px 10px;
+
+    &.focus {
+      .focus;
+    }
+  }
 }
 
 .form-container {
@@ -76,24 +87,7 @@
 
   .labelWithPopup {
     position: relative;
-  }
-
-  .tagsYouMightWant {
-    margin-left: 5px;
-    text-transform: none;
-    font-weight: normal;
-  }
-
-  .textarea {
-    border: 1px @quip-color-grey-lightest solid;
-    border-radius: 6px;
-    background: @white;
-    padding: 5px 10px;
-
-    &.focus {
-      .focus;
-    }
-  }
+  } 
 
   .submitNote {
     align-self: flex-end;
@@ -216,5 +210,28 @@
       align-self: flex-end;
       padding-bottom: 6px;
     }
+  }
+}
+
+.tagsYouMightWant {
+  margin-left: 5px;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.noteTwoForm {
+  padding: 10px;
+  background: #f1f1f1;
+  border: 1px @quip-color-grey-lighter solid;
+
+  .textarea {
+    margin-bottom: 15px;
+  }
+
+
+  .submitNote {
+    align-self: flex-end;
+    margin-left: 10px;
+    // padding: 5px 10px;
   }
 }
