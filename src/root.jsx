@@ -1,5 +1,6 @@
 import quip from "quip";
 import App from "./App.jsx";
+import reset from './style/quip-reset.css';
 
 import { 
   NoteBookRecord, 
