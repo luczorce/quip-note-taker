@@ -94,6 +94,22 @@ export default class Sections extends React.Component {
     }
   }
 
+  renderHeader = () => {
+    let current = this.renderCurrentTitle();
+
+    return <div className={Style.mainline}>
+      <button type="button" onClick={this.toggleSectionList} className={Button.simple}>
+        {this.state.showList ? <UpIcon /> : <DownIcon />}
+      </button>
+
+      <h1 className={Style.title}>{current}</h1>
+      
+      <button type="button" onClick={this.toggleSectionMaker} className={Button.simple}>
+        <AddPlusIcon />
+      </button>
+    </div>;
+  }
+
   renderSectionList = () => {
     let ordered;
 
@@ -121,9 +137,9 @@ export default class Sections extends React.Component {
   }
 
   render() {
-    let current = this.renderCurrentTitle();
-    let list;
-    let maker;
+    let header, list, maker;
+
+    header = this.renderHeader();
 
     if (this.state.showList) {
       list = this.renderSectionList();
@@ -134,18 +150,7 @@ export default class Sections extends React.Component {
     }
 
     return <div className={Style.container}>
-      <div className={Style.mainline}>
-        <button type="button" onClick={this.toggleSectionList} className={Button.simple}>
-          {this.state.showList ? <UpIcon /> : <DownIcon />}
-        </button>
-
-        <h1 className={Style.title}>{current}</h1>
-        
-        <button type="button" onClick={this.toggleSectionMaker} className={Button.simple}>
-          <AddPlusIcon />
-        </button>
-      </div>
-
+      {header}
       {list}
       {maker}
     </div>;

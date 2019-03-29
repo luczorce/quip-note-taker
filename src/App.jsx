@@ -62,10 +62,10 @@ export default class App extends React.Component {
 
   search = (value) => {
     let updatedState = {
-      searchTerm: value
+      searchTerm: value,
     };
 
-    if (value.length) {
+    if (value !== null) {
       updatedState.isSearching = true;
     } else {
       updatedState.isSearching = false;
@@ -85,7 +85,7 @@ export default class App extends React.Component {
   render() {
     return <div className={Style.app}>
       <header className={Style.header}>
-        <Sections sections={this.state.sections} updateCurrent={this.updateCurrentSections} />
+        {!this.state.isSearching && <Sections sections={this.state.sections} updateCurrent={this.updateCurrentSections} />}
         <Search search={this.search} />
       </header>
       

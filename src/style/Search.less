@@ -1,14 +1,13 @@
 @import "Colors.less";
 
 .search {
-  background: tomato;
-
   &.open {
     flex: 1 0 auto;
-    background: lime;
   }
 
-  &.closed {}
+  &.closed {
+    flex: 0 1 auto;
+  }
 
   .inside {
     display: flex;
