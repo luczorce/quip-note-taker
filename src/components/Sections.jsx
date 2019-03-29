@@ -12,24 +12,40 @@ export default class Sections extends React.Component {
     super();
 
     this.state = {
-      current: [],
-      showSectionList: false,
-      showSectionMaker: false
+      current: (props.sections.length) ? [ props.sections.sort()[0] ]: [],
+      showList: false,
+      showMaker: false
     };
   }
 
   toggleSectionList = () => {
-    this.setState({showSectionList: !this.state.showSectionList});
+    let updatedState = {
+      showList: !this.state.showList
+    };
+
+    if (!this.state.showList && this.state.showMaker) {
+      updatedState.showMaker = false;
+    }
+
+    this.setState(updatedState);
   }
 
   toggleSectionMaker = () => {
-    this.setState({showSectionMaker: !this.state.showSectionMaker});
+    let updatedState = {
+      showMaker: !this.state.showMaker
+    };
+
+    if (!this.state.showMaker && this.state.showList) {
+      updatedState.showList = false;
+    }
+
+    this.setState(updatedState);
   }
 
   //////
 
   renderCurrentTitle = () => {
-    if (this.state.current.length === this.props.sections.length && this.props.sections.length) {
+    if (this.state.current.length === this.props.sections.length && this.props.sections.length && this.state.current.length !== 1) {
       return 'All Sections';
     } else if (!this.props.sections.length) {
       return '[No Sections Available]';
@@ -45,7 +61,7 @@ export default class Sections extends React.Component {
       ordered = this.props.sections.sort().map(section => {
         let itemClass = Style.section;
         
-        if (this.props.currentSections.includes(section)) {
+        if (this.state.current.includes(section)) {
           itemClass += ' ' + Style.selected;
         }
         
@@ -68,18 +84,18 @@ export default class Sections extends React.Component {
     let list;
     let maker;
 
-    if (this.state.showSectionList) {
+    if (this.state.showList) {
       list = this.renderSectionList();
     }
 
-    if (this.state.showSectionMaker) {
+    if (this.state.showMaker) {
       maker = <SectionMaker sections={this.props.sections} finished={this.toggleSectionMaker} />;
     }
 
     return <div className={Style.container}>
       <div className={Style.mainline}>
         <button type="button" onClick={this.toggleSectionList} className={Button.simple}>
-          {this.state.showSectionList ? <UpIcon /> : <DownIcon />}
+          {this.state.showList ? <UpIcon /> : <DownIcon />}
         </button>
 
         <h1 className={Style.title}>{current}</h1>
