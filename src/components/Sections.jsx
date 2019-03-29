@@ -23,6 +23,7 @@ export default class Sections extends React.Component {
       showList: !this.state.showList
     };
 
+    // will be showing the list, but the maker is showing
     if (!this.state.showList && this.state.showMaker) {
       updatedState.showMaker = false;
     }
@@ -30,13 +31,20 @@ export default class Sections extends React.Component {
     this.setState(updatedState);
   }
 
-  toggleSectionMaker = () => {
+  toggleSectionMaker = (section) => {
     let updatedState = {
       showMaker: !this.state.showMaker
     };
 
+    // will be showing the maker, but the list is showing
     if (!this.state.showMaker && this.state.showList) {
       updatedState.showList = false;
+    }
+
+    // will be hiding the maker, sent something back
+    if (this.state.showMaker && section !== null) {
+      // TODO will this interfere with the state getting updated in the App?
+      updatedState.current = [section];
     }
 
     this.setState(updatedState);
