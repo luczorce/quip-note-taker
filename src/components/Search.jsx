@@ -15,6 +15,11 @@ export default class Search extends React.Component {
       searchTerm: '',
       isSearching: false
     };
+
+    this.searchInput = null;
+    this.setSearchInputRef = element => {
+      this.searchInput = element;
+    }
   }
 
   componentDidMount() {
@@ -30,12 +35,15 @@ export default class Search extends React.Component {
       isSearching: false,
       searchTerm: ''
     }, () => {
-      this.props.search('');
+      this.props.search(null);
     });
   }
 
   enableSearch = () => {
-    this.setState({ isSearching: true });
+    this.props.search('');
+    this.setState({ isSearching: true }, () => {
+      this.searchInput.focus();
+    });
   }
 
   search = () => {
@@ -60,7 +68,8 @@ export default class Search extends React.Component {
       <input type="text" 
           className={Form.textInput}
           onInput={this.updateSearch} 
-          value={this.state.searchTerm} />
+          value={this.state.searchTerm}
+          ref={this.setSearchInputRef} />
       <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
       <button type="button" disabled className={Button.simple}>export</button>
       <button type="button" className={Button.simple} onClick={this.disableSearch}><CloseSearchIcon title="collapse the search"/></button>
