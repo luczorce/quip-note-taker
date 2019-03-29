@@ -59,7 +59,7 @@ export default class NoteList extends React.Component {
     return <p className={Message.emptyNotice}>
       <BigEmptySearchIcon />
       <br/>
-      no results for "{this.searchTerm}"
+      no results for "{this.props.searchTerm}"
     </p>;
   }
 
