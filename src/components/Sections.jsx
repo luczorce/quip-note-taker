@@ -20,6 +20,7 @@ export default class Sections extends React.Component {
 
   setCurrent = (event, channel) => {
     let current;
+    let close = false;
 
     if (event.shiftKey) {
       // want to select multiple channels wooo
@@ -30,9 +31,16 @@ export default class Sections extends React.Component {
       }
     } else {
       current = [channel];
+      close = true;
     }
 
-    this.setState({current: current});
+    let updatedState = {current: current};
+
+    if (close) {
+      updatedState.showList = false;
+    }
+
+    this.setState(updatedState);
   }
 
   toggleSectionList = () => {
