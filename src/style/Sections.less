@@ -1,68 +1,37 @@
 @import "Colors.less";
 @import "Common.less";
 
-.sectionContainer {
-  background: @quip-color-grey-darkest;
-  color: @quip-color-grey-lightest;
-  grid-area: sidebar;
+.container {
+  position: relative;
+  flex: 1 0 auto;
+}
+
+.mainline {
   display: flex;
-  flex-direction: column;
   justify-content: flex-start;
+  align-items: baseline;
+
+  .title,
+  button {
+    margin-right: 5px;
+  }
+
+  button:last-of-type {
+    margin-left: auto;
+  }
+}
+
+.list {
+  // position: abolsute;
+  background: lime;
+}
+
+
+.form {
+  position: absolute;
+  bottom: -100px;
+  left: 5px;
+  width: 100%;  
   border-radius: 6px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  height: 500px;
-
-  .header {
-    padding: 5px 5px 0;
-  }
-
-  .body {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    min-height: 100px;
-  }
-
-  .footer {
-    padding: 0 5px 5px;
-  }
-}
-
-.title {
-  color: @quip-color-grey-lightest;
-  
-  .icon {
-    .iconInline;
-  }
-}
-
-.empty {
-  padding: 0 5px;
-}
-
-.sectionList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.section {
-  cursor: pointer;
-  padding: 3px 5px;
-  margin: 0;
-  user-select: none;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  &:hover {
-    background: fade(@white, 10%);
-  }
-
-  &.selected {
-    font-weight: bold;
-    text-decoration: underline;
-    background: fade(@quip-color-blue, 30%);
-  }
+  box-shadow: 3px -3px 15px fade(black, 10%);
 }

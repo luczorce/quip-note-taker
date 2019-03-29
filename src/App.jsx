@@ -1,4 +1,5 @@
 import Search from './components/Search.jsx';
+import Sections from './components/Sections.jsx';
 import Note from './components/Note.jsx';
 import Style from './style/App.less';
 import Button from './style/Buttons.less';
@@ -16,7 +17,9 @@ export default class App extends React.Component {
 
     this.state = {
       topics: props.record.get('topics'),
+      sections: props.record.get('sections'),
       notes: props.record.getAllNotes(),
+      
       searchTerm: '',
       isSearching: false
     };
@@ -97,6 +100,7 @@ export default class App extends React.Component {
 
     return <div className={Style.app}>
       <header className={Style.header}>
+        <Sections sections={this.state.sections} />
         <Search search={this.search} />
       </header>
       

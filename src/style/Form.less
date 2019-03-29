@@ -26,16 +26,20 @@
   .input-reset;
 }
 
+.label {
+  color: @quip-color-grey-dark;
+  margin-right: 5px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .stackedFormInput {
   display: flex;
   flex-direction: column;
 
   .label {
-    color: @quip-color-grey-dark;
     margin-bottom: 5px;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-transform: uppercase;
   }
 
   input[type=text] {
@@ -61,181 +65,29 @@
   }
 }
 
-.form-container {
+.container {
   padding: 10px;
   background: @off-white;
   border: 1px @quip-color-grey-lighter solid;
 }
 
-.tokenForm {
-  .form-container;
-  input {
-    font-family: monospace;
-    font-size: 1em;
-  }
-}
-
-// .noteForm {
-//   .form-container;
-//   margin-left: 10px;
-//   position: relative;
-//   border-bottom-right-radius: 6px;
-
-//   .collapsed {
-//     display: none;
-//   }
-
-//   .stackedFormInput {
-//     flex: 1 0 auto;
-//   }
-
-//   .labelWithPopup {
-//     position: relative;
-//   } 
-
-//   .submitNote {
-//     align-self: flex-end;
-//     margin-left: 10px;
-//     padding: 5px 10px;
-//     position: relative;
-
-//     &:focus .primedToAdd {
-//       display: block;
-//     }
-//   }
-
-//   .primedToAdd {
-//     display: none;
-//     position: absolute;
-//     font-size: 0.9em;
-//     background: @quip-color-blue-dark;
-//     color: @white;
-//     border-radius: 2px;
-//     padding: 2px 5px;
-//     top: -30px;
-//     right: 0;
-
-//     &:after {
-//       content: "";
-//       position: absolute;
-//       bottom: -6px;
-//       right: 18px;
-//       border-left: 6px solid transparent;
-//       border-right: 6px solid transparent;
-//       border-top: 6px solid @quip-color-blue-dark;
-//     }
-//   }
-
-//   .addSuccess {
-//     position: absolute;
-//     font-size: 0.9em;
-//     background: @quip-color-green;
-//     color: @white;
-//     border-radius: 2px;
-//     padding: 2px 5px;
-//     top: -5px;
-//     right: 20px;
-
-//     &:after {
-//       content: "";
-//       position: absolute;
-//       bottom: -6px;
-//       right: 18px;
-//       border-left: 6px solid transparent;
-//       border-right: 6px solid transparent;
-//       border-top: 6px solid @quip-color-green;
-//     }
-//   }
-
-//   .popoverQuestion {
-//     position: absolute;
-//     top: 8px;
-//     right: 12px;
-
-//     .icon {
-//       cursor: pointer;
-
-//       &:hover {
-//         stroke: @quip-color-blue;
-//       }
-//     }
-//   }
-
-//   .popoverNote {
-//     position: absolute;
-//     width: 90%;
-//     font-size: 0.9em;
-//     background: @quip-color-blue-dark;
-//     color: @white;
-//     border-radius: 2px;
-//     padding: 2px 5px;
-//     top: -42px;
-//     right: 0;
-//     text-align: right;
-
-//     &:after {
-//       content: "";
-//       position: absolute;
-//       bottom: -6px;
-//       right: 14px;
-//       border-left: 6px solid transparent;
-//       border-right: 6px solid transparent;
-//       border-top: 6px solid @quip-color-blue-dark;
-//     }
-//   }
-
-//   .icon {
-//     .iconInline;
-//   }
-// }
-
 .formRow {
   display: flex;
-  align-content: space-between;
-  margin: 1em auto 0;
+  justify-content: space-between;
+
+  .rowQueen {
+    flex: 0.96 0 auto;
+    display: flex;
+    align-items: baseline;
+
+    .textInput {
+      flex: 1 auto;
+    }
+  }
 }
-
-// .sectionForm {
-//   .form-container;
-//   padding: 10px 5px 5px;
-
-//   position: absolute;
-//   bottom: 10px;
-//   left: 5px;
-//   width: 300px;  
-//   border-radius: 6px;
-//   box-shadow: 3px -3px 15px fade(black, 10%);
-
-//   .formRow {
-//     margin-top: 0;
-//     justify-content: space-between;
-
-//     button {
-//       align-self: flex-end;
-//       padding-bottom: 6px;
-//     }
-//   }
-// }
 
 .tagsYouMightWant {
   margin-left: 5px;
   text-transform: none;
   font-weight: normal;
 }
-
-// .noteTwoForm {
-//   padding: 10px;
-//   background: #f1f1f1;
-//   border: 1px @quip-color-grey-lighter solid;
-
-//   .textarea {
-//     margin-bottom: 15px;
-//   }
-
-
-//   .submitNote {
-//     align-self: flex-end;
-//     margin-left: 10px;
-//     // padding: 5px 10px;
-//   }
-// }
