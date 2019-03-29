@@ -36,13 +36,13 @@ export default class Sections extends React.Component {
     });
   }
 
-  hideDelete = () => {
+  hideDelete = (didDeleteSection) => {
     let updatedState = {
       showDeleter: false,
       choppingBlock: ''
     };
 
-    if (this.state.current.includes(this.state.choppingBlock)) {
+    if (didDeleteSection && this.state.current.includes(this.state.choppingBlock)) {
       if (this.state.current.length === 1) {
         const place = this.props.sections.indexOf(this.state.choppingBlock);
 
@@ -202,8 +202,8 @@ export default class Sections extends React.Component {
     return <div className={Style.container}>
       {header}
       {list}
-      {maker}
       {deleter}
+      {maker}
     </div>;
   }
 }

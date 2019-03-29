@@ -22,12 +22,12 @@ export default class SectionDeleter extends React.Component {
   // componentDidMount() {}
 
   close = () => {
-    this.props.finished();
+    this.props.finished(false);
   }
 
   deleteSection = () => {
     quip.apps.getRootRecord().deleteSection(this.props.section);
-    this.props.finished();
+    this.props.finished(true);
   }
 
   //////
@@ -69,7 +69,7 @@ export default class SectionDeleter extends React.Component {
 
         <button type="button" 
             onClick={this.deleteSection} 
-            disabled={this.state.childNotes.length && this.state.reassign !== null}
+            disabled={this.state.childNotes.length && this.state.reassign === null}
             className={Button.primary}>
           delete
         </button>
