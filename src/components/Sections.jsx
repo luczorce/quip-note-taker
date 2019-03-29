@@ -37,10 +37,32 @@ export default class Sections extends React.Component {
   }
 
   hideDelete = () => {
-    this.setState({
+    let updatedState = {
       showDeleter: false,
       choppingBlock: ''
-    });
+    };
+
+    if (this.state.current.includes(this.state.choppingBlock)) {
+      if (this.state.current.length === 1) {
+        const place = this.props.sections.indexOf(this.state.choppingBlock);
+
+        if (place - 1 === -1) {
+          updatedState.current = [ this.props.sections[1] ]
+          if (this.props.sections.length === 1) {
+            updatedState.current = [];
+          } else {
+            updatedState.current = [ this.props.sections[1] ];
+          }
+        } else {
+          updatedState.current = [ this.props.sections[place - 1] ];
+        }
+      } else {
+        updatedState.current = this.state.current.filter(c => c !== this.state.choppingBlock);
+      }
+    }
+
+    
+    this.setState(updatedState);
   }
 
   setCurrent = (event, channel) => {
