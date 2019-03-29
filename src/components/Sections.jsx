@@ -1,4 +1,5 @@
 import SectionMaker from './SectionMaker.jsx';
+import SectionDeleter from './SectionDeleter.jsx';
 import Style from '../style/Sections.less';
 import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
@@ -15,7 +16,9 @@ export default class Sections extends React.Component {
     this.state = {
       current: (props.sections.length) ? [ props.sections.sort()[0] ]: [],
       showList: false,
-      showMaker: false
+      showMaker: false,
+      showDeleter: false,
+      choppingBlock: ''
     };
   }
 
@@ -25,6 +28,19 @@ export default class Sections extends React.Component {
 
   confirmDelete = (section) => {
     console.log('confirming delete for', section);
+    
+    this.setState({
+      showDeleter: true,
+      choppingBlock: section,
+      showList: false
+    });
+  }
+
+  hideDelete = () => {
+    this.setState({
+      showDeleter: false,
+      choppingBlock: ''
+    });
   }
 
   setCurrent = (event, channel) => {
@@ -143,7 +159,7 @@ export default class Sections extends React.Component {
   }
 
   render() {
-    let header, list, maker;
+    let header, list, maker, deleter;
 
     header = this.renderHeader();
 
@@ -155,10 +171,15 @@ export default class Sections extends React.Component {
       maker = <SectionMaker sections={this.props.sections} finished={this.toggleSectionMaker} />;
     }
 
+    if (this.state.showDeleter) {
+      deleter = <SectionDeleter sections={this.props.sections} section={this.state.choppingBlock} finished={this.hideDelete} />
+    }
+
     return <div className={Style.container}>
       {header}
       {list}
       {maker}
+      {deleter}
     </div>;
   }
 }
