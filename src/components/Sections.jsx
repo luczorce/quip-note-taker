@@ -59,6 +59,8 @@ export default class Sections extends React.Component {
       } else {
         updatedState.current = this.state.current.filter(c => c !== this.state.choppingBlock);
       }
+
+      this.props.updateCurrent(updatedState.current);
     }
 
     
