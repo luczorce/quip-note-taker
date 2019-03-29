@@ -1,4 +1,5 @@
 @import "Colors.less";
+@import "Common.less";
 
 .button-reset {
   display: inline-block;
@@ -40,6 +41,10 @@
   &:hover {
     border-color: darken(@quip-color-blue, 30%);
     background: darken(@quip-color-blue, 5%);
+  }
+
+  &:focus {
+    text-decoration: underline;
   }
   
   &[disabled] {
@@ -94,4 +99,45 @@
   .icon {
     margin-right: 5px;
   }
+}
+
+.bigBoyPrimary {
+  .primary;
+
+  width: 100%;
+  padding: 10px;
+}
+
+.bigBoySimple {
+  .simple;
+
+  width: 100%;
+  padding: 10px;
+}
+
+.justIcon {
+  .iconInline;
+}
+
+.text {
+  .button-reset;
+  text-align: left;
+  padding: 1px 3px;
+  background: none;
+  border-color: transparent;
+  transition: border-color 0.2s ease-in, background 0.2s ease-in;
+
+  &:hover,
+  &:focus {
+    background: @quip-color-grey-lightester;
+  }
+
+  &:focus {
+    border-color: @quip-color-grey-lighter;
+  }
+}
+
+.simpleSmall {
+  .simple;
+  padding: 0 2px;
 }

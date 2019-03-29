@@ -2,21 +2,10 @@
 
 .app {
   position: relative;
-  display: grid;
-  grid-template-rows: auto;
-  grid-template-columns: 100px auto;
-  grid-template-areas: 
-    "sidebar notelist"
-    "sidebar notetaker";
+  min-height: 500px;
 
-  & ::-webkit-scrollbar {
-    width: 8px;
-    background: transparent;
-  }
-
-  & ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.6);
-    border: 1px rgba(0,0,0,0.3) solid;
-    border-radius: 4px;
+  .header {
+    display: flex;
+    justify-content: space-between;
   }
 }

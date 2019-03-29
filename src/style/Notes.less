@@ -2,13 +2,11 @@
 @import "Common.less";
 
 .noteList {
-  margin-left: 10px;
-  overflow-y: auto;
-  height: 300px;
+  margin: 20px auto 10px;
 }
 
 .note {
-  padding: 5px 10px;
+  padding: 20px 10px 10px;
   transition: background 0.2s ease-in;
   border-bottom: 1px solid darken(@off-white, 10%);
 
@@ -22,42 +20,7 @@
   }
 
   .content {
-    margin: 0 auto 10px;
-    white-space: pre-line;
-
-    h1 {
-      font-size: 1.5em;
-    }
-
-    h2 {
-      font-size: 1.25em;
-    }
-
-    h3 {
-      text-transform: uppercase;
-    }
-
-    pre {
-      padding: 10px;
-      background: @quip-color-grey-darkest;
-      color: @quip-color-grey-lightest;
-      border-radius: 4px;
-      white-space: pre-line;
-    }
-
-    p > code {
-      background: @white;
-      border: 1px @quip-color-grey-lightest solid;
-      padding: 1px 4px;
-      border-radius: 4px;
-    }
-
-    blockquote {
-      border-left: 3px @quip-color-grey solid;
-      padding-left: 6px;
-      margin-left: 0;
-      color: @quip-color-grey-darkest;
-    }
+    margin: 0 auto 20px;
   }
 
   .topicList {

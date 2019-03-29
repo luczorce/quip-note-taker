@@ -1,89 +1,43 @@
 export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
-      notes: quip.apps.RecordList.Type(NoteRecord),
-      notesInProgress: quip.apps.RecordList.Type(NoteInProgressRecord),
       topics: 'array',
-      sections: 'array'
+      sections: 'array',
+      notes: quip.apps.RecordList.Type(NoteRecord)
     };
   }
 
   static getDefaultProperties() {
     return {
-      notesInProgress: [],
-      notes: [],
       topics: [],
-      sections: []
+      sections: [],
+      notes: []
     };
   }
 
-  addNote(noteData) {
-    this.get('notes').add(noteData);
-  }
-
-  addNoteInProgress(userId) {
-    return this.get('notesInProgress').add({  
-      owner: userId,
-      // NOTE
-      // we can not add placeholder text to the record, like so:
-      // thought: { RichText_placeholderText: "add your thoughts" }
-      // it registers as text, so an empty text box will register as not empty
-      thought: { RichText_placeholderText: '' }
+  addNote(section) {
+    return this.get('notes').add({
+      topics: [],
+      section: section
     });
   }
 
-  appendSection(section) {
+  addSection(section) {
     let sections = this.get('sections');
     this.set('sections', sections.concat(section));
   }
 
+  deleteSection(section) {
+    let sections = this.get('sections');
+    this.set('sections', sections.filter(s => s !==section));
+  }
+
   getAllNotes() {
-    const notes = quip.apps.getRootRecord()
-          .get('notes')
-          .getRecords()
-          .map(r => r.getData());
-
-    return notes;
+    return this.get('notes').getRecords()
   }
 
-  getAllNotesInProgress() {
-    const notes = quip.apps.getRootRecord()
-          .get('notesInProgress')
-          .getRecords()
-          .map(r => r.getData());
-
-    return notes;
-  }
-
-  getNoteInProgress(userId) {
-    return quip.apps.getRootRecord()
-          .get('notesInProgress')
-          .getRecords()
-          .map(r => r.getData())
-          .find(n => n.owner === userId);
-  }
-
-  toggleNoteLike(noteGuid, user, isLike) {
-    const note = quip.apps.getRootRecord()
-          .get('notes')
-          .getRecords()
-          .find(r => r.get('guid') === noteGuid);
-
-    if (!note) return;
-
-    let likes = note.get('likes');
-    
-    if (isLike) {
-      likes.push(user);
-    } else {
-      const index = likes.indexOf(user);
-
-      if (index !== -1) {
-        likes.splice(index, 1);
-      }
-    }
-
-    note.set('likes', likes);
+  getNotesFor(section) {
+    return this.get('notes').getRecords().filter(n => n.get('section') === section);
   }
 
   updateTopics(topics) {
@@ -104,39 +58,22 @@ export class NoteBookRecord extends quip.apps.RootRecord {
 
 export class NoteRecord extends quip.apps.Record {
   static getProperties() {
-    // example
-    // {
-    //   content: 'This is something that the person typed into the notebox',
-    //   owner: quip.apps.getViewingUser().getId(),
-    //   topics: ['artifical intelligence', 'ethics'],
-    //   guid: 'kjhgkj-kdjhffhg-hehehfjehf',
-    //   likes: ['quipUserId', 'quipUserId2']
-    // }
     return {
-      content: 'string',
-      owner: 'string',
+      content: quip.apps.RichTextRecord,
       topics: 'array',
-      guid: 'string',
-      likes: 'array'
-    };
+      likes: 'array',
+      section: 'string'
+    }
   }
 
   static getDefaultProperties() {
     return {
-      content: '',
-      likes: [],
+      content: {
+        RichText_placeholderText: 'start adding notes here'
+      },
       topics: [],
-      owner: '',
-      guid: ''
+      likes: [],
+      section: ''
     }
-  }
-}
-
-export class NoteInProgressRecord extends quip.apps.Record {
-  static getProperties() {
-    return {
-      thought: quip.apps.RichTextRecord,
-      owner: 'string'
-    };
   }
 }
