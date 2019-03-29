@@ -27,6 +27,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.noteListener = this.props.record.get('notes').listen(this.getUpdatedNoteState);
+    this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
   }
 
   componentWillUnmount() {
@@ -43,6 +44,15 @@ export default class App extends React.Component {
     const notes = record.getRecords();
 
     this.setState({notes: notes});
+  }
+
+  getUpdatedRecordState = (record) => {
+    let updatedState = {};
+
+    // TODO anyway to optimise this with if ??
+    updatedState.topics = record.get('topics');
+    updatedState.sections = record.get('sections');
+    this.setState(updatedState);
   }
 
   search = (value) => {
