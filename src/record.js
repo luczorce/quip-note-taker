@@ -2,6 +2,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       topics: 'array',
+      sections: 'array',
       notes: quip.apps.RecordList.Type(NoteRecord)
     };
   }
@@ -9,8 +10,25 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getDefaultProperties() {
     return {
       topics: [],
+      sections: [],
       notes: []
     };
+  }
+
+  addNote(section) {
+    return this.get('notes').add({
+      topics: [],
+      section: section
+    });
+  }
+
+  addSection(section) {
+    let sections = this.get('sections');
+    this.set('sections', sections.concat(section));
+  }
+
+  getAllNotes() {
+    return this.get('notes').getRecords()
   }
 
   updateTopics(topics) {
@@ -27,14 +45,6 @@ export class NoteBookRecord extends quip.apps.RootRecord {
       this.set('topics', current.concat(newTopics));
     }
   }
-
-  addNote() {
-    return this.get('notes').add({topics: []});
-  }
-
-  getAllNotes() {
-    return this.get('notes').getRecords()
-  }
 }
 
 export class NoteRecord extends quip.apps.Record {
@@ -42,7 +52,8 @@ export class NoteRecord extends quip.apps.Record {
     return {
       content: quip.apps.RichTextRecord,
       topics: 'array',
-      likes: 'array'
+      likes: 'array',
+      section: 'string'
     }
   }
 
@@ -52,7 +63,8 @@ export class NoteRecord extends quip.apps.Record {
         RichText_placeholderText: 'start adding notes here'
       },
       topics: [],
-      likes: []
+      likes: [],
+      section: ''
     }
   }
 }

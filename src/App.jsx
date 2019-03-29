@@ -1,4 +1,6 @@
-import Note from './components/Note.jsx';
+import Search from './components/Search.jsx';
+import Sections from './components/Sections.jsx';
+import NoteList from './components/NoteList.jsx';
 import Style from './style/App.less';
 import Button from './style/Buttons.less';
 
@@ -15,37 +17,32 @@ export default class App extends React.Component {
 
     this.state = {
       topics: props.record.get('topics'),
+      sections: props.record.get('sections'),
       notes: props.record.getAllNotes(),
+      
       searchTerm: '',
-      isSearching: false
+      isSearching: false,
+      currentSections: []
     };
   }
 
   componentDidMount() {
     this.noteListener = this.props.record.get('notes').listen(this.getUpdatedNoteState);
+    this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
   }
 
   componentWillUnmount() {
     if (this.noteListener !== null) {
       this.props.record.get('notes').unlisten(this.noteListener);
     }
+
+    if (this.recordListener !== null) {
+      this.props.record.unlisten(this.recordListener);
+    }
   }
 
   addNote = () => {
-    this.props.record.addNote();
-  }
-
-  clearSearch = () => {
-    this.setState({
-      searchTerm: '',
-      isSearching: false
-    });
-  }
-
-  enableSearch = () => {
-    this.setState({
-      isSearching: true
-    });
+    this.props.record.addNote(this.state.currentSections[0]);
   }
 
   getUpdatedNoteState = (record) => {
@@ -54,14 +51,31 @@ export default class App extends React.Component {
     this.setState({notes: notes});
   }
 
-  searchForNotes = () => {
-    // TODO search for more than just the topics
-    return this.state.notes.filter(n => {
-      const topics = n.get('topics').map(t => t.toLowerCase());
+  getUpdatedRecordState = (record) => {
+    let updatedState = {};
 
-      const match = topics.includes(this.state.searchTerm.toLowerCase());
-      return match;
-    });
+    // TODO anyway to optimise this with if ??
+    updatedState.topics = record.get('topics');
+    updatedState.sections = record.get('sections');
+    this.setState(updatedState);
+  }
+
+  search = (value) => {
+    let updatedState = {
+      searchTerm: value,
+    };
+
+    if (value !== null) {
+      updatedState.isSearching = true;
+    } else {
+      updatedState.isSearching = false;
+    }
+
+    this.setState(updatedState);
+  }
+
+  updateCurrentSections = (currentSections) => {
+    this.setState({currentSections: currentSections});
   }
 
   updateTopics = (topics) => {
@@ -69,44 +83,21 @@ export default class App extends React.Component {
   }
 
   render() {
-    let notes;
-
-    if (this.state.isSearching) {
-      notes = this.searchForNotes();
+    return <div className={Style.app}>
+      <header className={Style.header}>
+        {!this.state.isSearching && <Sections sections={this.state.sections} updateCurrent={this.updateCurrentSections} />}
+        <Search search={this.search} />
+      </header>
       
-      if (notes.length) {
-        notes = <div className={Style.noteList}>
-          {notes.map(n => {
-            return <Note note={n} globalTopics={this.state.topics} updateGlobalTopics={this.updateTopics} />;
-          })}
-        </div>;
-      } else {
-        notes = <p>no results from {this.state.searchTerm}</p>;
-      }
-    } else if (this.state.notes.length) {
-      notes = <div className={Style.noteList}>
-        {this.state.notes.map(n => {
-          return <Note note={n} globalTopics={this.state.topics} updateGlobalTopics={this.updateTopics} />;
-        })}
-      </div>;
-    } else {
-      notes = <p>no notes yet.. add one!</p>;
-    }
-
-    return <div className={Style.app2}>
-      <div className={Style.searchControl}>
-        <input type="text" 
-          onInput={event => this.setState({searchTerm: event.target.value})} 
-          value={this.state.search} />
-        <button type="button" className={Button.primary} onClick={this.enableSearch}>search</button>
-        <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
-        <button type="button" className={Button.simple}>export</button>
-      </div>
-      
-      {notes}
+      <NoteList notes={this.state.notes} 
+        isSearching={this.state.isSearching} 
+        searchTerm={this.state.searchTerm} 
+        currentSections={this.state.currentSections} 
+        updateTopics={this.updateTopics} 
+        topics={this.state.topics} />
       
       <div className={Style.footerControl}>
-        <button type="button" onClick={this.addNote} className={Button.bigBoyPrimary}>add note</button>
+        <button type="button" onClick={this.addNote} disabled={(this.state.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
       </div>
     </div>;
   }

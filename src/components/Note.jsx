@@ -1,4 +1,3 @@
-// import { debounce } from 'throttle-debounce';
 import Style from '../style/Notes.less';
 import Form from '../style/Form.less';
 import Message from '../style/Message.less';
@@ -9,7 +8,8 @@ export default class Note extends React.Component {
     // note is really the NoteRecord
     note: React.PropTypes.object,
     globalTopics: React.PropTypes.array,
-    updateGlobalTopics: React.PropTypes.func
+    updateGlobalTopics: React.PropTypes.func,
+    showSection: React.PropTypes.bool
   };
 
   constructor(props) {
@@ -19,12 +19,9 @@ export default class Note extends React.Component {
       topics: props.note.get('topics').join(', '),
       matchingTopics: []
     };
-
   }
 
-  // componentDidMount() {
-    // this.updateTopicsOnRecord = debounce(200, this.updateTopicsOnRecord)
-  // }
+  // componentDidMount() {}
 
   // likeNote = () => {
   //   const rootRecord = quip.apps.getRootRecord();
@@ -85,6 +82,7 @@ export default class Note extends React.Component {
     }
 
     this.setState(updatedState);
+    this.updateTopicsOnRecord();
   }
 
   render() {
@@ -120,11 +118,20 @@ export default class Note extends React.Component {
         </span>
 
         <input type="text" 
-          onInput={this.updateTopics} 
-          onBlur={this.updateTopicsOnRecord}
+          onInput={this.updateTopics}
           value={this.state.topics} 
           placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
       </label>
+
+      {this.props.showSection && (<label className={Form.stackedFormInput}>
+        <span className={Form.label}>
+          Section
+        </span>
+
+        <input type="text" 
+          value={this.props.note.get('section')} 
+          disabled />
+      </label>)}
 
       {/*<div className={Style.likes}>{likeControl} {likeCount} {likeList}</div>*/}
     </div>;

@@ -1,4 +1,5 @@
 @import "Colors.less";
+@import "Common.less";
 
 .button-reset {
   display: inline-block;
@@ -40,6 +41,10 @@
   &:hover {
     border-color: darken(@quip-color-blue, 30%);
     background: darken(@quip-color-blue, 5%);
+  }
+
+  &:focus {
+    text-decoration: underline;
   }
   
   &[disabled] {
@@ -108,4 +113,8 @@
 
   width: 100%;
   padding: 10px;
+}
+
+.justIcon {
+  .iconInline;
 }
