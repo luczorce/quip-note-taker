@@ -19,22 +19,32 @@ export default class SectionDeleter extends React.Component {
     };
   }
 
-  // componentDidMount() {}
-
   close = () => {
     this.props.finished(false);
   }
 
   deleteSection = () => {
-    quip.apps.getRootRecord().deleteSection(this.props.section);
+    const record = quip.apps.getRootRecord();
+    
+    if (this.state.childNotes.length) {
+      this.state.childNotes.forEach(n => n.set('section', this.state.reassign));
+    }
+    
+    record.deleteSection(this.props.section);
     this.props.finished(true);
+  }
+
+  updateReassignment = (event) => {
+    const value = event.target.value;
+    const update = (value.length) ? value : null;
+    this.setState({reassign: update})
   }
 
   //////
 
   renderReassignment = () => {
-    let options = this.props.section.filter(s => s !== this.props.section).map(s => {
-      return <option value={s}>s</option>;
+    let options = this.props.sections.filter(s => s !== this.props.section).map(s => {
+      return <option value={s}>{s}</option>;
     });
 
     let count = `${this.state.childNotes.length} note`;
@@ -45,7 +55,9 @@ export default class SectionDeleter extends React.Component {
     return <label className={Form.rowQueen}>
       <span className={Form.label}>reassign {count} under:</span>
 
-      <select onChange={e => this.setState({reassign: e.target.value})}>
+      <select className={Form.select} 
+              onChange={this.updateReassignment}>
+        <option value="">-- choose a section --</option>
         {options}
         </select>
     </label>;
@@ -55,7 +67,7 @@ export default class SectionDeleter extends React.Component {
     let notice, select;
 
     if (this.state.childNotes.length) {
-      notice = <p className={Message.helper}><QuestionIcon /> reassign notes under this section to delete the section</p>;
+      notice = <p className={Message.helper}><WarningIcon /> reassign notes under this section to delete the section</p>;
       select = this.renderReassignment();
     }
 
@@ -82,6 +94,6 @@ export default class SectionDeleter extends React.Component {
   }
 }
 
-function QuestionIcon() {
-  return <svg className={Message.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="arcs"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12" y2="17"></line></svg>;
+function WarningIcon() {
+  return <svg className={Message.icon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg>
 }
