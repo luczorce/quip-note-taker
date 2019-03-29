@@ -39,22 +39,23 @@
 }
 
 .section {
-  cursor: pointer;
-  padding: 3px 5px;
-  margin: 0;
+  margin: 0 auto 3px;
   user-select: none;
+  display: flex;
   
   &:last-child {
     margin-bottom: 0;
   }
 
-  &:hover {
-    background: fade(@white, 10%);
-  }
-
   &.selected {
     font-weight: bold;
     text-decoration: underline;
+  }
+
+  .name {
+    cursor: pointer;
+    flex: 1 0 auto;
+    margin-left: 10px;
   }
 }
 

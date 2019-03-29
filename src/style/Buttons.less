@@ -118,3 +118,26 @@
 .justIcon {
   .iconInline;
 }
+
+.text {
+  .button-reset;
+  text-align: left;
+  padding: 1px 3px;
+  background: none;
+  border-color: transparent;
+  transition: border-color 0.2s ease-in, background 0.2s ease-in;
+
+  &:hover,
+  &:focus {
+    background: @quip-color-grey-lightester;
+  }
+
+  &:focus {
+    border-color: @quip-color-grey-lighter;
+  }
+}
+
+.simpleSmall {
+  .simple;
+  padding: 0 2px;
+}
