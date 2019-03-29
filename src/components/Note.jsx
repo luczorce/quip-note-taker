@@ -9,7 +9,8 @@ export default class Note extends React.Component {
     // note is really the NoteRecord
     note: React.PropTypes.object,
     globalTopics: React.PropTypes.array,
-    updateGlobalTopics: React.PropTypes.func
+    updateGlobalTopics: React.PropTypes.func,
+    showSection: React.PropTypes.bool
   };
 
   constructor(props) {
@@ -22,9 +23,9 @@ export default class Note extends React.Component {
 
   }
 
-  // componentDidMount() {
+  componentDidMount() {
     // this.updateTopicsOnRecord = debounce(200, this.updateTopicsOnRecord)
-  // }
+  }
 
   // likeNote = () => {
   //   const rootRecord = quip.apps.getRootRecord();
@@ -125,6 +126,16 @@ export default class Note extends React.Component {
           value={this.state.topics} 
           placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
       </label>
+
+      {this.props.showSection && (<label className={Form.stackedFormInput}>
+        <span className={Form.label}>
+          Section
+        </span>
+
+        <input type="text" 
+          value={this.props.note.get('section')} 
+          disabled />
+      </label>)}
 
       {/*<div className={Style.likes}>{likeControl} {likeCount} {likeList}</div>*/}
     </div>;
