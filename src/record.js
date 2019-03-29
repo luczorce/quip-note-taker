@@ -27,8 +27,17 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     this.set('sections', sections.concat(section));
   }
 
+  deleteSection(section) {
+    let sections = this.get('sections');
+    this.set('sections', sections.filter(s => s !==section));
+  }
+
   getAllNotes() {
     return this.get('notes').getRecords()
+  }
+
+  getNotesFor(section) {
+    return this.get('notes').getRecords().filter(n => n.get('section') === section);
   }
 
   updateTopics(topics) {

@@ -1,4 +1,5 @@
 import SectionMaker from './SectionMaker.jsx';
+import SectionDeleter from './SectionDeleter.jsx';
 import Style from '../style/Sections.less';
 import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
@@ -15,12 +16,55 @@ export default class Sections extends React.Component {
     this.state = {
       current: (props.sections.length) ? [ props.sections.sort()[0] ]: [],
       showList: false,
-      showMaker: false
+      showMaker: false,
+      showDeleter: false,
+      choppingBlock: ''
     };
   }
 
   componentDidMount() {
     this.props.updateCurrent(this.state.current);
+  }
+
+  confirmDelete = (section) => {
+    console.log('confirming delete for', section);
+    
+    this.setState({
+      showDeleter: true,
+      choppingBlock: section,
+      showList: false
+    });
+  }
+
+  hideDelete = (didDeleteSection) => {
+    let updatedState = {
+      showDeleter: false,
+      choppingBlock: ''
+    };
+
+    if (didDeleteSection && this.state.current.includes(this.state.choppingBlock)) {
+      if (this.state.current.length === 1) {
+        const place = this.props.sections.indexOf(this.state.choppingBlock);
+
+        if (place - 1 === -1) {
+          updatedState.current = [ this.props.sections[1] ]
+          if (this.props.sections.length === 1) {
+            updatedState.current = [];
+          } else {
+            updatedState.current = [ this.props.sections[1] ];
+          }
+        } else {
+          updatedState.current = [ this.props.sections[place - 1] ];
+        }
+      } else {
+        updatedState.current = this.state.current.filter(c => c !== this.state.choppingBlock);
+      }
+
+      this.props.updateCurrent(updatedState.current);
+    }
+
+    
+    this.setState(updatedState);
   }
 
   setCurrent = (event, channel) => {
@@ -121,11 +165,13 @@ export default class Sections extends React.Component {
           itemClass += ' ' + Style.selected;
         }
         
-        return <li
-            className={itemClass}
-            onClick={(e) => this.setCurrent(e, section)}>
-              {section}
-            </li>;
+        return <li className={itemClass}>
+          <button className={Button.simpleSmall}type="button" onClick={e => this.confirmDelete(section)}>
+            <DeleteMinusIcon />
+          </button>
+          
+          <button className={[Button.text, Style.name].join(' ')} onClick={(e) => this.setCurrent(e, section)}>{section}</button>
+        </li>;
       });
 
       ordered = <ul className={Style.list}>{ordered}</ul>;
@@ -137,7 +183,7 @@ export default class Sections extends React.Component {
   }
 
   render() {
-    let header, list, maker;
+    let header, list, maker, deleter;
 
     header = this.renderHeader();
 
@@ -149,9 +195,14 @@ export default class Sections extends React.Component {
       maker = <SectionMaker sections={this.props.sections} finished={this.toggleSectionMaker} />;
     }
 
+    if (this.state.showDeleter) {
+      deleter = <SectionDeleter sections={this.props.sections} section={this.state.choppingBlock} finished={this.hideDelete} />
+    }
+
     return <div className={Style.container}>
       {header}
       {list}
+      {deleter}
       {maker}
     </div>;
   }
@@ -159,6 +210,10 @@ export default class Sections extends React.Component {
 
 function AddPlusIcon() {
   return <svg className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 3v5h5M12 18v-6M9 15h6"/></svg>
+}
+
+function DeleteMinusIcon() {
+  return <svg title="Delete this section" className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
 }
 
 function DownIcon() {
