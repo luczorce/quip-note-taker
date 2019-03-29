@@ -84,9 +84,9 @@ export default class Search extends React.Component {
 }
 
 function SearchIcon(params) {
-  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d0202" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
+  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
 }
 
 function CloseSearchIcon(params) {
-  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d0202" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M9 18l6-6-6-6"/></svg>
+  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M9 18l6-6-6-6"/></svg>
 }
