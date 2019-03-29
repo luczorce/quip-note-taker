@@ -5,7 +5,8 @@ import Message from '../style/Message.less';
 
 export default class Sections extends React.Component {
   static propTypes = {
-    sections: React.PropTypes.array
+    sections: React.PropTypes.array,
+    updateCurrent: React.PropTypes.func
   };
 
   constructor(props) {
@@ -16,6 +17,10 @@ export default class Sections extends React.Component {
       showList: false,
       showMaker: false
     };
+  }
+
+  componentDidMount() {
+    this.props.updateCurrent(this.state.current);
   }
 
   setCurrent = (event, channel) => {
@@ -41,6 +46,7 @@ export default class Sections extends React.Component {
     }
 
     this.setState(updatedState);
+    this.props.updateCurrent(current);
   }
 
   toggleSectionList = () => {

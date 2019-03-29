@@ -21,7 +21,8 @@ export default class App extends React.Component {
       notes: props.record.getAllNotes(),
       
       searchTerm: '',
-      isSearching: false
+      isSearching: false,
+      currentSections: []
     };
   }
 
@@ -79,6 +80,10 @@ export default class App extends React.Component {
     });
   }
 
+  updateCurrentSections = (currentSections) => {
+    this.setState({currentSections: currentSections});
+  }
+
   updateTopics = (topics) => {
     this.props.record.updateTopics(topics);
   }
@@ -110,14 +115,14 @@ export default class App extends React.Component {
 
     return <div className={Style.app}>
       <header className={Style.header}>
-        <Sections sections={this.state.sections} />
+        <Sections sections={this.state.sections} updateCurrent={this.updateCurrentSections} />
         <Search search={this.search} />
       </header>
       
       {notes}
       
       <div className={Style.footerControl}>
-        <button type="button" onClick={this.addNote} className={Button.bigBoyPrimary}>add note</button>
+        <button type="button" onClick={this.addNote} disabled={(this.state.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
       </div>
     </div>;
   }
