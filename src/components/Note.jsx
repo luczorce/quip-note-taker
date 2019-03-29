@@ -1,4 +1,3 @@
-// import { debounce } from 'throttle-debounce';
 import Style from '../style/Notes.less';
 import Form from '../style/Form.less';
 import Message from '../style/Message.less';
@@ -20,12 +19,9 @@ export default class Note extends React.Component {
       topics: props.note.get('topics').join(', '),
       matchingTopics: []
     };
-
   }
 
-  componentDidMount() {
-    // this.updateTopicsOnRecord = debounce(200, this.updateTopicsOnRecord)
-  }
+  // componentDidMount() {}
 
   // likeNote = () => {
   //   const rootRecord = quip.apps.getRootRecord();
@@ -86,6 +82,7 @@ export default class Note extends React.Component {
     }
 
     this.setState(updatedState);
+    this.updateTopicsOnRecord();
   }
 
   render() {
@@ -121,8 +118,7 @@ export default class Note extends React.Component {
         </span>
 
         <input type="text" 
-          onInput={this.updateTopics} 
-          onBlur={this.updateTopicsOnRecord}
+          onInput={this.updateTopics}
           value={this.state.topics} 
           placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
       </label>
