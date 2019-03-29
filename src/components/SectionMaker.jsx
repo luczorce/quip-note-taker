@@ -28,6 +28,7 @@ export default class SectionMaker extends React.Component {
   }
 
   checkValidSectionName = (name) => {
+    name = name.trim();
     const isDuplicated = this.props.sections.includes(name);
     const isFilled = Boolean(name.length);
     return isFilled && !isDuplicated;
@@ -38,7 +39,7 @@ export default class SectionMaker extends React.Component {
   }
 
   saveSection = (event) => {
-    const section = this.state.section;
+    const section = this.state.section.trim();
     
     quip.apps.getRootRecord().addSection(section);
     this.props.finished(section);
