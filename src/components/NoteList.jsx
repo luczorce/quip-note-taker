@@ -1,147 +1,105 @@
-import { debounce } from 'throttle-debounce';
 import Note from './Note.jsx';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
 
 export default class NoteList extends React.Component {
   static propTypes = {
-    notes: React.PropTypes.array,
-    currentSections: React.PropTypes.array
+    notes: React.PropTypes.array, // of NoteRecords
+    currentSections: React.PropTypes.array,
+    isSearching: React.PropTypes.boolean,
+    searchTerm: React.PropTypes.string,
+    topics: React.PropTypes.array,
+    updateTopics: React.PropTypes.func
   };
 
-  // { 'quipUserId': 'Namey McNamerson' }
-  names = {};
-
-  constructor(props) {
-    super();
-
-    this.state = {
-      hasScrolledUp: false
-    };
-
-    this.containerElement = null;
-    this.setContainerElementRef = element => {
-      this.containerElement = element;
-    }
-  }
-
-  componentDidMount() {
-    this.scrollToBottom();
-    this.detectScrollBehavior = debounce(100, this.detectScrollBehavior);
-    this.containerElement.addEventListener('scroll', this.detectScrollBehavior, false);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const moreNotes = Boolean(nextProps.notes.length !== this.props.notes.length);
-
-    let sectionChange = false;
-    let sectionLengths = {
-      current: this.props.currentSections.length,
-      next: nextProps.currentSections.length
-    };
-
-    if (sectionLengths.current !== sectionLengths.next) {
-      sectionChange = true;
-    } else if (sectionLengths.current === 1 && sectionLengths.next === 1 && this.props.currentSections[0] !== nextProps.currentSections[0]) {
-      sectionChange = true;
-    }
-    
-    if (moreNotes || sectionChange) {
-      this.scrollToBottom(sectionChange);
-    }
-
-    // always update when react thinks it's best
-    return true;
-  }
-
-  detectScrollBehavior = () => {
-    const height = this.containerElement.offsetHeight;
-    const scrollHeight = this.containerElement.scrollHeight;
-
-    const position = this.containerElement.scrollTop + this.containerElement.offsetHeight;
-
-    if (position === scrollHeight && this.state.hasScrolledUp) {
-      this.setState({hasScrolledUp: false});
-    } else if (position !== scrollHeight && !this.state.hasScrolledUp) {
-      this.setState({hasScrolledUp: true});
-    }
-  }
-
   getCurrentNotes = () => {
-    return this.props.notes.filter(n => {
-      let isPresent = false;
-      this.props.currentSections.forEach(s => {
-        if (n.topics.includes(s)) {
-          isPresent = true;
-        }
-      });
+    return this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
+  }
 
-      return isPresent;
+  searchForNotes = () => {
+    // TODO search for more than just the topics
+    return this.props.notes.filter(n => {
+      const topics = n.get('topics').map(t => t.toLowerCase());
+
+      const match = topics.includes(this.props.searchTerm.toLowerCase());
+      return match;
     });
   }
 
-  getName = (owner) => {
-    if (this.names.hasOwnProperty(owner)) {
-      return this.names[owner];
-    } else {
-      let name = quip.apps.getUserById(owner);
+  //////
+
+  renderNotes = (notes) => {
+    return notes.map(n => {
+      return <Note note={n} 
+        globalTopics={this.props.topics} 
+        updateGlobalTopics={this.props.updateTopics} 
+        showSection={this.props.currentSections.length > 1} />;
+    });
+  }
+
+  renderSearch = () => {
+    let notes = this.searchForNotes();
       
-      if (name !== null) {
-        name = name.getName();
-        this.names[owner] = name;
-      } else {
-        name = '';
-      }
-
-      return name;
+    if (notes.length) {
+      return this.renderNotes(notes);
+    } else {
+      return this.renderNoResults();
     }
   }
 
-  makeEachNote = (note) => {
-    const name = this.getName(note.owner);
-    // const likeNames = note.likes.map(this.getName);
-    const likeNames = [];
-
-    return <Note note={note} name={name} likeNames={likeNames} multipleSections={(this.props.currentSections > 1)} />;
+  renderEmpty = () => {
+    return <p className={Message.emptyNotice}>
+      <BigNoteIcon />
+      <br/>
+      add notes below!
+    </p>;
   }
 
-  scrollToBottom = (override) => {
-    if (!this.state.hasScrolledUp || override) {
-      // wait for the state to update o.o?
-      window.setTimeout(() => {
-        this.containerElement.scrollTop = this.containerElement.scrollHeight;
-      }, 100);
-    }
+  renderNoResults = () => {
+    return <p className={Message.emptyNotice}>
+      <BigEmptySearchIcon />
+      <br/>
+      no results for "{this.searchTerm}"
+    </p>;
+  }
+
+  renderNotReady = () => {
+    return <p className={Message.emptyNotice}>
+      <BigSectionIcon />
+      <br/>
+      select sections to see their notes
+    </p>;
   }
 
   render() {
-    const currentNotes = this.getCurrentNotes();
-    let notes;
+    let content;
 
-    if (currentNotes.length) {
-      notes = currentNotes.map(this.makeEachNote);
+    if (this.props.isSearching) {
+      content = this.renderSearch();
     } else if (!this.props.currentSections.length) {
-      notes = <p className={Message.emptyNotice}>
-        <BigSectionIcon />
-        <br/>
-        select sections to see their notes
-      </p>;
+      content = this.renderNotReady();
     } else {
-      notes = <p className={Message.emptyNotice}>
-        <BigNoteIcon />
-        <br/>
-        add notes below!
-      </p>;
-    }
+      const currentNotes = this.getCurrentNotes();
 
-    return <div className={Style.noteList} ref={this.setContainerElementRef}>{notes}</div>;
+      if (currentNotes.length) {
+        content = this.renderNotes(currentNotes);
+      } else {
+        content = this.renderEmpty();
+      }
+    }
+    
+    return <div className={Style.noteList}>{content}</div>;
   }
 }
 
 function BigSectionIcon() {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="round" strokeLinejoin="arcs"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg>;
+  return <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
 }
 
 function BigNoteIcon() {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+  return <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+}
+
+function BigEmptySearchIcon() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
 }
