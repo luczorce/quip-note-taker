@@ -15,8 +15,11 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     };
   }
 
-  addNote() {
-    return this.get('notes').add({topics: []});
+  addNote(section) {
+    return this.get('notes').add({
+      topics: [],
+      section: section
+    });
   }
 
   addSection(section) {
@@ -49,7 +52,8 @@ export class NoteRecord extends quip.apps.Record {
     return {
       content: quip.apps.RichTextRecord,
       topics: 'array',
-      likes: 'array'
+      likes: 'array',
+      section: 'string'
     }
   }
 
@@ -59,7 +63,8 @@ export class NoteRecord extends quip.apps.Record {
         RichText_placeholderText: 'start adding notes here'
       },
       topics: [],
-      likes: []
+      likes: [],
+      section: ''
     }
   }
 }
