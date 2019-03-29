@@ -76,6 +76,7 @@ export default class Sections extends React.Component {
     if (this.state.showMaker && section !== null) {
       // TODO will this interfere with the state getting updated in the App?
       updatedState.current = [section];
+      this.props.updateCurrent([section]);
     }
 
     this.setState(updatedState);
