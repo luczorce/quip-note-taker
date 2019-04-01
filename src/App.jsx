@@ -2,7 +2,6 @@ import Search from './components/Search.jsx';
 import Sections from './components/Sections.jsx';
 import NoteList from './components/NoteList.jsx';
 import Style from './style/App.less';
-import Button from './style/Buttons.less';
 
 export default class App extends React.Component {
   // static propTypes = {
@@ -95,10 +94,6 @@ export default class App extends React.Component {
         currentSections={this.state.currentSections} 
         updateTopics={this.updateTopics} 
         topics={this.state.topics} />
-      
-      <div className={Style.footerControl}>
-        <button type="button" onClick={this.addNote} disabled={(this.state.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
-      </div>
     </div>;
   }
 }

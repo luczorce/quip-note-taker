@@ -1,6 +1,7 @@
 import Note from './Note.jsx';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
+import Button from '../style/Buttons.less';
 
 export default class NoteList extends React.Component {
   static propTypes = {
@@ -88,7 +89,13 @@ export default class NoteList extends React.Component {
       }
     }
     
-    return <div className={Style.noteList}>{content}</div>;
+    return <div className={Style.noteList}>
+      {content}
+
+      <div className={Style.footer}>
+        <button type="button" onClick={this.addNote} disabled={(this.props.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
+      </div>
+    </div>;
   }
 }
 
