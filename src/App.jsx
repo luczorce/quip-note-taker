@@ -51,9 +51,7 @@ export default class App extends React.Component {
   }
 
   getUpdatedNoteState = (record) => {
-    console.log('updating notes in APp');
     const notes = record.getRecords();
-
     this.setState({notes: notes});
   }
 
