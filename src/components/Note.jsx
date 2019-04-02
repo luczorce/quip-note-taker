@@ -10,6 +10,7 @@ export default class Note extends React.Component {
     note: React.PropTypes.object,
     globalTopics: React.PropTypes.array,
     updateGlobalTopics: React.PropTypes.func,
+    filterNotesAgain: React.PropTypes.func,
     showSection: React.PropTypes.bool
   };
 
@@ -78,10 +79,9 @@ export default class Note extends React.Component {
     this.setState({
       moving: false,
       destination: null
+    }, () => {
+      this.props.filterNotesAgain();
     });
-
-    // TODO when this is done, we need to signal to the list
-    // that we may have to change which notes we should show
   }
 
   movingNote = () => {

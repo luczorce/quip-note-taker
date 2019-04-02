@@ -31,13 +31,18 @@ export default class NoteList extends React.Component {
     });
   }
 
+  notesWereUpdatedInChildren = () => {
+    this.forceUpdate();
+  }
+
   //////
 
   renderNotes = (notes) => {
     return notes.map(n => {
-      return <Note note={n} 
+      return <Note note={n}
         globalTopics={this.props.topics} 
-        updateGlobalTopics={this.props.updateTopics} 
+        updateGlobalTopics={this.props.updateTopics}
+        filterNotesAgain={this.notesWereUpdatedInChildren} 
         showSection={this.props.currentSections.length > 1} />;
     });
   }
