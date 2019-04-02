@@ -79,6 +79,9 @@ export default class Note extends React.Component {
       moving: false,
       destination: null
     });
+
+    // TODO when this is done, we need to signal to the list
+    // that we may have to change which notes we should show
   }
 
   movingNote = () => {
