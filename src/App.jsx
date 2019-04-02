@@ -8,6 +8,10 @@ export default class App extends React.Component {
   //   record: quip.rootRecord,
   // }
 
+  static childContextTypes = {
+    sections: React.PropTypes.array
+  };
+
   recordListener = null;
   noteListener = null;
 
@@ -22,6 +26,12 @@ export default class App extends React.Component {
       searchTerm: '',
       isSearching: false,
       currentSections: []
+    };
+  }
+
+  getChildContext() {
+    return {
+      sections: this.state.sections
     };
   }
 
@@ -45,6 +55,7 @@ export default class App extends React.Component {
   }
 
   getUpdatedNoteState = (record) => {
+    console.log('updating notes in APp');
     const notes = record.getRecords();
 
     this.setState({notes: notes});
