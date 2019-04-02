@@ -27,8 +27,6 @@ export default class Sections extends React.Component {
   }
 
   confirmDelete = (section) => {
-    console.log('confirming delete for', section);
-    
     this.setState({
       showDeleter: true,
       choppingBlock: section,
@@ -63,7 +61,6 @@ export default class Sections extends React.Component {
       this.props.updateCurrent(updatedState.current);
     }
 
-    
     this.setState(updatedState);
   }
 
@@ -147,7 +144,7 @@ export default class Sections extends React.Component {
       </button>
 
       <h1 className={Style.title}>{current}</h1>
-      
+
       <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple}>
         <AddPlusIcon />
       </button>
