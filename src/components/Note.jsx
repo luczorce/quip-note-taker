@@ -1,6 +1,7 @@
 import Style from '../style/Notes.less';
 import Form from '../style/Form.less';
 import Message from '../style/Message.less';
+import Button from '../style/Buttons.less';
 import {richTextAllowedStyles} from '../util/richtext-record-styles.js';
 
 export default class Note extends React.Component {
@@ -17,7 +18,8 @@ export default class Note extends React.Component {
 
     this.state = {
       topics: props.note.get('topics').join(', '),
-      matchingTopics: []
+      matchingTopics: [],
+      showAdvanced: false
     };
   }
 
@@ -39,6 +41,10 @@ export default class Note extends React.Component {
     topics = topics.filter(t => t.length);
     
     return topics;
+  }
+
+  toggleAdvancedControls = () => {
+    this.setState({showAdvanced: !this.state.showAdvanced});
   }
 
   updateTopicsOnRecord = () => {
@@ -85,13 +91,26 @@ export default class Note extends React.Component {
     this.updateTopicsOnRecord();
   }
 
+  //////
+
+  renderAdvancedControls = () => {
+    return <div className={Style.controls}>
+      <h1>advanced controls</h1>
+    </div>;
+  }
+
   render() {
     const note = this.props.note;  
     let matchingTopics;
+    let advancedControls;
 
     if (this.state.matchingTopics.length) {
       matchingTopics = <span className={Form.tagsYouMightWant}><em>maybe</em> {this.state.matchingTopics.join(', ')}?</span>;
-    } 
+    }
+
+    if (this.state.showAdvanced) {
+      advancedControls = this.renderAdvancedControls();
+    }
     // let likeCount = note.likes.length;
     // likeCount += (likeCount === 1) ? ' like' : ' likes';
 
@@ -122,6 +141,16 @@ export default class Note extends React.Component {
           value={this.state.topics} 
           placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
       </label>
+
+      <div className={Style.advancedControls}>
+        {advancedControls}
+                
+        <div className={Style.toggle}>
+          <button type="button" className={Button.superDiscreet} onClick={this.toggleAdvancedControls}>
+            {this.state.showAdvanced ? 'hide advanced' : 'advanced controls'}
+          </button>
+        </div>
+      </div>
 
       {this.props.showSection && (<label className={Form.stackedFormInput}>
         <span className={Form.label}>
