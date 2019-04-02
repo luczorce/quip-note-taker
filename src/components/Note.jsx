@@ -8,14 +8,14 @@ export default class Note extends React.Component {
   static propTypes = {
     // note is really the NoteRecord
     note: React.PropTypes.object,
-    globalTopics: React.PropTypes.array,
     updateGlobalTopics: React.PropTypes.func,
     filterNotesAgain: React.PropTypes.func,
     showSection: React.PropTypes.bool
   };
 
   static contextTypes = {
-    sections: React.PropTypes.array
+    sections: React.PropTypes.array,
+    topics: React.PropTypes.array
   }
 
   recordListener = null;
@@ -24,7 +24,7 @@ export default class Note extends React.Component {
     super();
 
     this.state = {
-      topics: props.note.get('topics').join(', '),
+      topics: props.note.get('topics'),
       section: props.note.get('section'),
       matchingTopics: [],
       showAdvanced: false,
@@ -128,7 +128,7 @@ export default class Note extends React.Component {
           // search for the string without the hash
           last = last.slice(1);
 
-          let matchingTopics = this.props.globalTopics.filter(t => {
+          let matchingTopics = this.context.topics.filter(t => {
             return t.toLowerCase().includes(last.toLowerCase()) && t[0] === '#';
           });
           
@@ -152,7 +152,7 @@ export default class Note extends React.Component {
 
   updateNoteFromRecord = (record) => {
     const section = record.get('section');
-    const topics = record.get('topics').join(', ');
+    const topics = record.get('topics');
     let updatedState = {};
     let update = false;
 

@@ -9,7 +9,8 @@ export default class App extends React.Component {
   // }
 
   static childContextTypes = {
-    sections: React.PropTypes.array
+    sections: React.PropTypes.array,
+    topics: React.PropTypes.array
   };
 
   recordListener = null;
@@ -31,7 +32,8 @@ export default class App extends React.Component {
 
   getChildContext() {
     return {
-      sections: this.state.sections
+      sections: this.state.sections,
+      topics: this.state.topics
     };
   }
 
@@ -97,8 +99,7 @@ export default class App extends React.Component {
         isSearching={this.state.isSearching} 
         searchTerm={this.state.searchTerm} 
         currentSections={this.state.currentSections} 
-        updateTopics={this.updateTopics} 
-        topics={this.state.topics} />
+        updateTopics={this.updateTopics} />
     </div>;
   }
 }
