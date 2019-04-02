@@ -2,12 +2,15 @@ import Search from './components/Search.jsx';
 import Sections from './components/Sections.jsx';
 import NoteList from './components/NoteList.jsx';
 import Style from './style/App.less';
-import Button from './style/Buttons.less';
 
 export default class App extends React.Component {
   // static propTypes = {
   //   record: quip.rootRecord,
   // }
+
+  static childContextTypes = {
+    sections: React.PropTypes.array
+  };
 
   recordListener = null;
   noteListener = null;
@@ -26,6 +29,12 @@ export default class App extends React.Component {
     };
   }
 
+  getChildContext() {
+    return {
+      sections: this.state.sections
+    };
+  }
+
   componentDidMount() {
     this.noteListener = this.props.record.get('notes').listen(this.getUpdatedNoteState);
     this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
@@ -41,11 +50,8 @@ export default class App extends React.Component {
     }
   }
 
-  addNote = () => {
-    this.props.record.addNote(this.state.currentSections[0]);
-  }
-
   getUpdatedNoteState = (record) => {
+    console.log('updating notes in APp');
     const notes = record.getRecords();
 
     this.setState({notes: notes});
@@ -95,10 +101,6 @@ export default class App extends React.Component {
         currentSections={this.state.currentSections} 
         updateTopics={this.updateTopics} 
         topics={this.state.topics} />
-      
-      <div className={Style.footerControl}>
-        <button type="button" onClick={this.addNote} disabled={(this.state.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
-      </div>
     </div>;
   }
 }

@@ -61,6 +61,7 @@
   background: transparent;
   border: none;
   font-size: 0.9em;
+  font-weight: normal;
 
   &:focus,
   &:hover {
@@ -72,6 +73,11 @@
     cursor: not-allowed;
     color: @quip-color-grey-dark;
   }
+}
+
+.superDiscreet {
+  .discreet;
+  color: @quip-color-grey;
 }
 
 .discreetForDark {
@@ -121,6 +127,7 @@
 
 .text {
   .button-reset;
+  font-weight: normal;
   text-align: left;
   padding: 1px 3px;
   background: none;

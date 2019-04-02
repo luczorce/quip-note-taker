@@ -1,6 +1,7 @@
 import Note from './Note.jsx';
 import Style from '../style/Notes.less';
 import Message from '../style/Message.less';
+import Button from '../style/Buttons.less';
 
 export default class NoteList extends React.Component {
   static propTypes = {
@@ -11,6 +12,10 @@ export default class NoteList extends React.Component {
     topics: React.PropTypes.array,
     updateTopics: React.PropTypes.func
   };
+
+  addNote = () => {
+    quip.apps.getRootRecord().addNote(this.props.currentSections[0]);
+  }
 
   getCurrentNotes = () => {
     return this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
@@ -26,13 +31,18 @@ export default class NoteList extends React.Component {
     });
   }
 
+  notesWereUpdatedInChildren = () => {
+    this.forceUpdate();
+  }
+
   //////
 
   renderNotes = (notes) => {
     return notes.map(n => {
-      return <Note note={n} 
+      return <Note note={n}
         globalTopics={this.props.topics} 
-        updateGlobalTopics={this.props.updateTopics} 
+        updateGlobalTopics={this.props.updateTopics}
+        filterNotesAgain={this.notesWereUpdatedInChildren} 
         showSection={this.props.currentSections.length > 1} />;
     });
   }
@@ -88,7 +98,13 @@ export default class NoteList extends React.Component {
       }
     }
     
-    return <div className={Style.noteList}>{content}</div>;
+    return <div className={Style.noteList}>
+      {content}
+
+      <div className={Style.footer}>
+        <button type="button" onClick={this.addNote} disabled={(this.props.currentSections.length !== 1)} className={Button.bigBoyPrimary}>add note</button>
+      </div>
+    </div>;
   }
 }
 
