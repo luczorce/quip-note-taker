@@ -60,7 +60,7 @@ export class NoteRecord extends quip.apps.Record {
   static getProperties() {
     return {
       content: quip.apps.RichTextRecord,
-      topics: 'array',
+      topics: 'string',
       likes: 'array',
       section: 'string'
     }
@@ -71,7 +71,7 @@ export class NoteRecord extends quip.apps.Record {
       content: {
         RichText_placeholderText: 'start adding notes here'
       },
-      topics: [],
+      topics: '',
       likes: [],
       section: ''
     }
