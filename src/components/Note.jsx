@@ -65,10 +65,9 @@ export default class Note extends React.Component {
   // }
 
   formatAndCleanTopics = () => {
-    let topics = this.state.topics.split(',');
+    let topics = this.state.topics.split(' ');
     topics = topics.map(t => t.trim());
     topics = topics.filter(t => t.length);
-    console.log('new topics to save', topics);
     return topics;
   }
 
@@ -104,19 +103,21 @@ export default class Note extends React.Component {
   }
 
   updateTopicsOnRecord = () => {
-    const topics = this.formatAndCleanTopics();
-    this.props.note.set('topics', topics);
-    this.props.updateGlobalTopics(topics);
+    // set the note topics
+    this.props.note.set('topics', this.state.topics);
+    
+    // update the global record topics
+    // TODO figure this out. we are saving # and #h and #ha and so forth until #hashtagging
+    // const topics = this.formatAndCleanTopics();
+    // this.props.updateGlobalTopics(topics);
   }
 
   updateTopics = (event) => {
     const value = event.target.value;
-    console.log(value);
     let updatedState = { topics: value };
-    // let updatedState = {};
 
     if (value.length > 2) {
-      let topics = value.split(',');
+      let topics = value.split(' ');
       topics = topics.map(t => t.trim());
       // tags = tags.filter(t => t.length);
       
@@ -129,7 +130,7 @@ export default class Note extends React.Component {
           last = last.slice(1);
 
           let matchingTopics = this.context.topics.filter(t => {
-            return t.toLowerCase().includes(last.toLowerCase()) && t[0] === '#';
+            return t.toLowerCase().includes(last.toLowerCase());
           });
           
           if (matchingTopics.length > 4) {
@@ -162,8 +163,6 @@ export default class Note extends React.Component {
     }
 
     if (topics !== this.state.topics) {
-      console.log('found new topics');
-      console.log(topics, this.state.topics);
       updatedState.topics = topics;
       update = true;
     }
@@ -262,7 +261,7 @@ export default class Note extends React.Component {
         <input type="text" 
           onInput={this.updateTopics}
           value={this.state.topics} 
-          placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
+          placeholder="#dataprivacy #ethics (start each tag with a #, separate with a space)" />
       </label>
 
       {sectionName}
