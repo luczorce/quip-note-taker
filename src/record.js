@@ -17,7 +17,6 @@ export class NoteBookRecord extends quip.apps.RootRecord {
 
   addNote(section) {
     return this.get('notes').add({
-      topics: [],
       section: section
     });
   }
