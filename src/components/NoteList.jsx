@@ -9,7 +9,6 @@ export default class NoteList extends React.Component {
     currentSections: React.PropTypes.array,
     isSearching: React.PropTypes.boolean,
     searchTerm: React.PropTypes.string,
-    topics: React.PropTypes.array,
     updateTopics: React.PropTypes.func
   };
 
@@ -39,8 +38,9 @@ export default class NoteList extends React.Component {
 
   renderNotes = (notes) => {
     return notes.map(n => {
-      return <Note note={n}
-        globalTopics={this.props.topics} 
+      return <Note 
+        key={n.getId()}
+        note={n}
         updateGlobalTopics={this.props.updateTopics}
         filterNotesAgain={this.notesWereUpdatedInChildren} 
         showSection={this.props.currentSections.length > 1} />;

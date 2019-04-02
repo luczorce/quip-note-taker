@@ -8,14 +8,14 @@ export default class Note extends React.Component {
   static propTypes = {
     // note is really the NoteRecord
     note: React.PropTypes.object,
-    globalTopics: React.PropTypes.array,
     updateGlobalTopics: React.PropTypes.func,
     filterNotesAgain: React.PropTypes.func,
     showSection: React.PropTypes.bool
   };
 
   static contextTypes = {
-    sections: React.PropTypes.array
+    sections: React.PropTypes.array,
+    topics: React.PropTypes.array
   }
 
   recordListener = null;
@@ -24,7 +24,7 @@ export default class Note extends React.Component {
     super();
 
     this.state = {
-      topics: props.note.get('topics').join(', '),
+      topics: props.note.get('topics'),
       section: props.note.get('section'),
       matchingTopics: [],
       showAdvanced: false,
@@ -65,10 +65,9 @@ export default class Note extends React.Component {
   // }
 
   formatAndCleanTopics = () => {
-    let topics = this.state.topics.split(',');
+    let topics = this.state.topics.split(' ');
     topics = topics.map(t => t.trim());
     topics = topics.filter(t => t.length);
-    
     return topics;
   }
 
@@ -104,18 +103,21 @@ export default class Note extends React.Component {
   }
 
   updateTopicsOnRecord = () => {
+    // set the note topics
+    this.props.note.set('topics', this.state.topics);
+    
+    // update the global record topics
+    // TODO figure this out. we are saving # and #h and #ha and so forth until #hashtagging
     // const topics = this.formatAndCleanTopics();
-    // this.props.note.set('topics', topics);
     // this.props.updateGlobalTopics(topics);
   }
 
   updateTopics = (event) => {
     const value = event.target.value;
-    // let updatedState = { topics: value };
-    let updatedState = {};
+    let updatedState = { topics: value };
 
     if (value.length > 2) {
-      let topics = value.split(',');
+      let topics = value.split(' ');
       topics = topics.map(t => t.trim());
       // tags = tags.filter(t => t.length);
       
@@ -127,8 +129,8 @@ export default class Note extends React.Component {
           // search for the string without the hash
           last = last.slice(1);
 
-          let matchingTopics = this.props.globalTopics.filter(t => {
-            return t.toLowerCase().includes(last.toLowerCase()) && t[0] === '#';
+          let matchingTopics = this.context.topics.filter(t => {
+            return t.toLowerCase().includes(last.toLowerCase());
           });
           
           if (matchingTopics.length > 4) {
@@ -144,8 +146,9 @@ export default class Note extends React.Component {
       updatedState.matchingTopics = [];
     }
 
-    this.setState(updatedState);
-    this.updateTopicsOnRecord();
+    this.setState(updatedState, () => {
+      this.updateTopicsOnRecord();
+    });
   }
 
   updateNoteFromRecord = (record) => {
@@ -227,9 +230,9 @@ export default class Note extends React.Component {
       advancedControls = this.renderAdvancedControls();
     }
 
-    // if (this.props.showSection) {
-    // }
+    if (this.props.showSection) {
       sectionName = this.renderSection();
+    }
 
     // let likeCount = note.likes.length;
     // likeCount += (likeCount === 1) ? ' like' : ' likes';
@@ -258,7 +261,7 @@ export default class Note extends React.Component {
         <input type="text" 
           onInput={this.updateTopics}
           value={this.state.topics} 
-          placeholder="#data privacy, #ethics (each tag starts with #, separate tags with a comma)" />
+          placeholder="#dataprivacy #ethics (start each tag with a #, separate with a space)" />
       </label>
 
       {sectionName}
