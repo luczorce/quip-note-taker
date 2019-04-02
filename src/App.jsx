@@ -50,10 +50,6 @@ export default class App extends React.Component {
     }
   }
 
-  addNote = () => {
-    this.props.record.addNote(this.state.currentSections[0]);
-  }
-
   getUpdatedNoteState = (record) => {
     console.log('updating notes in APp');
     const notes = record.getRecords();

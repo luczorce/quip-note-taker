@@ -13,6 +13,10 @@ export default class NoteList extends React.Component {
     updateTopics: React.PropTypes.func
   };
 
+  addNote = () => {
+    quip.apps.getRootRecord().addNote(this.props.currentSections[0]);
+  }
+
   getCurrentNotes = () => {
     return this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
   }
