@@ -143,7 +143,7 @@ export default class Sections extends React.Component {
         {this.state.showList ? <UpIcon /> : <DownIcon />}
       </button>
 
-      <h1 className={Style.title}>{current}</h1>
+      <h1 className={Style.title} onClick={this.toggleSectionList}>{current}</h1>
 
       <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple}>
         <AddPlusIcon />
