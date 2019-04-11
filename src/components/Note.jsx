@@ -30,6 +30,7 @@ export default class Note extends React.Component {
       topics: props.note.get('topics'),
       section: props.note.get('section'),
       likes: likes,
+      usernames: {},
       matchingTopics: [],
       hasLiked: false,
       showAdvanced: false,
@@ -42,6 +43,9 @@ export default class Note extends React.Component {
   componentDidMount() {
     this.recordListener = this.props.note.listen(this.updateNoteFromRecord);
     this.setState({ hasLiked: this.state.likes.includes(this.context.currentUser) });
+    
+    // HACK not wrapped in the timeout, we can't find users (even though the quip user ids are VERY valid)
+    window.setTimeout(this.getUsernames, 1);
   }
 
   componentWillUnmount() {
@@ -73,8 +77,27 @@ export default class Note extends React.Component {
     quip.apps.getRootRecord().deleteNote(this.props.note);
   }
 
+  getUsernames = () => {
+    let usernames = {};
+    let update = false;
+
+    this.props.note.get('likes').forEach(user => {  
+      if (!this.state.usernames.hasOwnProperty(user)) {
+        let quipUser = quip.apps.getUserById(user);
+        
+        if (quipUser !== null) {
+          usernames[user] = quipUser.getName();
+          update = true;
+        }
+      }
+    });
+
+    if (update) {
+      this.setState({usernames: Object.assign(usernames, this.state.usernames)});
+    }
+  }
+
   likeToggle = () => {
-    console.log('toggline like');
     this.props.note.toggleLike(this.context.currentUser);
   }
 
@@ -184,11 +207,10 @@ export default class Note extends React.Component {
     }
 
     if (likes !== this.state.likes) {
-      console.log('hey');
       updatedState.likes = likes;
       updatedState.hasLiked = likes.includes(this.context.currentUser);
       update = true;
-      console.log(updatedState);
+      this.getUsernames();
     }
 
     if (update) {
@@ -253,14 +275,26 @@ export default class Note extends React.Component {
 
   renderLikes = () => {
     let likeCount = this.state.likes.length;
-    likeCount += (likeCount === 1) ? ' like' : ' likes';
-
+    let likeList;
     let likeControl = (this.state.hasLiked) ? <FilledStarIcon action={this.likeToggle} /> : <EmptyStarIcon action={this.likeToggle} />;
 
-    // let likeList = '';
+    if (likeCount) {
+      let names = this.state.likes.map(user => this.state.usernames[user]);
+      
+      if (names.length >= 2) {
+        last = names.pop();
+        names = `${names.join(', ')}, and ${last}`;
+      } else {
+        names = names.join(', ')
+      }
+
+      likeList = `liked by ${names}`;
+    }
+    
+    likeCount += (likeCount === 1) ? ' like' : ' likes';
     
     return <div className={Style.likes}>
-      {likeControl} <span>{likeCount}</span>
+      {likeControl} <span>{likeCount}</span> <em style={{fontSize: '0.9em'}}>{likeList}</em>
     </div>;
   }
 

@@ -36,7 +36,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   }
 
   getAllNotes() {
-    return this.get('notes').getRecords()
+    return this.get('notes').getRecords();
   }
 
   getNotesFor(section) {
