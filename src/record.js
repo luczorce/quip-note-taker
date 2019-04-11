@@ -79,4 +79,18 @@ export class NoteRecord extends quip.apps.Record {
       section: ''
     }
   }
+
+  toggleLike(userId) {
+    let likeList = this.get('likes');
+    const likerPosition = likeList.indexOf(userId);
+    const hasLiked = likerPosition !== -1;
+    
+    if (hasLiked) {
+      likeList.splice(likerPosition, 1);
+    } else {
+      likeList = likeList.concat(userId);
+    }
+
+    this.set('likes', likeList);
+  }
 }
