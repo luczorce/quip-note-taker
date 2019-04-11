@@ -28,6 +28,7 @@ export default class Note extends React.Component {
       section: props.note.get('section'),
       matchingTopics: [],
       showAdvanced: false,
+      deleting: false,
       moving: false,
       destination: null
     };
@@ -50,8 +51,20 @@ export default class Note extends React.Component {
     });
   }
 
+  cancelDeleteNote = () => {
+    this.setState({ deleting: false });
+  }
+
   confirmDelete = () => {
-    // TODO
+    this.setState({
+      deleting: true,
+      moving: false,
+      destination: null
+    });
+  }
+
+  deleteNote = () => {
+    quip.apps.getRootRecord().deleteNote(this.props.note);
   }
 
   // likeNote = () => {
@@ -86,7 +99,8 @@ export default class Note extends React.Component {
   movingNote = () => {
     this.setState({
       moving: true,
-      destination: null
+      destination: null,
+      deleting: false
     });
   }
 
@@ -176,6 +190,7 @@ export default class Note extends React.Component {
 
   renderAdvancedControls = () => {
     let sectionSelecter;
+    let deleteConfirmation;
 
     if (this.state.moving) {
       let options = this.context.sections
@@ -193,10 +208,20 @@ export default class Note extends React.Component {
       </div>;
     }
 
+    if (this.state.deleting) {
+      deleteConfirmation = <div className={Style.deleter}>
+        <span>are you sure?</span>
+        <button type="button" className={Button.simple} onClick={this.deleteNote}>delete</button>
+        <button type="button" className={Button.primary} onClick={this.cancelDeleteNote}>cancel</button>
+      </div>;
+    }
+
     return <div className={Style.controls}>
       <button type="button" onClick={this.confirmDelete} className={Button.text}>
         <GarbageIcon /> delete this note
       </button>
+
+      {deleteConfirmation}
 
       {!this.state.moving && (<button type="button" onClick={this.movingNote} className={Button.text}>
         move this note
