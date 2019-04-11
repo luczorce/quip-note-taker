@@ -56,7 +56,11 @@ export default class Note extends React.Component {
   }
 
   confirmDelete = () => {
-    this.setState({ deleting: true });
+    this.setState({
+      deleting: true,
+      moving: false,
+      destination: null
+    });
   }
 
   deleteNote = () => {
@@ -95,7 +99,8 @@ export default class Note extends React.Component {
   movingNote = () => {
     this.setState({
       moving: true,
-      destination: null
+      destination: null,
+      deleting: false
     });
   }
 
