@@ -10,7 +10,8 @@ export default class App extends React.Component {
 
   static childContextTypes = {
     sections: React.PropTypes.array,
-    topics: React.PropTypes.array
+    topics: React.PropTypes.array,
+    currentUser: React.PropTypes.string
   };
 
   recordListener = null;
@@ -33,7 +34,8 @@ export default class App extends React.Component {
   getChildContext() {
     return {
       sections: this.state.sections,
-      topics: this.state.topics
+      topics: this.state.topics,
+      currentUser: quip.apps.getViewingUser().getId()
     };
   }
 

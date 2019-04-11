@@ -15,7 +15,8 @@ export default class Note extends React.Component {
 
   static contextTypes = {
     sections: React.PropTypes.array,
-    topics: React.PropTypes.array
+    topics: React.PropTypes.array,
+    currentUser: React.PropTypes.string
   }
 
   recordListener = null;
@@ -23,10 +24,14 @@ export default class Note extends React.Component {
   constructor(props) {
     super();
 
+    const likes = props.note.get('likes');
+
     this.state = {
       topics: props.note.get('topics'),
       section: props.note.get('section'),
+      likes: likes,
       matchingTopics: [],
+      hasLiked: false,
       showAdvanced: false,
       deleting: false,
       moving: false,
@@ -36,6 +41,7 @@ export default class Note extends React.Component {
 
   componentDidMount() {
     this.recordListener = this.props.note.listen(this.updateNoteFromRecord);
+    this.setState({ hasLiked: this.state.likes.includes(this.context.currentUser) });
   }
 
   componentWillUnmount() {
@@ -67,15 +73,10 @@ export default class Note extends React.Component {
     quip.apps.getRootRecord().deleteNote(this.props.note);
   }
 
-  // likeNote = () => {
-  //   const rootRecord = quip.apps.getRootRecord();
-  //   rootRecord.toggleNoteLike(this.props.note.guid, quip.apps.getViewingUser().getId(), true);
-  // }
-
-  // unlikeNote = () => {
-  //   const rootRecord = quip.apps.getRootRecord();
-  //   rootRecord.toggleNoteLike(this.props.note.guid, quip.apps.getViewingUser().getId(), false);
-  // }
+  likeToggle = () => {
+    console.log('toggline like');
+    this.props.note.toggleLike(this.context.currentUser);
+  }
 
   formatAndCleanTopics = () => {
     let topics = this.state.topics.split(' ');
@@ -168,6 +169,7 @@ export default class Note extends React.Component {
   updateNoteFromRecord = (record) => {
     const section = record.get('section');
     const topics = record.get('topics');
+    const likes = record.get('likes');
     let updatedState = {};
     let update = false;
 
@@ -179,6 +181,14 @@ export default class Note extends React.Component {
     if (topics !== this.state.topics) {
       updatedState.topics = topics;
       update = true;
+    }
+
+    if (likes !== this.state.likes) {
+      console.log('hey');
+      updatedState.likes = likes;
+      updatedState.hasLiked = likes.includes(this.context.currentUser);
+      update = true;
+      console.log(updatedState);
     }
 
     if (update) {
@@ -241,11 +251,25 @@ export default class Note extends React.Component {
     </label>;
   }
 
+  renderLikes = () => {
+    let likeCount = this.state.likes.length;
+    likeCount += (likeCount === 1) ? ' like' : ' likes';
+
+    let likeControl = (this.state.hasLiked) ? <FilledStarIcon action={this.likeToggle} /> : <EmptyStarIcon action={this.likeToggle} />;
+
+    // let likeList = '';
+    
+    return <div className={Style.likes}>
+      {likeControl} <span>{likeCount}</span>
+    </div>;
+  }
+
   render() {
     const note = this.props.note;  
     let matchingTopics;
     let advancedControls;
     let sectionName;
+    let likes = this.renderLikes();
 
     if (this.state.matchingTopics.length) {
       matchingTopics = <span className={Form.tagsYouMightWant}><em>maybe</em> {this.state.matchingTopics.join(', ')}?</span>;
@@ -258,14 +282,6 @@ export default class Note extends React.Component {
     if (this.props.showSection) {
       sectionName = this.renderSection();
     }
-
-    // let likeCount = note.likes.length;
-    // likeCount += (likeCount === 1) ? ' like' : ' likes';
-
-    // let userLiked = note.likes.includes(quip.apps.getViewingUser().getId());
-    // let likeControl = (userLiked) ? <FilledStarIcon action={this.unlikeNote} /> : <EmptyStarIcon action={this.likeNote} />;
-
-    // let likeList = '';
 
     return <div key={note.getId()} className={Style.note}>
       <div className={Style.content}>
@@ -291,6 +307,8 @@ export default class Note extends React.Component {
 
       {sectionName}
 
+      {likes}
+
       <div className={Style.advancedControls}>
         {advancedControls}
                 
@@ -300,7 +318,6 @@ export default class Note extends React.Component {
           </button>
         </div>
       </div>
-      {/*<div className={Style.likes}>{likeControl} {likeCount} {likeList}</div>*/}
     </div>;
   }
 }
