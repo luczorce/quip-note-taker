@@ -205,7 +205,7 @@ export default class Note extends React.Component {
 
     if (this.state.deleting) {
       deleteConfirmation = <div className={Style.deleter}>
-        <span>are you sure? </span>
+        <span>are you sure?</span>
         <button type="button" className={Button.simple} onClick={this.deleteNote}>delete</button>
         <button type="button" className={Button.primary} onClick={this.cancelDeleteNote}>cancel</button>
       </div>;
