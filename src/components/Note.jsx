@@ -282,7 +282,7 @@ export default class Note extends React.Component {
       let names = this.state.likes.map(user => this.state.usernames[user]);
       
       if (names.length >= 2) {
-        last = names.pop();
+        let last = names.pop();
         names = `${names.join(', ')}, and ${last}`;
       } else {
         names = names.join(', ')
