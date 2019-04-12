@@ -195,6 +195,7 @@ export default class Note extends React.Component {
     const likes = record.get('likes');
     let updatedState = {};
     let update = false;
+    let updateUsernames = false;
 
     if (section !== this.state.section) {
       updatedState.section = section;
@@ -210,11 +211,15 @@ export default class Note extends React.Component {
       updatedState.likes = likes;
       updatedState.hasLiked = likes.includes(this.context.currentUser);
       update = true;
-      this.getUsernames();
+      updateUsernames = true;
     }
 
     if (update) {
-      this.setState(updatedState);
+      this.setState(updatedState, () => {
+        if (updateUsernames) {
+          this.getUsernames();
+        }
+      });
     }
   }
 
