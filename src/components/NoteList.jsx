@@ -23,7 +23,7 @@ export default class NoteList extends React.Component {
   searchForNotes = () => {
     // TODO search for more than just the topics
     return this.props.notes.filter(n => {
-      const topics = n.get('topics').map(t => t.toLowerCase());
+      const topics = n.get('topics').split(' ').map(t => t.toLowerCase());
 
       const match = topics.includes(this.props.searchTerm.toLowerCase());
       return match;
