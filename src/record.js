@@ -36,7 +36,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   }
 
   getAllNotes() {
-    return this.get('notes').getRecords()
+    return this.get('notes').getRecords();
   }
 
   getNotesFor(section) {
@@ -78,5 +78,19 @@ export class NoteRecord extends quip.apps.Record {
       likes: [],
       section: ''
     }
+  }
+
+  toggleLike(userId) {
+    let likeList = this.get('likes');
+    const likerPosition = likeList.indexOf(userId);
+    const hasLiked = likerPosition !== -1;
+    
+    if (hasLiked) {
+      likeList.splice(likerPosition, 1);
+    } else {
+      likeList = likeList.concat(userId);
+    }
+
+    this.set('likes', likeList);
   }
 }
