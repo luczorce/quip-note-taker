@@ -9,6 +9,8 @@ export default class NoteList extends React.Component {
     currentSections: React.PropTypes.array,
     isSearching: React.PropTypes.boolean,
     searchTerm: React.PropTypes.string,
+    searchContent: React.PropTypes.boolean,
+    searchTopics: React.PropTypes.boolean,
     updateTopics: React.PropTypes.func
   };
 
@@ -20,12 +22,21 @@ export default class NoteList extends React.Component {
     return this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
   }
 
-  searchForNotes = () => {
-    // TODO search for more than just the topics
+  searchForNotes = () => {   
     return this.props.notes.filter(n => {
-      const topics = n.get('topics').split(' ').map(t => t.toLowerCase());
+      const term = this.props.searchTerm.toLowerCase();
+      let match = false;
 
-      const match = topics.includes(this.props.searchTerm.toLowerCase());
+      if (term.length && this.props.searchTopics) {
+        const topics = n.get('topics').toLowerCase();
+        match = topics.includes(term);
+      }
+
+      if (term.length && this.props.searchContent && !match) {
+        const content = n.get('content').getTextContent().toLowerCase();
+        match = content.includes(term);
+      }
+
       return match;
     });
   }

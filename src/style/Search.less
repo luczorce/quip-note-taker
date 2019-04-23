@@ -12,9 +12,24 @@
   .inside {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
-    input {
+    .search {
       flex: 0.98 0 auto;
     }
+  }
+
+  .filters {
+    flex-basis: 100%;
+    margin: 10px auto 0;
+  }
+
+  .option {
+    margin-right: 10px;
+    user-select: none;
+  }
+
+  .optionbox {
+    margin-right: 2px;
   }
 }
