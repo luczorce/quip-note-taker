@@ -13,7 +13,9 @@ export default class Search extends React.Component {
 
     this.state = {
       searchTerm: '',
-      isSearching: false
+      isSearching: false,
+      checkTopics: true,
+      checkContent: false
     };
 
     this.searchInput = null;
@@ -47,12 +49,24 @@ export default class Search extends React.Component {
   }
 
   search = () => {
-    this.props.search(this.state.searchTerm);
+    this.props.search(this.state.searchTerm, this.state.checkTopics, this.state.checkContent);
+  }
+
+  immediateSearch = () => {
+    this.props.search(this.state.searchTerm, this.state.checkTopics, this.state.checkContent);
   }
 
   updateSearch = (event) => {
     this.setState({searchTerm: event.target.value});
     this.search();
+  }
+
+  updateFilterByTopic = (event) => {
+    this.setState({checkTopics: !this.state.checkTopics}, this.immediateSearch);
+  }
+
+  updateFilterByContent = (event) => {
+    this.setState({checkContent: !this.state.checkContent}, this.immediateSearch);
   }
 
   //////
@@ -66,13 +80,20 @@ export default class Search extends React.Component {
   renderOpenSearch = () => {
     return <div className={Style.inside}>
       <input type="text" 
-          className={Form.textInput}
+          className={`${Form.textInput} ${Style.search}`}
           onInput={this.updateSearch} 
           value={this.state.searchTerm}
           ref={this.setSearchInputRef} />
       <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
       <button type="button" disabled className={Button.simple}>export</button>
       <button type="button" className={Button.simple} onClick={this.disableSearch}><CloseSearchIcon title="collapse the search"/></button>
+
+      <p className={Style.filters}>
+        <span>filter by: </span>
+        
+        <Checkbox label="topics" model={this.state.checkTopics} updater={this.updateFilterByTopic} />
+        <Checkbox label="content" model={this.state.checkContent} updater={this.updateFilterByContent} />
+      </p>
     </div>;
   }
 
@@ -98,4 +119,14 @@ function SearchIcon(params) {
 
 function CloseSearchIcon(params) {
   return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M9 18l6-6-6-6"/></svg>
+}
+
+function Checkbox(params) {
+  return <label className={Style.option}>
+    <input className={`${Form.checkbox} ${Style.optionbox}`} 
+           type="checkbox" 
+           checked={params.model} 
+           onChange={params.updater} />
+    <span>{params.label}</span>
+  </label>;
 }

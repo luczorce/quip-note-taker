@@ -26,6 +26,8 @@ export default class App extends React.Component {
       notes: props.record.getAllNotes(),
       
       searchTerm: '',
+      searchTopics: true,
+      searchContent: false,
       isSearching: false,
       currentSections: []
     };
@@ -68,9 +70,11 @@ export default class App extends React.Component {
     this.setState(updatedState);
   }
 
-  search = (value) => {
+  search = (value, filterByTopic = true, filterByContent = false) => {
     let updatedState = {
       searchTerm: value,
+      searchTopics: filterByTopic,
+      searchContent: filterByContent
     };
 
     if (value !== null) {
@@ -99,7 +103,9 @@ export default class App extends React.Component {
       
       <NoteList notes={this.state.notes} 
         isSearching={this.state.isSearching} 
-        searchTerm={this.state.searchTerm} 
+        searchTerm={this.state.searchTerm}
+        searchContent={this.state.searchContent}
+        searchTopics={this.state.searchTopics} 
         currentSections={this.state.currentSections} 
         updateTopics={this.updateTopics} />
     </div>;
