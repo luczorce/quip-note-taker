@@ -16,7 +16,6 @@ export default class Note extends React.Component {
   static contextTypes = {
     sections: React.PropTypes.array,
     topics: React.PropTypes.array,
-    currentUser: React.PropTypes.string
   }
 
   recordListener = null;
@@ -24,15 +23,11 @@ export default class Note extends React.Component {
   constructor(props) {
     super();
 
-    const likes = props.note.get('likes');
-
     this.state = {
       topics: props.note.get('topics'),
       section: props.note.get('section'),
-      likes: likes,
       usernames: {},
       matchingTopics: [],
-      hasLiked: false,
       showAdvanced: false,
       deleting: false,
       moving: false,
@@ -42,7 +37,6 @@ export default class Note extends React.Component {
 
   componentDidMount() {
     this.recordListener = this.props.note.listen(this.updateNoteFromRecord);
-    this.setState({ hasLiked: this.state.likes.includes(this.context.currentUser) });
     
     // HACK not wrapped in the timeout, we can't find users (even though the quip user ids are VERY valid)
     window.setTimeout(this.getUsernames, 1);
@@ -75,30 +69,6 @@ export default class Note extends React.Component {
 
   deleteNote = () => {
     quip.apps.getRootRecord().deleteNote(this.props.note);
-  }
-
-  getUsernames = () => {
-    let usernames = {};
-    let update = false;
-
-    this.props.note.get('likes').forEach(user => {  
-      if (!this.state.usernames.hasOwnProperty(user)) {
-        let quipUser = quip.apps.getUserById(user);
-        
-        if (quipUser !== null) {
-          usernames[user] = quipUser.getName();
-          update = true;
-        }
-      }
-    });
-
-    if (update) {
-      this.setState({usernames: Object.assign(usernames, this.state.usernames)});
-    }
-  }
-
-  likeToggle = () => {
-    this.props.note.toggleLike(this.context.currentUser);
   }
 
   formatAndCleanTopics = () => {
@@ -192,10 +162,8 @@ export default class Note extends React.Component {
   updateNoteFromRecord = (record) => {
     const section = record.get('section');
     const topics = record.get('topics');
-    const likes = record.get('likes');
     let updatedState = {};
     let update = false;
-    let updateUsernames = false;
 
     if (section !== this.state.section) {
       updatedState.section = section;
@@ -207,19 +175,8 @@ export default class Note extends React.Component {
       update = true;
     }
 
-    if (likes !== this.state.likes) {
-      updatedState.likes = likes;
-      updatedState.hasLiked = likes.includes(this.context.currentUser);
-      update = true;
-      updateUsernames = true;
-    }
-
     if (update) {
-      this.setState(updatedState, () => {
-        if (updateUsernames) {
-          this.getUsernames();
-        }
-      });
+      this.setState(updatedState);
     }
   }
 
@@ -278,37 +235,11 @@ export default class Note extends React.Component {
     </label>;
   }
 
-  renderLikes = () => {
-    let likeCount = this.state.likes.length;
-    let likeList;
-    let likeControl = (this.state.hasLiked) ? <FilledStarIcon action={this.likeToggle} /> : <EmptyStarIcon action={this.likeToggle} />;
-
-    if (likeCount) {
-      let names = this.state.likes.map(user => this.state.usernames[user]);
-      
-      if (names.length >= 2) {
-        let last = names.pop();
-        names = `${names.join(', ')}, and ${last}`;
-      } else {
-        names = names.join(', ')
-      }
-
-      likeList = `liked by ${names}`;
-    }
-    
-    likeCount += (likeCount === 1) ? ' like' : ' likes';
-    
-    return <div className={Style.likes}>
-      {likeControl} <span>{likeCount}</span> <em style={{fontSize: '0.9em'}}>{likeList}</em>
-    </div>;
-  }
-
   render() {
     const note = this.props.note;  
     let matchingTopics;
     let advancedControls;
     let sectionName;
-    let likes = this.renderLikes();
 
     if (this.state.matchingTopics.length) {
       matchingTopics = <span className={Form.tagsYouMightWant}><em>maybe</em> {this.state.matchingTopics.join(', ')}?</span>;
@@ -346,8 +277,6 @@ export default class Note extends React.Component {
 
       {sectionName}
 
-      {likes}
-
       <div className={Style.advancedControls}>
         {advancedControls}
                 
@@ -359,14 +288,6 @@ export default class Note extends React.Component {
       </div>
     </div>;
   }
-}
-
-function FilledStarIcon(params) {
-  return <svg className={Style.icon} onClick={params.action} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#f1d860" stroke="#d2c41b" strokeWidth="3" strokelinecap="butt" strokelinejoin="arcs"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-}
-
-function EmptyStarIcon(params) {
-  return <svg className={Style.icon} onClick={params.action} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dadcdf" strokeWidth="3" strokelinecap="butt" strokelinejoin="arcs"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>;
 }
 
 function GarbageIcon() {

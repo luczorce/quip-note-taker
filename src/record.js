@@ -64,7 +64,6 @@ export class NoteRecord extends quip.apps.Record {
     return {
       content: quip.apps.RichTextRecord,
       topics: 'string',
-      likes: 'array',
       section: 'string'
     }
   }
@@ -75,22 +74,7 @@ export class NoteRecord extends quip.apps.Record {
         RichText_placeholderText: 'start adding notes here'
       },
       topics: '',
-      likes: [],
       section: ''
     }
-  }
-
-  toggleLike(userId) {
-    let likeList = this.get('likes');
-    const likerPosition = likeList.indexOf(userId);
-    const hasLiked = likerPosition !== -1;
-    
-    if (hasLiked) {
-      likeList.splice(likerPosition, 1);
-    } else {
-      likeList = likeList.concat(userId);
-    }
-
-    this.set('likes', likeList);
   }
 }
