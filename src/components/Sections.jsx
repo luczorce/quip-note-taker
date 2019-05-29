@@ -8,6 +8,7 @@ import Message from '../style/Message.less';
 export default class Sections extends React.Component {
   static propTypes = {
     sections: React.PropTypes.array,
+    noteCount: React.PropTypes.object,
     updateCurrent: React.PropTypes.func
   };
 
@@ -204,7 +205,7 @@ export default class Sections extends React.Component {
             <DeleteMinusIcon />
           </button>
           
-          <button className={[Button.text, Style.name].join(' ')} onClick={(e) => this.setCurrent(e, section)}>{section}</button>
+          <button className={[Button.text, Style.name].join(' ')} onClick={(e) => this.setCurrent(e, section)}>{section} ({this.props.noteCount[section]})</button>
 
           <button className={Button.superDiscreet} type="button" title={['rename',section].join(' ')} onClick={e => this.toggleSectionRenamer(section)}>rename</button>
         </li>;
