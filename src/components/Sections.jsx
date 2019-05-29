@@ -1,5 +1,6 @@
 import SectionMaker from './SectionMaker.jsx';
 import SectionDeleter from './SectionDeleter.jsx';
+import SectionRenamer from './SectionRenamer.jsx';
 import Style from '../style/Sections.less';
 import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
@@ -139,13 +140,13 @@ export default class Sections extends React.Component {
     let current = this.renderCurrentTitle();
 
     return <div className={Style.mainline}>
-      <button type="button" onClick={this.toggleSectionList} className={Button.simple}>
+      <button type="button" onClick={this.toggleSectionList} className={Button.discreet}>
         {this.state.showList ? <UpIcon /> : <DownIcon />}
       </button>
 
       <h1 className={Style.title} onClick={this.toggleSectionList}>{current}</h1>
 
-      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple}>
+      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple} title="add new section">
         <AddPlusIcon />
       </button>
     </div>;
@@ -163,11 +164,13 @@ export default class Sections extends React.Component {
         }
         
         return <li className={itemClass}>
-          <button className={Button.simpleSmall}type="button" onClick={e => this.confirmDelete(section)}>
+          <button className={Button.discreet} type="button" title={['delete',section].join(' ')} onClick={e => this.confirmDelete(section)}>
             <DeleteMinusIcon />
           </button>
           
           <button className={[Button.text, Style.name].join(' ')} onClick={(e) => this.setCurrent(e, section)}>{section}</button>
+
+          <button className={Button.superDiscreet} type="button" title={['rename',section].join(' ')} onClick={e => this.toggleSectionRenamer(section)}>rename</button>
         </li>;
       });
 
@@ -210,7 +213,7 @@ function AddPlusIcon() {
 }
 
 function DeleteMinusIcon() {
-  return <svg title="Delete this section" className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
+  return <svg title="Delete this section" className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
 }
 
 function DownIcon() {

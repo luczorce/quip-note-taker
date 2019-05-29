@@ -55,7 +55,7 @@ export default class SectionMaker extends React.Component {
 
   render() {
     return <div className={`${Style.form} ${Form.container}`}>
-      <p className={Message.helper}><QuestionIcon /> add sections like groups from slack</p>
+      <p className={Message.helper} style={{marginTop: 0}}><QuestionIcon /> add sections like groups from slack</p>
       
       <div className={Form.formRow}>
         <label className={Form.rowQueen}>
