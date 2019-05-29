@@ -259,7 +259,7 @@ export default class Note extends React.Component {
             record={note.get('content')}
             allowedStyles={richTextAllowedStyles}
             maxListIndentationLevel="3"
-            minHeight={200}
+            minHeight={50}
              />
        </div>
       
