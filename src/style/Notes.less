@@ -3,15 +3,23 @@
 
 .noteList {
   margin: 20px auto 10px;
+  // border: 1px @offen-white solid;
+  // border-radius: 6px;
+  // border-bottom: none;
+}
+
+.footer {
+  margin-top: 15px;
 }
 
 .note {
   padding: 20px 10px 10px;
   transition: background 0.2s ease-in;
-  border-bottom: 1px solid darken(@off-white, 10%);
+  border-bottom: 1px solid @offen-white;
 
-  &:last-child {
-    margin-bottom: 20px;
+  // use the nth-last child because the .footer is 
+  // also in the same parent element at the nd
+  &:nth-last-child(2) {
     border-bottom: none;
   }
 
