@@ -3,9 +3,6 @@
 
 .noteList {
   margin: 20px auto 10px;
-  // border: 1px @offen-white solid;
-  // border-radius: 6px;
-  // border-bottom: none;
 }
 
 .footer {
@@ -13,18 +10,13 @@
 }
 
 .note {
-  padding: 20px 10px 10px;
-  transition: background 0.2s ease-in;
-  border-bottom: 1px solid @offen-white;
-
-  // use the nth-last child because the .footer is 
-  // also in the same parent element at the nd
-  &:nth-last-child(2) {
-    border-bottom: none;
-  }
+  padding: 20px 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: border-color 0.2s ease-in;
 
   &:hover {
-    background: @off-white;
+    border-color: @offen-white;
   }
 
   .content {
