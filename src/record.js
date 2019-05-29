@@ -43,6 +43,22 @@ export class NoteBookRecord extends quip.apps.RootRecord {
     return this.get('notes').getRecords().filter(n => n.get('section') === section);
   }
 
+  renameSection(section, newName) {
+    let sections = this.get('sections');
+    let position = sections.indexOf(section);
+    
+    if (position === -1) return false;
+    sections.splice(position, 1, newName)
+    this.set('sections', sections);
+    
+    let notes = this.get('notes').getRecords();
+    notes.forEach(n => { 
+      if (n.get('section') === section) {
+        n.set('section', newName);
+      }
+    });
+  }
+
   updateTopics(topics) {
     const current = this.get('topics');
     let newTopics = [];

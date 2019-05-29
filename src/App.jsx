@@ -28,7 +28,8 @@ export default class App extends React.Component {
       searchTopics: true,
       searchContent: false,
       isSearching: false,
-      currentSections: []
+      currentSections: [],
+      noteCount: null
     };
   }
 
@@ -40,6 +41,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    this.setState( {noteCount: this.getNoteCount(this.state.notes)} );
     this.noteListener = this.props.record.get('notes').listen(this.getUpdatedNoteState);
     this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
   }
@@ -54,9 +56,23 @@ export default class App extends React.Component {
     }
   }
 
+  getNoteCount = (notes) => {
+    let noteCount = {};
+
+    this.state.sections.forEach(s => noteCount[s] = 0);
+    notes.forEach(n => noteCount[n.get('section')]++);
+
+    return noteCount;
+  }
+
   getUpdatedNoteState = (record) => {
     const notes = record.getRecords();
-    this.setState({notes: notes});
+    const noteCount = this.getNoteCount(notes);
+   
+    this.setState({
+      notes: notes,
+      noteCount: noteCount
+    });
   }
 
   getUpdatedRecordState = (record) => {
@@ -95,7 +111,7 @@ export default class App extends React.Component {
   render() {
     return <div className={Style.app}>
       <header className={Style.header}>
-        {!this.state.isSearching && <Sections sections={this.state.sections} updateCurrent={this.updateCurrentSections} />}
+        {!this.state.isSearching && <Sections sections={this.state.sections} noteCount={this.state.noteCount} updateCurrent={this.updateCurrentSections} />}
         <Search search={this.search} />
       </header>
       

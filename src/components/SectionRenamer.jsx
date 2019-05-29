@@ -3,9 +3,10 @@ import Form from '../style/Form.less';
 import Button from '../style/Buttons.less';
 import Message from '../style/Message.less';
 
-export default class SectionMaker extends React.Component {
+export default class SectionRenamer extends React.Component {
   static propTypes = {
     sections: React.PropTypes.array,
+    section: React.PropTypes.string,
     finished: React.PropTypes.func
   };
 
@@ -13,7 +14,7 @@ export default class SectionMaker extends React.Component {
     super();
 
     this.state = {
-      section: '',
+      newName: props.section,
       isValid: false
     };
 
@@ -31,51 +32,53 @@ export default class SectionMaker extends React.Component {
     name = name.trim();
     const isDuplicated = this.props.sections.includes(name);
     const isFilled = Boolean(name.length);
-    return isFilled && !isDuplicated;
+    const isSame = Boolean(name === this.props.section);
+    return isFilled && !isDuplicated && !isSame;
   }
 
-  closeMaker = () => {
+  closeRenamer = () => {
     this.props.finished(null);
   }
 
-  saveSection = (event) => {
-    const section = this.state.section.trim();
+  renameSection = (event) => {
+    const section = this.props.section;
+    const name = this.state.newName.trim();
     
-    quip.apps.getRootRecord().addSection(section);
-    this.props.finished(section);
+    quip.apps.getRootRecord().renameSection(section, name);
+    this.props.finished({section, name});
   }
 
-  updateSectionName = (event) => {
+  updateNewName = (event) => {
     const name = event.target.value;
     this.setState({
-      section: name,
+      newName: name,
       isValid: this.checkValidSectionName(name)
     });
   }
 
   render() {
     return <div className={`${Style.form} ${Form.container}`}>
-      <p className={Message.helper} style={{marginTop: 0}}><QuestionIcon /> add sections like groups from slack</p>
+      <p className={Message.helper} style={{marginTop: 0}}><QuestionIcon /> rename a section</p>
       
       <div className={Form.formRow}>
         <label className={Form.rowQueen}>
-          <span className={Form.label}>section name</span>
+          <span className={Form.label}>new name</span>
 
           <input type="text" 
               className={Form.textInput}
-              onInput={this.updateSectionName} 
+              onInput={this.updateNewName} 
               ref={this.setSectionInputRef}
-              value={this.state.section} />
+              value={this.state.newName} />
         </label>
 
         <button type="button" 
-            onClick={this.saveSection} 
+            onClick={this.renameSection} 
             disabled={!this.state.isValid}
             className={Button.primary}>
-          add
+          rename
         </button>
         
-        <button className={Button.simple} type="button" onClick={this.closeMaker}>
+        <button className={Button.simple} type="button" onClick={this.closeRenamer}>
           cancel
         </button>
       </div>
