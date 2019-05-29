@@ -19,7 +19,9 @@ export default class Sections extends React.Component {
       showList: false,
       showMaker: false,
       showDeleter: false,
-      choppingBlock: ''
+      showRenamer: false,
+      choppingBlock: '',
+      updatingSection: null
     };
   }
 
@@ -124,6 +126,40 @@ export default class Sections extends React.Component {
     this.setState(updatedState);
   }
 
+  toggleSectionRenamer = (section) => {
+    let updatedState = {
+      showRenamer: !this.state.showRenamer
+    };
+
+    // will be showing the renamer
+    if (!this.state.showRenamer) {
+      updatedState.updatingSection = section;
+      
+      // is the list is showing?
+      if (this.state.showList) {
+        updatedState.showList = false;
+      }
+    }
+
+    // will be hiding the maker
+    if (this.state.showRenamer) {
+      updatedState.showList = true;
+      updatedState.updatingSection = null;
+
+      // if we have a new section name
+      if (section !== null && this.state.current.includes(section.section)) {
+        const position = this.state.current.indexOf(section.section);
+        let updatedCurrentSections = this.state.current;
+        updatedCurrentSections.splice(position, 1, section.name);
+        
+        updatedState.current = updatedCurrentSections;
+        this.props.updateCurrent(updatedCurrentSections);
+      }
+    }
+
+    this.setState(updatedState);
+  }
+
   //////
 
   renderCurrentTitle = () => {
@@ -183,7 +219,7 @@ export default class Sections extends React.Component {
   }
 
   render() {
-    let header, list, maker, deleter;
+    let header, list, maker, deleter, renamer;
 
     header = this.renderHeader();
 
@@ -199,11 +235,16 @@ export default class Sections extends React.Component {
       deleter = <SectionDeleter sections={this.props.sections} section={this.state.choppingBlock} finished={this.hideDelete} />
     }
 
+    if (this.state.showRenamer) {
+      renamer = <SectionRenamer sections={this.props.sections} section={this.state.updatingSection} finished={this.toggleSectionRenamer} />;
+    }
+
     return <div className={Style.container}>
       {header}
       {list}
       {deleter}
       {maker}
+      {renamer}
     </div>;
   }
 }
