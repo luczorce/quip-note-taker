@@ -2,6 +2,7 @@ import Search from './components/Search.jsx';
 import Sections from './components/Sections.jsx';
 import NoteList from './components/NoteList.jsx';
 import TopicDefiner from './components/TopicDefiner.jsx';
+import Exporter from './components/Exporter.jsx';
 import Style from './style/App.less';
 
 export default class App extends React.Component {
@@ -61,6 +62,7 @@ export default class App extends React.Component {
         {
           id: 'predefinedTopics',
           label: 'define default topics',
+          // TODO disable the other menu list
           handler: () => this.setState({showTopicDefiner: true})
         },
         {
@@ -71,6 +73,7 @@ export default class App extends React.Component {
         {
           id: 'exportToQuip',
           label: 'to new Quip document',
+          // TODO disable the other menu list
           handler: () => this.setState({showExportWindow: true, exportDestination: 'quip'})
         },
       ]
@@ -118,6 +121,10 @@ export default class App extends React.Component {
   hideTopicDefiner = () => {
     this.setState({showTopicDefiner: false});
   }
+  
+  hideExporter = () => {
+    this.setState({showExportWindow: false, exportDestination: null});
+  }
 
   search = (value, filterByTopic = true, filterByContent = false) => {
     let updatedState = {
@@ -162,7 +169,7 @@ export default class App extends React.Component {
             currentSections={this.state.currentSections} 
             updateTopics={this.updateTopics} />
 
-          {this.state.showExportWindow && <p>EXPORT</p>}
+          {this.state.showExportWindow && <Exporter destination={this.state.exportDestination} finished={this.hideExporter} />}
           </div>
         )}
     </div>;
