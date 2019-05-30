@@ -32,7 +32,9 @@ export default class App extends React.Component {
       isSearching: false,
       currentSections: [],
       noteCount: null,
-      showTopicDefiner: false
+      showTopicDefiner: false,
+      showExportWindow: false,
+      exportDestination: null
     };
   }
 
@@ -49,7 +51,7 @@ export default class App extends React.Component {
     this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
 
     quip.apps.updateToolbar({
-      toolbarCommandIds: [ 'topicParent' ],
+      toolbarCommandIds: [ 'topicParent', 'exportParent' ],
       menuCommands: [
         {
           id: 'topicParent',
@@ -60,7 +62,17 @@ export default class App extends React.Component {
           id: 'predefinedTopics',
           label: 'define default topics',
           handler: () => this.setState({showTopicDefiner: true})
-        }
+        },
+        {
+          id: 'exportParent',
+          label: 'export',
+          subCommands: ['exportToQuip']
+        },
+        {
+          id: 'exportToQuip',
+          label: 'to new Quip document',
+          handler: () => this.setState({showExportWindow: true, exportDestination: 'quip'})
+        },
       ]
     });
   }
@@ -149,6 +161,8 @@ export default class App extends React.Component {
             searchTopics={this.state.searchTopics} 
             currentSections={this.state.currentSections} 
             updateTopics={this.updateTopics} />
+
+          {this.state.showExportWindow && <p>EXPORT</p>}
           </div>
         )}
     </div>;

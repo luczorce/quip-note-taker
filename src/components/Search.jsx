@@ -85,7 +85,6 @@ export default class Search extends React.Component {
           value={this.state.searchTerm}
           ref={this.setSearchInputRef} />
       <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
-      <button type="button" disabled className={Button.simple}>export</button>
       <button type="button" className={Button.simple} onClick={this.disableSearch}><CloseSearchIcon title="collapse the search"/></button>
 
       <p className={Style.filters}>
