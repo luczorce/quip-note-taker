@@ -1,6 +1,7 @@
 import Search from './components/Search.jsx';
 import Sections from './components/Sections.jsx';
 import NoteList from './components/NoteList.jsx';
+import TopicDefiner from './components/TopicDefiner.jsx';
 import Style from './style/App.less';
 
 export default class App extends React.Component {
@@ -23,13 +24,15 @@ export default class App extends React.Component {
       topics: props.record.get('topics'),
       sections: props.record.get('sections'),
       notes: props.record.getAllNotes(),
+      defaultTopics: props.record.get('defaultTopics'),
       
       searchTerm: '',
       searchTopics: true,
       searchContent: false,
       isSearching: false,
       currentSections: [],
-      noteCount: null
+      noteCount: null,
+      showTopicDefiner: false
     };
   }
 
@@ -44,6 +47,22 @@ export default class App extends React.Component {
     this.setState( {noteCount: this.getNoteCount(this.state.notes)} );
     this.noteListener = this.props.record.get('notes').listen(this.getUpdatedNoteState);
     this.recordListener = this.props.record.listen(this.getUpdatedRecordState);
+
+    quip.apps.updateToolbar({
+      toolbarCommandIds: [ 'topicParent' ],
+      menuCommands: [
+        {
+          id: 'topicParent',
+          label: 'topics',
+          subCommands: ['predefinedTopics']
+        },
+        {
+          id: 'predefinedTopics',
+          label: 'define default topics',
+          handler: () => this.setState({showTopicDefiner: true})
+        }
+      ]
+    });
   }
 
   componentWillUnmount() {
@@ -81,7 +100,12 @@ export default class App extends React.Component {
     // TODO anyway to optimise this with if ??
     updatedState.topics = record.get('topics');
     updatedState.sections = record.get('sections');
+    updatedState.defaultTopics = record.get('defaultTopics');
     this.setState(updatedState);
+  }
+
+  hideTopicDefiner = () => {
+    this.setState({showTopicDefiner: false});
   }
 
   search = (value, filterByTopic = true, filterByContent = false) => {
@@ -110,18 +134,24 @@ export default class App extends React.Component {
 
   render() {
     return <div className={Style.app}>
-      <header className={Style.header}>
-        {!this.state.isSearching && <Sections sections={this.state.sections} noteCount={this.state.noteCount} updateCurrent={this.updateCurrentSections} />}
-        <Search search={this.search} />
-      </header>
+      {this.state.showTopicDefiner && <TopicDefiner predefinedTopics={this.state.defaultTopics} finished={this.hideTopicDefiner} />}
       
-      <NoteList notes={this.state.notes} 
-        isSearching={this.state.isSearching} 
-        searchTerm={this.state.searchTerm}
-        searchContent={this.state.searchContent}
-        searchTopics={this.state.searchTopics} 
-        currentSections={this.state.currentSections} 
-        updateTopics={this.updateTopics} />
+      {!this.state.showTopicDefiner && (
+        <div>
+          <header className={Style.header}>
+            {!this.state.isSearching && <Sections sections={this.state.sections} noteCount={this.state.noteCount} updateCurrent={this.updateCurrentSections} />}
+            <Search search={this.search} />
+          </header>
+          
+          <NoteList notes={this.state.notes} 
+            isSearching={this.state.isSearching} 
+            searchTerm={this.state.searchTerm}
+            searchContent={this.state.searchContent}
+            searchTopics={this.state.searchTopics} 
+            currentSections={this.state.currentSections} 
+            updateTopics={this.updateTopics} />
+          </div>
+        )}
     </div>;
   }
 }

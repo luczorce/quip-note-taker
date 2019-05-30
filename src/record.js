@@ -2,6 +2,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getProperties() {
     return {
       topics: 'array',
+      defaultTopics: 'array',
       sections: 'array',
       notes: quip.apps.RecordList.Type(NoteRecord)
     };
@@ -10,6 +11,7 @@ export class NoteBookRecord extends quip.apps.RootRecord {
   static getDefaultProperties() {
     return {
       topics: [],
+      defaultTopics: [],
       sections: [],
       notes: []
     };
@@ -57,6 +59,10 @@ export class NoteBookRecord extends quip.apps.RootRecord {
         n.set('section', newName);
       }
     });
+  }
+
+  updateDefaultTopics(topics) {
+    this.set('defaultTopics', topics);
   }
 
   updateTopics(topics) {
