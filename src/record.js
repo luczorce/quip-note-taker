@@ -67,12 +67,14 @@ export class NoteBookRecord extends quip.apps.RootRecord {
 
   updateTopics(topics) {
     const current = this.get('topics');
+    const defaultTopics = this.get('defaultTopics');
     let newTopics = [];
     
     topics.forEach(t => {
-      if (current.indexOf(t) === -1) {
-        newTopics.push(t);
-      }
+      if (defaultTopics.includes(t)) return;
+      if (current.includes(t)) return;
+
+      newTopics.push(t);
     });
 
     if (newTopics.length) {

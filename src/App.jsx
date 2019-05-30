@@ -39,7 +39,7 @@ export default class App extends React.Component {
   getChildContext() {
     return {
       sections: this.state.sections,
-      topics: this.state.topics
+      topics: this.state.topics.concat(this.state.defaultTopics)
     };
   }
 
