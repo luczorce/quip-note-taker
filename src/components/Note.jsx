@@ -1,3 +1,4 @@
+import { debounce } from 'throttle-debounce';
 import Style from '../style/Notes.less';
 import Form from '../style/Form.less';
 import Message from '../style/Message.less';
@@ -26,7 +27,6 @@ export default class Note extends React.Component {
     this.state = {
       topics: props.note.get('topics'),
       section: props.note.get('section'),
-      usernames: {},
       matchingTopics: [],
       showAdvanced: false,
       deleting: false,
@@ -36,10 +36,8 @@ export default class Note extends React.Component {
   }
 
   componentDidMount() {
+    this.updateTopicsOnRecord = debounce(300, this.updateTopicsOnRecord);
     this.recordListener = this.props.note.listen(this.updateNoteFromRecord);
-    
-    // HACK not wrapped in the timeout, we can't find users (even though the quip user ids are VERY valid)
-    window.setTimeout(this.getUsernames, 1);
   }
 
   componentWillUnmount() {
@@ -74,6 +72,7 @@ export default class Note extends React.Component {
   formatAndCleanTopics = () => {
     let topics = this.state.topics.split(' ');
     topics = topics.map(t => t.trim());
+    topics = topics.map(t => (t[0] === '#') ? t.substring(1) : t);
     topics = topics.filter(t => t.length);
     return topics;
   }
@@ -111,13 +110,12 @@ export default class Note extends React.Component {
   }
 
   updateTopicsOnRecord = () => {
-    // set the note topics
     this.props.note.set('topics', this.state.topics);
-    
-    // update the global record topics
-    // TODO figure this out. we are saving # and #h and #ha and so forth until #hashtagging
-    // const topics = this.formatAndCleanTopics();
-    // this.props.updateGlobalTopics(topics);
+  }
+
+  updateGlobalTopicsOnRecord = () => {
+    const topics = this.formatAndCleanTopics();
+    this.props.updateGlobalTopics(topics);
   }
 
   updateTopics = (event) => {
@@ -127,7 +125,6 @@ export default class Note extends React.Component {
     if (value.length > 2) {
       let topics = value.split(' ');
       topics = topics.map(t => t.trim());
-      // tags = tags.filter(t => t.length);
       
       if (topics.length) {
         let last = topics.pop();
@@ -154,9 +151,7 @@ export default class Note extends React.Component {
       updatedState.matchingTopics = [];
     }
 
-    this.setState(updatedState, () => {
-      this.updateTopicsOnRecord();
-    });
+    this.setState(updatedState, this.updateTopicsOnRecord);
   }
 
   updateNoteFromRecord = (record) => {
@@ -271,6 +266,7 @@ export default class Note extends React.Component {
 
         <input type="text" 
           onInput={this.updateTopics}
+          onBlur={this.updateGlobalTopicsOnRecord}
           value={this.state.topics} 
           placeholder="#dataprivacy #ethics (start each tag with a #, separate with a space)" />
       </label>
