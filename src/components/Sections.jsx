@@ -119,7 +119,6 @@ export default class Sections extends React.Component {
 
     // will be hiding the maker, sent something back
     if (this.state.showMaker && section !== null) {
-      // TODO will this interfere with the state getting updated in the App?
       updatedState.current = [section];
       this.props.updateCurrent([section]);
     }

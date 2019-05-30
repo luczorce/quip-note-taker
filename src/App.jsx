@@ -97,7 +97,6 @@ export default class App extends React.Component {
   getUpdatedRecordState = (record) => {
     let updatedState = {};
 
-    // TODO anyway to optimise this with if ??
     updatedState.topics = record.get('topics');
     updatedState.sections = record.get('sections');
     updatedState.defaultTopics = record.get('defaultTopics');
