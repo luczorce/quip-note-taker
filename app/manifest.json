@@ -12,7 +12,8 @@
   "csp_sources": {
     "connect_srcs": [
       "https://localhost:8000",
-      "https://qetl-notetaker-proxy.herokuapp.com"
+      "https://qetl-notetaker-proxy.herokuapp.com",
+      "https://platform.quip.com"
     ]
   },
   "allow_tiny_size": true

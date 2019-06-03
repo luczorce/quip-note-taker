@@ -30,7 +30,13 @@ export default class Exporter extends React.Component {
   }
 
   exportSection = () => {
-    console.log('exporting');
+    console.log('not exporting');
+    console.log('only testing the validity of the token right now');
+
+    const tokenUrl = 'https://platform.quip.com/1/oauth/verify_token'
+    fetch(tokenUrl, {
+      headers: { 'Authorization': `Bearer ${this.state.quipToken}`}
+    }).then(response => console.log(response))
   }
 
   updateQuipToken = (event) => {
