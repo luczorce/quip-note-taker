@@ -11,35 +11,85 @@ export default class Exporter extends React.Component {
   constructor(props) {
     super();
 
+    const token = quip.apps.getUserPreferences().getForKey('token');
+
     this.state = {
-      isReady: false
+      isReady: false,
+      quipToken: token || '',
+      exportChoice: null
     };
   }
 
   componentDidMount() {}
 
+  checkValidity = () => {
+    const hasToken = this.state.quipToken.length;
+    const hasChosenNotes = this.state.exportChoice !== null;
+
+    this.setState({isReady: hasToken && hasChosenNotes});
+  }
+
   exportSection = () => {
     console.log('exporting');
   }
 
-  render() {
-    return <div className={`${Form.container} ${Form.floater}`}>
-      <p className={Message.helper} style={{marginTop: 0}}><QuestionIcon /> export notes to <span style={{textDecoration: 'underline'}}>{(this.props.destination === 'quip' ? 'a new Quip document' : 'elsewhere')}</span></p>
-      
-      <div className={Form.formRow}>
-        <label className={Form.rowQueen}>
-          <span className={Form.label}>section name</span>
+  updateQuipToken = (event) => {
+    const token = event.target.value;
 
-          <p>WHAT DOESKJHGSKJ HERE</p>
+    this.setState({quipToken: token}, () => {
+      quip.apps.getUserPreferences().save({token});
+      this.checkValidity();
+    });
+  }
+
+  updateWhichNotesToExport = (event) => {
+    const target = event.target.value;
+
+    this.setState({exportChoice: target}, this.checkValidity);
+  }
+
+  render() {
+    const destination = (this.props.destination === 'quip') ? 'a new Quip document' : 'elsewhere';
+
+    return <div className={`${Form.container} ${Form.floater}`}>
+      <p className={Message.helper} style={{marginTop: 0}}><QuestionIcon /> export notes to <span style={{textDecoration: 'underline'}}>{destination}</span></p>
+
+      <div className={Form.formRow}>
+        <p className={Form.label}>Export which...</p>
+
+        <label>
+          <input type="radio" name="quipExport" value="all" className={Form.radio} onChange={this.updateWhichNotesToExport} />
+          &nbsp; All Notes
         </label>
 
+        <label>
+          <input type="radio" name="quipExport" value="search" className={Form.radio} onChange={this.updateWhichNotesToExport} />
+          &nbsp; Search Results
+        </label>
+
+        <label>
+          <input type="radio" name="quipExport" value="section" className={Form.radio} onChange={this.updateWhichNotesToExport} />
+          &nbsp; Current Section
+        </label>
+      </div>
+
+      <p><em>In order to export to a Quip Document, we'll need your Quip Token, which you can get at the Quip Token Generator, accessible at <span style={{textDecoration: 'underline'}}>https://quip.com/dev/token</span>.</em></p>
+
+      <div className={Form.formRow}>
+        <label>
+          <span className={Form.label}>Quip Token</span>
+          <input type="text" value={this.state.quipToken} onInput={this.updateQuipToken} className={[Form.textInput, Form.monospace].join(' ')} />
+        </label>
+      </div>
+
+      <div style={{marginTop: '10px'}}>
         <button type="button" 
             onClick={this.exportSection} 
             disabled={!this.state.isReady}
             className={Button.primary}>
           export
         </button>
-        
+        &nbsp;
         <button className={Button.simple} type="button" onClick={this.props.finished}>
           cancel
         </button>
