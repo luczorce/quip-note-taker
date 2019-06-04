@@ -11,7 +11,8 @@ export default class NoteList extends React.Component {
     searchTerm: React.PropTypes.string,
     searchContent: React.PropTypes.boolean,
     searchTopics: React.PropTypes.boolean,
-    updateTopics: React.PropTypes.func
+    updateTopics: React.PropTypes.func,
+    updateCurrentNotes: React.PropTypes.func
   };
 
   addNote = () => {
@@ -19,11 +20,14 @@ export default class NoteList extends React.Component {
   }
 
   getCurrentNotes = () => {
-    return this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
+    let notes = this.props.notes.filter(n => this.props.currentSections.includes(n.get('section')));
+    
+    this.props.updateCurrentNotes(notes);
+    return notes;
   }
 
   searchForNotes = () => {   
-    return this.props.notes.filter(n => {
+    let notes = this.props.notes.filter(n => {
       const term = this.props.searchTerm.toLowerCase();
       let match = false;
 
@@ -39,6 +43,9 @@ export default class NoteList extends React.Component {
 
       return match;
     });
+
+    this.props.updateCurrentNotes(notes);
+    return notes;
   }
 
   notesWereUpdatedInChildren = () => {
@@ -60,7 +67,8 @@ export default class NoteList extends React.Component {
 
   renderSearch = () => {
     let notes = this.searchForNotes();
-      
+    this.props.updateCurrentNotes(notes);
+    
     if (notes.length) {
       return this.renderNotes(notes);
     } else {

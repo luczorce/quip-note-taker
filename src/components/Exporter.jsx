@@ -5,6 +5,7 @@ import Message from '../style/Message.less';
 export default class Exporter extends React.Component {
   static propTypes = {
     destination: React.PropTypes.string,
+    exportToQuip: React.PropTypes.func,
     finished: React.PropTypes.func
   };
 
@@ -20,23 +21,30 @@ export default class Exporter extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  cancelExport = () => {
+    this.props.finished();
+  }
 
   checkValidity = () => {
-    const hasToken = this.state.quipToken.length;
+    const hasToken = Boolean(this.state.quipToken.length);
     const hasChosenNotes = this.state.exportChoice !== null;
 
     this.setState({isReady: hasToken && hasChosenNotes});
   }
 
-  exportSection = () => {
-    console.log('not exporting');
-    console.log('only testing the validity of the token right now');
+  exportToQuip = () => {
+    const token = this.state.quipToken;
+    const which = this.state.exportChoice;
 
-    const tokenUrl = 'https://platform.quip.com/1/oauth/verify_token'
-    fetch(tokenUrl, {
-      headers: { 'Authorization': `Bearer ${this.state.quipToken}`}
-    }).then(response => console.log(response))
+    this.props.exportToQuip(token, which).then(response => {
+      if (response.status === 200) {
+        response.json().then(data => {
+          console.log(data.thread.link);
+        });
+      } else {
+        console.log('there was an issue exporting the document');
+      }
+    });
   }
 
   updateQuipToken = (event) => {
@@ -90,13 +98,13 @@ export default class Exporter extends React.Component {
 
       <div style={{marginTop: '10px'}}>
         <button type="button" 
-            onClick={this.exportSection} 
+            onClick={this.exportToQuip} 
             disabled={!this.state.isReady}
             className={Button.primary}>
           export
         </button>
         &nbsp;
-        <button className={Button.simple} type="button" onClick={this.props.finished}>
+        <button className={Button.simple} type="button" onClick={this.cancelExport}>
           cancel
         </button>
       </div>

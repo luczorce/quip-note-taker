@@ -3,6 +3,7 @@ import Sections from './components/Sections.jsx';
 import NoteList from './components/NoteList.jsx';
 import TopicDefiner from './components/TopicDefiner.jsx';
 import Exporter from './components/Exporter.jsx';
+import {makeNewDocument} from './util/automation.js';
 import Style from './style/App.less';
 
 export default class App extends React.Component {
@@ -17,6 +18,7 @@ export default class App extends React.Component {
 
   recordListener = null;
   noteListener = null;
+  currentNotes = [];
 
   constructor(props) {
     super();
@@ -99,6 +101,76 @@ export default class App extends React.Component {
     return noteCount;
   }
 
+  exportToQuip = (token, whichNotes) => {
+    let title = 'Note Export';
+    let exportLine;
+    let content = '';
+    let sections = [];
+    let now = new Date();
+    let date = `${now.getMonth() + 1}/${now.getDate()}`;
+
+    if (whichNotes === 'search') {
+      title += ` | Search Results`;
+      exportLine = `_Search on (${this.state.searchTerm}) exported on ${date}_`;
+      
+    } else if (whichNotes === 'all') {
+      title += ' | All Notes'
+      exportLine = `_Every note exported on ${date}_`;
+
+      this.state.sections.forEach(s => {
+        sections[s] = this.state.notes.filter(n => n.get('section') === s);
+      });
+    } else if (whichNotes === 'section') {
+      title += ' | ' + this.state.currentSections.join(', ');
+      exportLine = `_These sections exported on ${date}_`;
+
+      this.state.currentSections.forEach(s => {
+        sections[s] = this.currentNotes.filter(n => n.get('section') === s);
+      });
+    }
+
+    content += `# ${title}`;
+    content += '\n\n';
+    
+    content += exportLine
+    content += '\n\n';
+    content += '<hr>';
+    content += '\n\n';
+
+    if (whichNotes === 'search') {
+      this.currentNotes.forEach((n, index, currentNotes) => {
+        content += n.get('content').getTextContent();
+        content += '\n\n';
+        content += `***topics**: ${n.get('topics')}*`;
+        content += '\n\n';
+        content += `***section**: ${n.get('section')}*`;
+        content += '\n';
+
+        if (index !== currentNotes.length - 1) {
+          content += '<hr>\n\n';
+        }
+      });
+    } else {
+      Object.keys(sections).forEach((s, index, sectionKeys) => {
+        content += '# ' + s;
+        content += '\n\n';
+        
+        sections[s].forEach(n => {
+          content += n.get('content').getTextContent();
+          // content += '\n';
+          content += `***topics**: ${n.get('topics')}*`;
+          content += '\n\n';
+        });
+
+        if (index !== sectionKeys.length - 1) {
+          content += '<hr>\n\n';
+        }
+      });
+    }
+
+    return makeNewDocument(token, content, title);
+  }
+
   getUpdatedNoteState = (record) => {
     const notes = record.getRecords();
     const noteCount = this.getNoteCount(notes);
@@ -122,7 +194,7 @@ export default class App extends React.Component {
     this.setState({showTopicDefiner: false});
   }
   
-  hideExporter = () => {
+  hideExporter = (result) => {
     this.setState({showExportWindow: false, exportDestination: null});
   }
 
@@ -146,6 +218,10 @@ export default class App extends React.Component {
     this.setState({currentSections: currentSections});
   }
 
+  updateCurrentNotes = (currentNotes) => {
+    this.currentNotes = currentNotes;
+  }
+
   updateTopics = (topics) => {
     this.props.record.updateTopics(topics);
   }
@@ -154,7 +230,7 @@ export default class App extends React.Component {
     return <div className={Style.app}>
       {this.state.showTopicDefiner && <TopicDefiner predefinedTopics={this.state.defaultTopics} finished={this.hideTopicDefiner} />}
       
-      {!this.state.showTopicDefiner && (
+      {!this.state.showTopicDefiner && !this.state.showExportWindow && (
         <div>
           <header className={Style.header}>
             {!this.state.isSearching && <Sections sections={this.state.sections} noteCount={this.state.noteCount} updateCurrent={this.updateCurrentSections} />}
@@ -167,11 +243,17 @@ export default class App extends React.Component {
             searchContent={this.state.searchContent}
             searchTopics={this.state.searchTopics} 
             currentSections={this.state.currentSections} 
-            updateTopics={this.updateTopics} />
+            updateTopics={this.updateTopics}
+            updateCurrentNotes={this.updateCurrentNotes} 
+            />
 
-          {this.state.showExportWindow && <Exporter destination={this.state.exportDestination} finished={this.hideExporter} />}
           </div>
         )}
+      
+      {this.state.showExportWindow && <Exporter 
+        destination={this.state.exportDestination}
+        exportToQuip={this.exportToQuip}
+        finished={this.hideExporter} />}
     </div>;
   }
 }
