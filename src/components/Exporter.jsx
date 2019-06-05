@@ -17,7 +17,9 @@ export default class Exporter extends React.Component {
     this.state = {
       isReady: false,
       quipToken: token || '',
-      exportChoice: null
+      exportChoice: null,
+      showStatus: false,
+      status: ''
     };
   }
 
@@ -36,13 +38,16 @@ export default class Exporter extends React.Component {
     const token = this.state.quipToken;
     const which = this.state.exportChoice;
 
+    this.setState({showStatus: true, status: 'exporting...'});
     this.props.exportToQuip(token, which).then(response => {
       if (response.status === 200) {
         response.json().then(data => {
           console.log(data.thread.link);
+          this.setState({status: 'exported to ' + data.thread.link});
         });
       } else {
         console.log('there was an issue exporting the document');
+        this.setState({status: 'there was an issue exporting, please check your token and try again'});
       }
     });
   }
@@ -107,6 +112,7 @@ export default class Exporter extends React.Component {
         <button className={Button.simple} type="button" onClick={this.cancelExport}>
           cancel
         </button>
+        {this.state.showStatus && <span>&nbsp; {this.state.status}</span>}
       </div>
     </div>;
   }
