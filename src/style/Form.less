@@ -22,6 +22,11 @@
   }
 }
 
+.monospace {
+  font-family: monospace;
+  font-size: 0.8em;
+}
+
 .textInput {
   .input-reset;
 }
@@ -37,7 +42,8 @@
   .input-reset
 }
 
-.checkbox {
+.checkbox,
+.radio {
   display: inline;
 }
 
@@ -88,11 +94,19 @@
   padding: 10px;
   background: @off-white;
   border: 1px @quip-color-grey-lighter solid;
+
+  &.floater {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+  }
 }
 
 .formRow {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 
   .rowQueen {
     flex: 0.96 0 auto;
