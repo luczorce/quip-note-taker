@@ -2,6 +2,7 @@ import { debounce } from 'throttle-debounce';
 import Style from '../style/Search.less';
 import Form from '../style/Form.less';
 import Button from '../style/Buttons.less';
+import Message from '../style/Message.less';
 
 export default class Search extends React.Component {
   static propTypes = {
@@ -15,7 +16,8 @@ export default class Search extends React.Component {
       searchTerm: '',
       isSearching: false,
       checkTopics: true,
-      checkContent: false
+      checkContent: false,
+      showHelper: false
     };
 
     this.searchInput = null;
@@ -56,6 +58,10 @@ export default class Search extends React.Component {
     this.props.search(this.state.searchTerm, this.state.checkTopics, this.state.checkContent);
   }
 
+  toggleSearchHelper = () => {
+    this.setState({showHelper: !this.state.showHelper});
+  }
+
   updateSearch = (event) => {
     this.setState({searchTerm: event.target.value});
     this.search();
@@ -73,7 +79,10 @@ export default class Search extends React.Component {
 
   renderClosedSearch = () => {
     return <div className={Style.inside}>
-      <button type="button" className={Button.simple} onClick={this.enableSearch}><SearchIcon title="start searching"/></button>
+      <button type="button" className={Button.simple} onClick={this.enableSearch} onMouseEnter={this.toggleSearchHelper} onMouseLeave={this.toggleSearchHelper}><SearchIcon title="start searching"/></button>
+
+      {this.state.showHelper && <span className={[Style.searchHelper, Message.titlePopover].join(' ')}>search</span>}
+      
     </div>;
   }
 
