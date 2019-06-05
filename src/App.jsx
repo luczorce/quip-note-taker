@@ -64,8 +64,12 @@ export default class App extends React.Component {
         {
           id: 'predefinedTopics',
           label: 'define default topics',
-          // TODO disable the other menu list
-          handler: () => this.setState({showTopicDefiner: true})
+          handler: () => {
+            this.setState({showTopicDefiner: true});
+            quip.apps.updateToolbar({
+              disabledCommandIds: ['exportParent']
+            });
+          }
         },
         {
           id: 'exportParent',
@@ -75,8 +79,12 @@ export default class App extends React.Component {
         {
           id: 'exportToQuip',
           label: 'to new Quip document',
-          // TODO disable the other menu list
-          handler: () => this.setState({showExportWindow: true, exportDestination: 'quip'})
+          handler: () => {
+            this.setState({showExportWindow: true, exportDestination: 'quip'});
+            quip.apps.updateToolbar({
+              disabledCommandIds: ['topicParent']
+            });
+          }
         },
       ]
     });
@@ -192,10 +200,16 @@ export default class App extends React.Component {
 
   hideTopicDefiner = () => {
     this.setState({showTopicDefiner: false});
+    quip.apps.updateToolbar({
+      disabledCommandIds: []
+    });
   }
   
   hideExporter = (result) => {
     this.setState({showExportWindow: false, exportDestination: null});
+    quip.apps.updateToolbar({
+      disabledCommandIds: []
+    });
   }
 
   search = (value, filterByTopic = true, filterByContent = false) => {
