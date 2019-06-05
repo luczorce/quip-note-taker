@@ -21,6 +21,7 @@ export default class Sections extends React.Component {
       showMaker: false,
       showDeleter: false,
       showRenamer: false,
+      showMakerHelper: false,
       choppingBlock: '',
       updatingSection: null
     };
@@ -160,6 +161,10 @@ export default class Sections extends React.Component {
     this.setState(updatedState);
   }
 
+  toggleMakerHelper = () => {
+    this.setState({showMakerHelper: !this.state.showMakerHelper});
+  }
+
   //////
 
   renderCurrentTitle = () => {
@@ -182,9 +187,11 @@ export default class Sections extends React.Component {
 
       <h1 className={Style.title} onClick={this.toggleSectionList}>{current}</h1>
 
-      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple} title="add new section">
+      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple} onMouseEnter={this.toggleMakerHelper} onMouseLeave={this.toggleMakerHelper}>
         <AddPlusIcon />
       </button>
+
+      {this.state.showMakerHelper && <span className={[Style.makerHelper, Message.titlePopover].join(' ')}>make new sections</span>}
     </div>;
   }
 

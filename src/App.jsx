@@ -246,7 +246,6 @@ export default class App extends React.Component {
             updateTopics={this.updateTopics}
             updateCurrentNotes={this.updateCurrentNotes} 
             />
-
           </div>
         )}
       
