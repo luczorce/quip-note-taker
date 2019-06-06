@@ -259,9 +259,9 @@ export default class App extends React.Component {
             currentSections={this.state.currentSections} 
             updateTopics={this.updateTopics}
             updateCurrentNotes={this.updateCurrentNotes} 
-            />
-          </div>
-        )}
+            />  
+        </div>
+      )}
       
       {this.state.showExportWindow && <Exporter 
         destination={this.state.exportDestination}
