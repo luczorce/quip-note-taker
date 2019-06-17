@@ -18,9 +18,11 @@ export default class Sections extends React.Component {
     this.state = {
       current: (props.sections.length) ? [ props.sections.sort()[0] ]: [],
       showList: false,
+      showListHelper: false,
       showMaker: false,
       showDeleter: false,
       showRenamer: false,
+      showMakerHelper: false,
       choppingBlock: '',
       updatingSection: null
     };
@@ -94,6 +96,10 @@ export default class Sections extends React.Component {
     this.props.updateCurrent(current);
   }
 
+  toggleMakerHelper = () => {
+    this.setState({showMakerHelper: !this.state.showMakerHelper});
+  }
+
   toggleSectionList = () => {
     let updatedState = {
       showList: !this.state.showList
@@ -105,6 +111,10 @@ export default class Sections extends React.Component {
     }
 
     this.setState(updatedState);
+  }
+
+  toggleSectionListHelper = () => {
+    this.setState({showListHelper: !this.state.showListHelper});
   }
 
   toggleSectionMaker = (section) => {
@@ -176,15 +186,19 @@ export default class Sections extends React.Component {
     let current = this.renderCurrentTitle();
 
     return <div className={Style.mainline}>
-      <button type="button" onClick={this.toggleSectionList} className={Button.discreet}>
+      <button type="button" onClick={this.toggleSectionList} className={Button.discreet} onMouseEnter={this.toggleSectionListHelper} onMouseLeave={this.toggleSectionListHelper}>
         {this.state.showList ? <UpIcon /> : <DownIcon />}
       </button>
 
       <h1 className={Style.title} onClick={this.toggleSectionList}>{current}</h1>
 
-      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple} title="add new section">
+      <button type="button" onClick={e => this.toggleSectionMaker(null)} className={Button.simple} onMouseEnter={this.toggleMakerHelper} onMouseLeave={this.toggleMakerHelper}>
         <AddPlusIcon />
       </button>
+
+      {this.state.showMakerHelper && <span className={[Style.makerHelper, Message.titlePopover].join(' ')}>make new sections</span>}
+
+      {this.state.showListHelper && <span className={[Style.listHelper, Message.titlePopover].join(' ')}>show section list</span>}
     </div>;
   }
 
