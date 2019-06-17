@@ -258,30 +258,32 @@ export default class Note extends React.Component {
              />
        </div>
       
-      <label className={Form.stackedFormInput}>
-        <span className={Form.label}>
-          topics
-          {matchingTopics}
-        </span>
+      <footer className={Style.footer}>
+        <label className={Form.stackedFormInput}>
+          <span className={Form.label}>
+            topics
+            {matchingTopics}
+          </span>
 
-        <input type="text" 
-          onInput={this.updateTopics}
-          onBlur={this.updateGlobalTopicsOnRecord}
-          value={this.state.topics} 
-          placeholder="#dataprivacy #ethics (start each tag with a #, separate with a space)" />
-      </label>
+          <input type="text" 
+            onInput={this.updateTopics}
+            onBlur={this.updateGlobalTopicsOnRecord}
+            value={this.state.topics} 
+            placeholder="#dataprivacy #ethics (start each tag with a #, separate with a space)" />
+        </label>
 
-      {sectionName}
+        {sectionName}
 
-      <div className={Style.advancedControls}>
-        {advancedControls}
-                
-        <div className={Style.toggle}>
-          <button type="button" className={Button.superDiscreet} onClick={this.toggleAdvancedControls}>
-            {this.state.showAdvanced ? 'hide advanced' : 'advanced controls'}
-          </button>
+        <div className={Style.advancedControls}>
+          {advancedControls}
+                  
+          <div className={Style.toggle}>
+            <button type="button" className={Button.superDiscreet} onClick={this.toggleAdvancedControls}>
+              {this.state.showAdvanced ? 'hide advanced' : 'advanced controls'}
+            </button>
+          </div>
         </div>
-      </div>
+      </footer>
     </div>;
   }
 }
