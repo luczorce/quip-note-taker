@@ -1,6 +1,6 @@
 {
     "name": "note-taker",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "note-taker Quip App",
     "license": "UNLICENSED",
     "scripts": {
