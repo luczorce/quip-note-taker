@@ -1,4 +1,5 @@
 @import "Colors.less";
+@import "Common.less";
 
 .search {
   &.open {
@@ -10,24 +11,55 @@
   }
 
   .inside {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
     position: relative;
 
-    .search {
-      flex: 0.98 0 auto;
+    @media all and (min-width: @desktopMedia) {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      .search {
+        flex: 0.98 0 auto;
+      }
+
+      .filters {
+        flex-basis: 100%;
+      }
     }
 
     .searchHelper {
+      display: none;
       position: absolute;
       bottom: -24px;
       right: 0;
     }
+
+    .searchToggle:hover + .searchHelper {
+      display: block;
+    }
+
+    @media all and (max-width: @desktopMedia) {
+      .search {
+        width: 100%;
+        display: block;
+      }
+
+      .clear {
+        margin-right: 5px;
+      }
+
+      .hideSearch,
+      .clear {
+        margin-top: 5px;
+      }
+
+      .hideSearch .label {
+        display: inline;
+      }
+    }
   }
 
   .filters {
-    flex-basis: 100%;
     margin: 10px auto 0;
   }
 

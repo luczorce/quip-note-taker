@@ -104,17 +104,30 @@
 }
 
 .formRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-
-  .rowQueen {
-    flex: 0.96 0 auto;
+  @media all and (min-width: @desktopMedia) {
     display: flex;
+    justify-content: space-between;
     align-items: baseline;
 
-    .textInput {
-      flex: 1 auto;
+    .rowQueen {
+      flex: 0.96 0 auto;
+      display: flex;
+      align-items: baseline;
+
+      .textInput {
+        flex: 1 auto;
+      }
+    }
+  }
+
+  @media all and (max-width: @desktopMedia) {
+    button {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .rowQueen input {
+      width: 100%;
     }
   }
 }
