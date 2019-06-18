@@ -79,10 +79,9 @@ export default class Search extends React.Component {
 
   renderClosedSearch = () => {
     return <div className={Style.inside}>
-      <button type="button" className={Button.simple} onClick={this.enableSearch} onMouseEnter={this.toggleSearchHelper} onMouseLeave={this.toggleSearchHelper}><SearchIcon title="start searching"/></button>
+      <button type="button" className={[Button.simple, Style.searchToggle].join(' ')} onClick={this.enableSearch}><SearchIcon title="start searching"/></button>
 
-      {this.state.showHelper && <span className={[Style.searchHelper, Message.titlePopover].join(' ')}>search</span>}
-      
+      <span className={[Style.searchHelper, Message.titlePopover].join(' ')}>search</span>
     </div>;
   }
 
@@ -93,8 +92,11 @@ export default class Search extends React.Component {
           onInput={this.updateSearch} 
           value={this.state.searchTerm}
           ref={this.setSearchInputRef} />
-      <button type="button" className={Button.simple} onClick={this.clearSearch}>clear</button>
-      <button type="button" className={Button.simple} onClick={this.disableSearch}><CloseSearchIcon title="collapse the search"/></button>
+      <button type="button" className={[Button.simple, Style.clear].join(' ')} onClick={this.clearSearch}>clear</button>
+      <button type="button" className={[Button.simple, Style.hideSearch].join(' ')} onClick={this.disableSearch}>
+        <CloseSearchIcon title="hide the search"/>
+        <span class="label">hide search</span>
+      </button>
 
       <p className={Style.filters}>
         <span>filter by: </span>
@@ -126,7 +128,7 @@ function SearchIcon(params) {
 }
 
 function CloseSearchIcon(params) {
-  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M9 18l6-6-6-6"/></svg>
+  return <svg title={params.title} className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M9 18l6-6-6-6"/></svg>
 }
 
 function Checkbox(params) {
