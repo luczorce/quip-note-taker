@@ -214,13 +214,13 @@ export default class Sections extends React.Component {
         }
         
         return <li className={itemClass}>
-          <button className={Button.discreet} type="button" title={['delete',section].join(' ')} onClick={e => this.confirmDelete(section)}>
-            <DeleteMinusIcon />
-          </button>
-          
           <button className={[Button.text, Style.name].join(' ')} onClick={(e) => this.setCurrent(e, section)}>{section} ({this.props.noteCount[section]})</button>
 
           <button className={Button.superDiscreet} type="button" title={['rename',section].join(' ')} onClick={e => this.toggleSectionRenamer(section)}>rename</button>
+
+          <button className={Button.discreet} type="button" title={['delete',section].join(' ')} onClick={e => this.confirmDelete(section)}>
+            <GarbageIcon />
+          </button>
         </li>;
       });
 
@@ -277,4 +277,8 @@ function DownIcon() {
 
 function UpIcon() {
   return <svg className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#474747" strokeWidth="3" strokeLinecap="butt" strokeLinejoin="arcs"><path d="M18 15l-6-6-6 6"/></svg>
+}
+
+function GarbageIcon() {
+  return <svg title="Delete this section" className={Button.justIcon} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff2525" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>;
 }
