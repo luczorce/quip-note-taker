@@ -16,8 +16,7 @@ export default class Search extends React.Component {
       searchTerm: '',
       isSearching: false,
       checkTopics: true,
-      checkContent: false,
-      showHelper: false
+      checkContent: false
     };
 
     this.searchInput = null;
@@ -56,10 +55,6 @@ export default class Search extends React.Component {
 
   immediateSearch = () => {
     this.props.search(this.state.searchTerm, this.state.checkTopics, this.state.checkContent);
-  }
-
-  toggleSearchHelper = () => {
-    this.setState({showHelper: !this.state.showHelper});
   }
 
   updateSearch = (event) => {

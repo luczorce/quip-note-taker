@@ -25,15 +25,25 @@
   }
 
   .makerHelper {
+    display: none;
     position: absolute;
     bottom: -24px;
     right: 5px;
   }
 
   .listHelper {
+    display: none;
     position: absolute;
     bottom: -24px;
     left: 5px;
+  }
+
+  .listToggle:hover + .listHelper {
+    display: block;
+  }
+
+  .makerToggle:hover + .makerHelper {
+    display: block;
   }
 }
 
